@@ -1,4 +1,4 @@
-var EventEngine = function() {
+this.EventEngine = function() {
     var _handlersByEventName = {};
     var _eventTree = {};
     return {
