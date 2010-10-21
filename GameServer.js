@@ -1,0 +1,4 @@
+var GameServer = function() {
+    return {
+    };
+}();
