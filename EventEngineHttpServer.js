@@ -3,9 +3,19 @@ var http = require('http');
 var url = require('url');
 var EventEngine = require('./EventEngine.js').EventEngine;
 
-var EventEngineHttpServer = http.createServer(function() {
+this.EventEngineHttpServer = http.createServer(function() {
     
     EventEngine.observe('serverEvent', onServerEvent);
+
+    function textResponse(response, text, responseCode) {
+        responseCode = responseCode || 200;
+
+        response.writeHead(responseCode, {
+            'Content-Type': 'text/plain',
+            'Content-Length': text.length
+        });
+        response.end(text);
+    }
 
     function jsonResponse(response, json, responseCode) {
         responseCode = responseCode || 200;
@@ -88,7 +98,7 @@ var EventEngineHttpServer = http.createServer(function() {
             //}
             break;
         default:
-            response.end('Invalid command');
+            textResponse(response, 'Invalid command');
         }
     }
 }());
