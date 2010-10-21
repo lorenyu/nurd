@@ -7,10 +7,12 @@ var EventEngineHttpServer = http.createServer(function() {
     
     EventEngine.observe('serverEvent', onServerEvent);
 
-    function jsonResponse(response, json, responseCode == 200) {
+    function jsonResponse(response, json, responseCode) {
+        responseCode = responseCode || 200;
         if (typeof(json) !== 'string') {
             json = JSON.stringify(object);
         }
+
         response.writeHead(responseCode, {
             'Content-Type': 'application/json',
             'Content-Length': json.length
