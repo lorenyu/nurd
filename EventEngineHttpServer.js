@@ -77,14 +77,13 @@ this.EventEngineHttpServer = function(config) {
         return result;
     }
 
-
-    var getMap = {};
-
+    // TODO refactor into more general utility class
     function extname (path) {
         var index = path.lastIndexOf(".");
         return index < 0 ? "" : path.substring(index);
     }
 
+    // TODO refactor to fit our coding style
     function staticHandler(filename) {
         var body, headers;
         var contentType = mime.lookupExtension(extname(filename));
