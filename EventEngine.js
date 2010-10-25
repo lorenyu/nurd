@@ -2,8 +2,8 @@ this.EventEngine = function() {
     var _handlersByEventName = {};
     var _eventTree = {};
     return {
-        fire: function(event) {
-            var eventName = event.name,
+        fire: function(eventName, eventData) {
+            var eventName,
                 i,
                 n,
                 handlers,
@@ -12,7 +12,7 @@ this.EventEngine = function() {
                 handlers = _handlersByEventName[eventName];
                 for (i = 0, n = handlers.length; i < n; i += 1) {
                     handler = handlers[i];
-                    handler(event);
+                    handler({ name: eventName, data: eventData});
                 }
                 eventName = _eventTree[eventName];
             }
@@ -28,7 +28,7 @@ this.EventEngine = function() {
         stopObserving: function(eventName, handler) {
             var handlers = _handlersByEventName[eventName],
                 index;
-            if (handlers) {
+            if (!handlers) {
                 return;
             }
             index = handlers.indexOf(handler);
