@@ -5,9 +5,29 @@ var url = require('url');
 var util = require('util');
 var EventEngine = require('./EventEngine.js').EventEngine;
 
-this.EventEngineHttpServer = function(config) {
+var log = util.puts;
+
+var Client = function() {
+    // Private class properties and methods
+    var nextClientId = 1;
+
+    return function() {
+
+        this.id = nextClientId;
+        this.lastUpdated = 0;
+        this.response = null;
+        nextClientId += 1;
+    }
+}();
+
+var EventEngineHttpServer = function(config) {
     
     // Private properties and methods
+
+    var clientsById = {};
+    var numClients = 0;
+    var events = [];
+    var numClientsToNotifyByEventId = {};
 
     function textResponse(response, text, responseCode) {
         responseCode = responseCode || 200;
@@ -22,7 +42,7 @@ this.EventEngineHttpServer = function(config) {
     function jsonResponse(response, json, responseCode) {
         responseCode = responseCode || 200;
         if (typeof(json) !== 'string') {
-            json = JSON.stringify(object);
+            json = JSON.stringify(json);
         }
 
         response.writeHead(responseCode, {
@@ -33,23 +53,35 @@ this.EventEngineHttpServer = function(config) {
     }
 
     function notifyClients() {
+        log('notifyClients');
         var now = (new Date()).getTime();
-        for (clientId in clientsById) { // TODO: add "hasOwnProperty" check
+        for (clientId in clientsById) if (clientsById.hasOwnProperty(clientId)) {
             var client = clientsById[clientId];
+            log('client:' + JSON.stringify(client.id));
             if (client.response) {
                 var newEvents = getEventsBetween(client.lastUpdated, now);
                 jsonResponse(client.response, newEvents);
+                client.lastUpdated = now;
                 client.response = null;
                 for (var i = 0, n = newEvents.length; i < n; i += 1) {
-                    newEvents[i].numClientsToNotify -= 1;
+                    numClientsToNotifyByEventId[newEvents[i].id] -= 1;
                 }
             }
         }
         cleanupEvents();
     }
 
+    function onEvent(event) {
+        if (event.name.indexOf('http:') === 0) {
+            var eventName = event.name.substring('http:'.length); // strip out "http:" prefix from event name
+            EventEngine.fire(eventName, event.data);
+        } else if (event.name.indexOf('server:') === 0) {
+            onServerEvent(event);
+        }
+    }
+
     function onServerEvent(event) {
-        event.numClientsToNotify = clients.length;
+        numClientsToNotifyByEventId[event.id] = numClients;
         event.serverTime = (new Date()).getTime();
         events.push(event);
 
@@ -57,22 +89,29 @@ this.EventEngineHttpServer = function(config) {
     }
 
     function cleanupEvents() {
-        // TODO uncomment when ready to test more
-        /*
-        while (events.length > 0 && events[0].numClientsToNotify === 0) {
+        while (events.length > 0 && numClientsToNotifyByEventId[events[0].id] === 0) {
+            numClientsToNotifyByEventId[events[0].id] = undefined;
             events.shift();
         }
-*/
     }
 
+    /*
+     * getEventsBetween(minTime, maxTime)
+     * ----------------------------------
+     * returns events whose serverTime property is > minTime and <= maxTime.
+     */
     function getEventsBetween(minTime, maxTime) {
+        log('getEventsBetween:minTime:' + minTime + ',maxTime:' + maxTime);
         var result = [];
         var i = 0;
-        while (i < events.length && events[i].serverTime < minTime) {
+        while (i < events.length && events[i].serverTime <= minTime) {
+            log('skipping event:' + JSON.stringify(events[i]));
             i += 1;
         }
-        while (events[i].serverTime < maxTime) {
+        while (i < events.length && events[i].serverTime <= maxTime) {
+            log('adding event:' + JSON.stringify(events[i]));
             result.push(events[i]);
+            i += 1;
         }
         return result;
     }
@@ -302,12 +341,11 @@ this.EventEngineHttpServer = function(config) {
 
         switch (urlInfo.pathname) {
         case '/ajax/send':
-            var event = {
-                name: queryParams.en, // use short query params so URL remains short
-                data: queryParams.dt  
-            };
+            var eventName = queryParams.en; // use short query params so URL remains short
+            var eventData = queryParams.dt;
+            log('defaultHandler:ajax/send:' + JSON.stringify(queryParams));
             jsonResponse(response, {success:true});
-            EventEngine.fire(event);
+            EventEngine.fire(eventName, eventData);
             break;
         case '/ajax/recv':
             // check nonce to prevent a client from pretending to be another client
@@ -319,27 +357,28 @@ this.EventEngineHttpServer = function(config) {
             //}
             break;
         case '/ajax/join':
-            util.puts('joining');
+            log('joining');
+            var client = new Client();
+            numClients += 1;
+            clientsById[client.id] = client;
+            jsonResponse(response, {
+                success: true,
+                clientId: client.id
+            });
             break;
         default:
             textResponse(response, 'Invalid command');
         }
     }
 
-
-
-
     var server = http.createServer(function(request, response) {
         var urlInfo = url.parse(request.url, true);
         var pathname = urlInfo.pathname;
         var queryParams = urlInfo.query;
 
-        util.puts(pathname);
+        log(pathname);
         var filename = '.' + pathname;
-        util.puts(filename);
         fs.stat(filename, function(err, stats) {
-            util.puts('asfd');
-            util.puts(stats);
             if (stats) {
                 staticHandler(filename)(request, response);
             } else {
@@ -354,5 +393,8 @@ this.EventEngineHttpServer = function(config) {
     this.listen = function(port, hostname, callback) { server.listen(port, hostname, callback) };
 
     // Constructor
-    EventEngine.observe('serverEvent', onServerEvent);
+    EventEngine.observeAll(onEvent);
 };
+
+this.Client = Client;
+this.EventEngineHttpServer = EventEngineHttpServer;
