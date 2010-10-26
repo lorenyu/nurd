@@ -3,9 +3,10 @@ var fs = require('fs');
 var http = require('http');
 var url = require('url');
 var util = require('util');
+var querystring = require('querystring');
 var EventEngine = require('./EventEngine.js').EventEngine;
 
-var log = util.puts;
+var log = console.log;
 
 var Client = function() {
     // Private class properties and methods
@@ -133,17 +134,17 @@ var EventEngineHttpServer = function(config) {
                 return;
             }
 
-            util.puts("loading " + filename + "...");
+            log("staticHandler:loadResponseData:loading " + filename + "...");
             fs.readFile(filename, function (err, data) {
                 if (err) {
-                    util.puts("Error loading " + filename);
+                    log("staticHandler:loadResponseData:Error loading " + filename);
                 } else {
                     body = data;
                     headers = { "Content-Type": contentType
                                 , "Content-Length": body.length
                               };
                     headers["Cache-Control"] = "public";
-                    util.puts("static file " + filename + " loaded");
+                    log("staticHandler:loadResponseData:static file " + filename + " loaded");
                     callback();
                 }
             });
@@ -333,13 +334,31 @@ var EventEngineHttpServer = function(config) {
                 }
     };
 
+    function getPostData(request, callback) {
+        log('getPostData');
+        var text = '';
+        request.on('data', function(chunk) {
+            text += chunk;
+        });
+        request.on('end', function() {
+            log('getPostData:data= ' + text);
+            queryParams = querystring.parse(text);
+            callback(queryParams);
+        });
+    }
+
 
     function defaultHandler(request, response) {
         var urlInfo = url.parse(request.url, true);
         var pathname = urlInfo.pathname;
-        var queryParams = urlInfo.query;
+        var queryParams;
+        if (request.method == 'GET') {
+            queryParams = urlInfo.query;
+        } else if (request.method == 'POST') {
+            queryParams = request.queryParams; // TODO: clean this up. Shouldn't have to set queryParams property on the request object
+        }
 
-        switch (urlInfo.pathname) {
+        switch (pathname) {
         case '/ajax/send':
             var eventName = queryParams.en; // use short query params so URL remains short
             var eventData = queryParams.dt;
@@ -378,13 +397,20 @@ var EventEngineHttpServer = function(config) {
 
         log(pathname);
         var filename = '.' + pathname;
-        fs.stat(filename, function(err, stats) {
-            if (stats) {
-                staticHandler(filename)(request, response);
-            } else {
+        if (request.method == 'POST') {
+            getPostData(request, function(queryParams) {
+                request.queryParams = queryParams;
                 defaultHandler(request, response);
-            }
-        });
+            });
+        } else {
+            fs.stat(filename, function(err, stats) {
+                if (stats) {
+                    staticHandler(filename)(request, response);
+                } else {
+                    defaultHandler(request, response);
+                }
+            });
+        }
     });
 
 
