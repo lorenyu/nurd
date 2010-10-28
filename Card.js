@@ -1,8 +1,3 @@
-var util = require('util');
-var EventEngine = require('./EventEngine.js').EventEngine;
-
-var log = util.puts;
-
 this.Card = function(shape, color, shading, number) {
     this.attributes = [shape, color, shading, number];
     
