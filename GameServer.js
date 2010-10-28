@@ -7,8 +7,8 @@ var log = util.puts;
 var Game = function() {
 
     var deck = new Deck();
-    var cardsInPlay = [];
-    var players = [];
+    this.cardsInPlay = [];
+    this.players = [];
 
     function isValidSet(cards) {
         var i, j, card, total;
@@ -21,7 +21,7 @@ var Game = function() {
         }
         for (i = 0; i < 3; i += 1) {
             card = cards[i];
-            if (!isCardInPlay(card)) {
+            if (!this.isCardInPlay(card)) {
                 log('card not in play');
                 return false;
             }
@@ -41,25 +41,25 @@ var Game = function() {
     }
 
     function isCardInPlay(card) {
-        for (var i = 0, n = cardsInPlay.length; i < n; i += 1) {
-            if (Card.equals(cardsInPlay[i], card)) {
+        for (var i = 0, n = this.cardsInPlay.length; i < n; i += 1) {
+            if (Card.equals(this.cardsInPlay[i], card)) {
                 return true;
             }
         }
         return false;
     }
 
-    function addPlayer(player) {
-        for (var i = 0, n = players.length; i < n; i += 1) {
-            if (Player.equals(players[i], player)) {
+    this.addPlayer = function(player) {
+        for (var i = 0, n = this.players.length; i < n; i += 1) {
+            if (Player.equals(this.players[i], player)) {
                 return false;
             }
         }
-        players.push(player);
+        this.players.push(player);
         return true;
     }
 
-    function processSet(cards) {
+    this.processSet = function(cards) {
         if (!isValidSet(cards)) {
             return false;
         }
@@ -67,33 +67,26 @@ var Game = function() {
         if (!deck.isEmpty()) {
             for (var i = 0, n = cards.length; i < n; i += 1) {
                 var card = cards[i];
-                for (var j = 0, m = cardsInPlay.length; j < m; j += 1) {
-                    if (Card.equals(cardsInPlay[j], card)) {
+                for (var j = 0, m = this.cardsInPlay.length; j < m; j += 1) {
+                    if (Card.equals(this.cardsInPlay[j], card)) {
                         break;
                     }
                 }
-                cardsInPlay[j] = deck.drawCard();
+                this.cardsInPlay[j] = deck.drawCard();
             }
         }
         return true;
     }
 
-    function startGame() {
+    this.startGame = function() {
         for (var i = 0; i < 12; i += 1) {
-            cardsInPlay.push(deck.drawCard());
+            this.cardsInPlay.push(deck.drawCard());
         }
     }
 
-    function dealMoreCards() {
+    this.dealMoreCards = function() {
         for (var i = 0; i < 3; i += 1) {
-            cardsInPlay.push(deck.drawCard());
-        }
-    }
-
-    function getGameState() {
-        return {
-            cardsInPlay: cardsInPlay,
-            players: players
+            this.cardsInPlay.push(deck.drawCard());
         }
     }
 };
