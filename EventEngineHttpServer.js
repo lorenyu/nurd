@@ -6,6 +6,9 @@ var util = require('util');
 var querystring = require('querystring');
 var EventEngine = require('./EventEngine.js').EventEngine;
 
+var Player = require('./Player.js').Player;
+var Game = require('./GameServer.js').Game;
+
 var log = console.log;
 
 var Client = function() {
@@ -18,6 +21,9 @@ var Client = function() {
         this.lastUpdated = 0;
         this.response = null;
         nextClientId += 1;
+
+        // game related fields (should they be here?)
+        this.player = null;
     }
 }();
 
@@ -29,6 +35,8 @@ var EventEngineHttpServer = function(config) {
     var numClients = 0;
     var events = [];
     var numClientsToNotifyByEventId = {};
+
+    var game = new Game();
 
     function textResponse(response, text, responseCode) {
         responseCode = responseCode || 200;
@@ -360,6 +368,7 @@ var EventEngineHttpServer = function(config) {
 
         switch (pathname) {
         case '/ajax/send':
+            // TODO: check nonce to prevent a client from pretending to be another client
             var eventName = queryParams.en; // use short query params so URL remains short
             var eventData = queryParams.dt;
             log('defaultHandler:ajax/send:' + JSON.stringify(queryParams));
@@ -380,10 +389,19 @@ var EventEngineHttpServer = function(config) {
             var client = new Client();
             numClients += 1;
             clientsById[client.id] = client;
+
+
+            var player = new Player();
+            player.joinGame(game);
+            client.player = player;
+
+
             jsonResponse(response, {
                 success: true,
-                clientId: client.id
+                clientId: client.id,
+                playerId: player.id
             });
+
             break;
         default:
             textResponse(response, 'Invalid command');

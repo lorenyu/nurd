@@ -34,5 +34,5 @@ this.Deck = function() {
         return this.cards.length === 0;
     }
 
-    init();
+    init.apply(this, arguments);
 };

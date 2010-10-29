@@ -2,13 +2,28 @@ var util = require('util');
 var http = require('http');
 var EventEngine = require('./EventEngine.js').EventEngine;
 
+var Deck = require('./Deck.js').Deck;
+
 var log = util.puts;
 
-var Game = function() {
+function proxy(fn, object) {
+    return function() {
+        fn.apply(object, arguments);
+    }
+}
+
+this.Game = function() {
 
     var deck = new Deck();
     this.cardsInPlay = [];
     this.players = [];
+
+    function init() {
+        EventEngine.observe('client:startGame', proxy(this.startGame, this));
+        EventEngine.observe('client:dealMoreCards', proxy(this.dealMoreCards, this));
+        EventEngine.observe('client:selectCards', proxy(this.selectCards, this));
+        //EventEngine.observe('client:endGame', proxy(this.endGame, this));
+    }
 
     function isValidSet(cards) {
         var i, j, card, total;
@@ -75,6 +90,7 @@ var Game = function() {
                 this.cardsInPlay[j] = deck.drawCard();
             }
         }
+        EventEngine.fire('server:gameUpdated', this);
         return true;
     }
 
@@ -82,17 +98,15 @@ var Game = function() {
         for (var i = 0; i < 12; i += 1) {
             this.cardsInPlay.push(deck.drawCard());
         }
+        EventEngine.fire('server:gameUpdated', this);
     }
 
     this.dealMoreCards = function() {
         for (var i = 0; i < 3; i += 1) {
             this.cardsInPlay.push(deck.drawCard());
         }
+        EventEngine.fire('server:gameUpdated', this);
     }
-};
 
-var GameServer = function() {
-    EventEngine.observeAll(
-    return {
-    };
-}();
+    init.apply(this, arguments);
+};

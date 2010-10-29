@@ -1,6 +1,6 @@
 this.Player = function() {
     // Private class properties and functions
-    var nextId = 0;
+    var nextId = 1;
 
     return function() {
         this.id = 0;
@@ -37,6 +37,6 @@ this.Player = function() {
             }
         }
 
-        init();
+        init.apply(this, arguments);
     }
 }();
