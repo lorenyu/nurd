@@ -1,16 +1,12 @@
 var util = require('util');
 var http = require('http');
 var EventEngine = require('./EventEngine.js').EventEngine;
+var proxy = require('./jsutil.js').proxy;
 
+var Player = require('./Player.js').Player;
 var Deck = require('./Deck.js').Deck;
 
 var log = util.puts;
-
-function proxy(fn, object) {
-    return function() {
-        fn.apply(object, arguments);
-    }
-}
 
 this.Game = function() {
 
@@ -19,12 +15,14 @@ this.Game = function() {
     this.players = [];
 
     function init() {
+        EventEngine.observe('client:registerPlayer', proxy(function(event) {
+            this.registerPlayer(event.data.registerId, event.data.secret);
+        }, this));
         EventEngine.observe('client:startGame', proxy(this.startGame, this));
         EventEngine.observe('client:dealMoreCards', proxy(this.dealMoreCards, this));
-        EventEngine.observe('client:selectCards', proxy(this.selectCards, this));
         //EventEngine.observe('client:endGame', proxy(this.endGame, this));
     }
-
+    
     function isValidSet(cards) {
         var i, j, card, total;
         if (cards.length != 3) {
@@ -62,6 +60,16 @@ this.Game = function() {
             }
         }
         return false;
+    }
+
+    this.registerPlayer = function(registerId, secret) {
+        log('Game:registerPlayer: registerId=' + registerId + ', secret=' + secret);
+        var player = new Player();
+        var encPlayerId = secret + player.id;
+        EventEngine.fire('server:playerRegistered', {
+            registerId: registerId,
+            encPlayerId: encPlayerId
+        });
     }
 
     this.addPlayer = function(player) {

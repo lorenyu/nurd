@@ -26,7 +26,7 @@ var EventEngineHttpClient = function() {
                 data: {
                     id: clientId
                 },
-                success: this.onServerResponse
+                success: onServerResponse
             });
         //} else if (Prototype) { // TODO: Add support for Prototype
         //    new Ajax.Request(url, {
@@ -62,8 +62,8 @@ var EventEngineHttpClient = function() {
             type: 'POST',
             data: {
                 id: clientId,
-                en: eventName,
-                dt: eventData
+                en: 'http:' + eventName,
+                dt: JSON.stringify(eventData)
             }
         });
     }

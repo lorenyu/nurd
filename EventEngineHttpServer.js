@@ -92,6 +92,7 @@ var EventEngineHttpServer = function(config) {
     function onServerEvent(event) {
         numClientsToNotifyByEventId[event.id] = numClients;
         event.serverTime = (new Date()).getTime();
+        event.name = 'http:' + event.name;
         events.push(event);
 
         notifyClients();
@@ -368,38 +369,26 @@ var EventEngineHttpServer = function(config) {
 
         switch (pathname) {
         case '/ajax/send':
-            // TODO: check nonce to prevent a client from pretending to be another client
             var eventName = queryParams.en; // use short query params so URL remains short
-            var eventData = queryParams.dt;
+            var eventData = JSON.parse(queryParams.dt);
             log('defaultHandler:ajax/send:' + JSON.stringify(queryParams));
             jsonResponse(response, {success:true});
             EventEngine.fire(eventName, eventData);
             break;
         case '/ajax/recv':
-            // check nonce to prevent a client from pretending to be another client
             var clientId = queryParams.id;
-            var nonce = queryParams.nc;
             var client = clientsById[clientId];
-            //if (client.nonce == nonce) { // TODO: uncomment once we want to test security
             client.response = response;
-            //}
             break;
         case '/ajax/join':
             log('joining');
-            var client = new Client();
+            var client = new Client(); // TODO: do this in a smarter way without having to explicitly hit this URL
             numClients += 1;
             clientsById[client.id] = client;
 
-
-            var player = new Player();
-            player.joinGame(game);
-            client.player = player;
-
-
             jsonResponse(response, {
                 success: true,
-                clientId: client.id,
-                playerId: player.id
+                clientId: client.id
             });
 
             break;

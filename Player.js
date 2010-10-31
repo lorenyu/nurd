@@ -1,6 +1,11 @@
+var proxy = require('./jsutil.js').proxy;
+var Crypto = require('./jsutil.js').Crypto;
+var EventEngine = require('./EventEngine.js').EventEngine;
+
+var log = require('util').puts;
+
 this.Player = function() {
     // Private class properties and functions
-    var nextId = 1;
 
     return function() {
         this.id = 0;
@@ -11,10 +16,14 @@ this.Player = function() {
         var _game = null;
         
         function init() {
-            this.id = nextId;
-            nextId += 1;
+            this.id = Crypto.getRandomKey();
+            log('Creating Player with id: ' + this.id);
+            EventEngine.observe('client:selectCards', proxy(function(event) {
+                this.selectCards(event.data.cards);
+            }, this));
         }
 
+        /*
         this.joinGame = function(game) {
             if (game.addPlayer(this)) {
                 _game = game;
@@ -22,8 +31,9 @@ this.Player = function() {
             }
             return false;
         }
+*/
 
-        this.set = function(cards) {
+        this.selectCards = function(cards) {
             if (!_game) {
                 return;
             }
