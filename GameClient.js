@@ -13,9 +13,13 @@ this.Player = function() {
         EventEngine.observe('server:playerRegistered', proxy(function(event) {
             this.onPlayerRegistered(event.data.registerId, event.data.encPlayerId);
         }, this));
-        EventEngine.observe('client:selectCards', proxy(function(event) {
-            this.selectCards(event.data.cards);
-        }, this));
+    }
+
+    function onEvent(event) {
+        switch(event.name) {
+        
+        default: break;
+        }
     }
 
     this.register = function() {
@@ -31,6 +35,7 @@ this.Player = function() {
         if (registerId === _registerId) {
             this.id = encPlayerId - _secret;
         }
+        EventEngine.observeAll(proxy(onEvent, this));
     }
 
     /*
@@ -44,13 +49,16 @@ this.Player = function() {
 */
 
     this.selectCards = function(cards) {
-        
+        EventEngine.fire('client:selectCards', {
+            playerId: this.id,
+            cards: cards
+        });
     }
 
     init.apply(this, arguments);
 };
 
-var Game = function() {
+this.Game = function() {
 
     function init() {
         EventEngine.observe('server:playerRegistered', proxy(function(event) {

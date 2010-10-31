@@ -36,7 +36,7 @@ var EventEngineHttpServer = function(config) {
     var events = [];
     var numClientsToNotifyByEventId = {};
 
-    var game = new Game();
+    var game;
 
     function textResponse(response, text, responseCode) {
         responseCode = responseCode || 200;
@@ -69,15 +69,21 @@ var EventEngineHttpServer = function(config) {
             log('client:' + JSON.stringify(client.id));
             if (client.response) {
                 var newEvents = getEventsBetween(client.lastUpdated, now);
-                jsonResponse(client.response, newEvents);
-                client.lastUpdated = now;
-                client.response = null;
-                for (var i = 0, n = newEvents.length; i < n; i += 1) {
-                    numClientsToNotifyByEventId[newEvents[i].id] -= 1;
+                if (newEvents.length > 0) { // need to check this so that we don't constantly sending empty lists of events
+                    jsonResponse(client.response, newEvents);
+                    client.lastUpdated = now;
+                    client.response = null;
+                    for (var i = 0, n = newEvents.length; i < n; i += 1) {
+                        numClientsToNotifyByEventId[newEvents[i].id] -= 1;
+                    }
                 }
             }
         }
         cleanupEvents();
+    }
+
+    function notifyClientsAsync() {
+        setTimeout(notifyClients, 0);
     }
 
     function onEvent(event) {
@@ -95,7 +101,7 @@ var EventEngineHttpServer = function(config) {
         event.name = 'http:' + event.name;
         events.push(event);
 
-        notifyClients();
+        notifyClientsAsync();
     }
 
     function cleanupEvents() {
@@ -379,6 +385,7 @@ var EventEngineHttpServer = function(config) {
             var clientId = queryParams.id;
             var client = clientsById[clientId];
             client.response = response;
+            notifyClientsAsync();
             break;
         case '/ajax/join':
             log('joining');
@@ -427,6 +434,7 @@ var EventEngineHttpServer = function(config) {
 
     // Constructor
     EventEngine.observeAll(onEvent);
+    game = new Game();
 };
 
 this.Client = Client;

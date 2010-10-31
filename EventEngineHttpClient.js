@@ -52,6 +52,7 @@ var EventEngineHttpClient = function() {
             var event = events[i];
             EventEngine.fire(event.name, event.data);
         }
+        setTimeout(listen, 0);
     }
 
     function notify(eventName, eventData) {

@@ -21,9 +21,11 @@ this.Game = function() {
         EventEngine.observe('client:startGame', proxy(this.startGame, this));
         EventEngine.observe('client:dealMoreCards', proxy(this.dealMoreCards, this));
         //EventEngine.observe('client:endGame', proxy(this.endGame, this));
+
+        this.startGame();
     }
     
-    function isValidSet(cards) {
+    this._isValidSet = function(cards) {
         var i, j, card, total;
         if (cards.length != 3) {
             log('need 3 cards');
@@ -34,7 +36,7 @@ this.Game = function() {
         }
         for (i = 0; i < 3; i += 1) {
             card = cards[i];
-            if (!this.isCardInPlay(card)) {
+            if (!this._isCardInPlay(card)) {
                 log('card not in play');
                 return false;
             }
@@ -53,7 +55,7 @@ this.Game = function() {
         return true;
     }
 
-    function isCardInPlay(card) {
+    this._isCardInPlay = function(card) {
         for (var i = 0, n = this.cardsInPlay.length; i < n; i += 1) {
             if (Card.equals(this.cardsInPlay[i], card)) {
                 return true;
@@ -65,11 +67,14 @@ this.Game = function() {
     this.registerPlayer = function(registerId, secret) {
         log('Game:registerPlayer: registerId=' + registerId + ', secret=' + secret);
         var player = new Player();
+        player.joinGame(this);
+
         var encPlayerId = secret + player.id;
         EventEngine.fire('server:playerRegistered', {
             registerId: registerId,
             encPlayerId: encPlayerId
         });
+        EventEngine.fire('server:gameUpdated', this);
     }
 
     this.addPlayer = function(player) {
@@ -83,7 +88,7 @@ this.Game = function() {
     }
 
     this.processSet = function(cards) {
-        if (!isValidSet(cards)) {
+        if (!this._isValidSet(cards)) {
             return false;
         }
 
@@ -98,7 +103,6 @@ this.Game = function() {
                 this.cardsInPlay[j] = deck.drawCard();
             }
         }
-        EventEngine.fire('server:gameUpdated', this);
         return true;
     }
 

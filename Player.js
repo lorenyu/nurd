@@ -19,11 +19,13 @@ this.Player = function() {
             this.id = Crypto.getRandomKey();
             log('Creating Player with id: ' + this.id);
             EventEngine.observe('client:selectCards', proxy(function(event) {
-                this.selectCards(event.data.cards);
+                if (event.data.playerId == this.id) {
+                    this.selectCards(event.data.cards);
+                    EventEngine.fire('server:gameUpdated', _game);
+                }
             }, this));
         }
 
-        /*
         this.joinGame = function(game) {
             if (game.addPlayer(this)) {
                 _game = game;
@@ -31,9 +33,9 @@ this.Player = function() {
             }
             return false;
         }
-*/
 
         this.selectCards = function(cards) {
+            log('Player:selectCards(' + JSON.stringify(cards) + ')');
             if (!_game) {
                 return;
             }
@@ -45,6 +47,10 @@ this.Player = function() {
                 this.score -= 1;
                 this.numFalseSets += 1;
             }
+        }
+
+        this.equals = function(player) {
+            return this.id == player.id;
         }
 
         init.apply(this, arguments);
