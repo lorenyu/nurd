@@ -4,6 +4,7 @@ var EventEngine = require('./EventEngine.js').EventEngine;
 var proxy = require('./jsutil.js').proxy;
 
 var Player = require('./Player.js').Player;
+var Card = require('./Card.js').Card;
 var Deck = require('./Deck.js').Deck;
 
 var log = util.puts;
@@ -45,7 +46,7 @@ this.Game = function() {
             total = 0;
             for (j = 0; j < 3; j += 1) {
                 card = cards[j];
-                total += card.getAttribute[i];
+                total += card.attributes[i];
             }
             if (total % 3 !== 0) {
                 log('total not multiple of three');

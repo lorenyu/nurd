@@ -49,10 +49,10 @@ this.Player = function() {
             }
         }
 
-        this.equals = function(player) {
-            return this.id == player.id;
-        }
-
         init.apply(this, arguments);
     }
 }();
+
+this.Player.equals = function(playerA, playerB) {
+    return playerA.id == playerB.id;
+};
