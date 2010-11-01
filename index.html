@@ -1,16 +1,17 @@
 <html>
 <head>
   <link type="text/css" rel="stylesheet" href="/css/nurd.css" />
-  <script type="text/javascript" src="jquery-1.4.3.js" ></script>
+  <script type="text/javascript" src="/js/lib/jquery-1.4.3.js" ></script>
+  <script type="text/javascript" src="/js/lib/pure.js" ></script>
   <script type="text/javascript" src="jsutil.js" ></script>
   <script type="text/javascript" src="EventEngine.js" ></script>
   <script type="text/javascript" src="EventEngineHttpClient.js" ></script>
   <script type="text/javascript" src="GameClient.js" ></script>
   <script type="text/javascript">
-  var player = new Player();
-  var game = new Game();
-
   $(document).ready(function() {
+    var player = new Player();
+    var game = new Game();
+
     new EventEngineHttpClient();
     player.register();
   });
@@ -22,6 +23,11 @@
 </head>
 <body>
   <div id="game-container">
+    <ul class="cards-in-play">
+      <li class="card">
+        <img class="card-img" />
+      </li>
+    </ul>
   </div>
 </body>
 </html>

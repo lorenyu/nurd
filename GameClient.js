@@ -60,21 +60,37 @@ this.Player = function() {
 
 this.Game = function() {
 
+    var TEMPLATE;
+
     function init() {
+        TEMPLATE = $('#game-container .cards-in-play').html();
+
         EventEngine.observe('server:gameUpdated', function(event) {
             log('server:gameUpdated');
             var cards = event.data.cardsInPlay;
-            var html = '';
-            for (var i = 0, n = cards.length; i < n; i += 1) {
-                var card = cards[i];
-                var attributesStr = '' + card.attributes[0] + card.attributes[1] + card.attributes[2] + card.attributes[3];
-                html += '<img src="/images/' + attributesStr + '.png" ></img>';
-            }
-            $('#game-container').html(html);
+
+            $('#game-container .cards-in-play').html(TEMPLATE).render({cards:cards}, PureDirectives.GAME);
         });
 
         //EventEngine.observe('client:endGame', proxy(this.endGame, this));
     }
 
     init.apply(this, arguments);
+};
+
+this.PureDirectives = {
+    GAME: {
+        '.card' : {
+            'card<-cards' : {
+                'img@src' : function(arg) {
+                    var card = arg.item;
+                    var attrStr = '';
+                    for (var i = 0; i < 4; i += 1) {
+                        attrStr += card.attributes[i];
+                    }
+                    return '/images/' + attrStr + '.png';
+                }
+            }
+        }
+    }
 };

@@ -14,3 +14,8 @@ blockquote, q { quotes: "" ""; }
 /* main.css */
 
 #game-container { width:300px; }
+
+.card { }
+
+.cards-in-play { }
+.cards-in-play .card { float:left; }
