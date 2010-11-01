@@ -61,11 +61,18 @@ this.Player = function() {
 this.Game = function() {
 
     function init() {
-        EventEngine.observe('server:playerRegistered', proxy(function(event) {
-            this.registerPlayer(event.data.registerId, event.data.secret);
-        }, this));
-        EventEngine.observe('client:startGame', proxy(this.startGame, this));
-        EventEngine.observe('client:dealMoreCards', proxy(this.dealMoreCards, this));
+        EventEngine.observe('server:gameUpdated', function(event) {
+            log('server:gameUpdated');
+            var cards = event.data.cardsInPlay;
+            var html = '';
+            for (var i = 0, n = cards.length; i < n; i += 1) {
+                var card = cards[i];
+                var attributesStr = '' + card.attributes[0] + card.attributes[1] + card.attributes[2] + card.attributes[3];
+                html += '<img src="/images/' + attributesStr + '.png" ></img>';
+            }
+            $('#game-container').html(html);
+        });
+
         //EventEngine.observe('client:endGame', proxy(this.endGame, this));
     }
 

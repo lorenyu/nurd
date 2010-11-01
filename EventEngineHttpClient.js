@@ -38,6 +38,8 @@ var EventEngineHttpClient = function() {
     }
 
     function onEvent(event) {
+        console.log('onEvent');
+        console.log(event);
         if (event.name.indexOf('http:') === 0) {
             var eventName = event.name.substring('http:'.length); // strip out "http:" prefix from event name
             EventEngine.fire(eventName, event.data);

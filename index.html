@@ -7,46 +7,20 @@
   <script type="text/javascript" src="GameClient.js" ></script>
   <script type="text/javascript">
   var player = new Player();
+  var game = new Game();
 
-    $(document).ready(function() {
-      $('#new-ee-client').click(function() {
-        new EventEngineHttpClient();
-      });
+  $(document).ready(function() {
+    new EventEngineHttpClient();
+    player.register();
+  });
 
-      $('#event-form').submit(function() {
-        var form = $(this);
-        EventEngine.fire($('#event-name-field').val(), JSON.parse($('#event-data-field').val()));
-        return false;
-      });
-
-      EventEngine.observeAll(function(event) {
-        console.log(event);
-      });
-    });
+  EventEngine.observeAll(function(event) {
+    log('received event:' + event.name + ', data=' + JSON.stringify(event.data));
+  });
   </script>
 </head>
 <body>
-  Hello, world!
-  <div>
-    <button id="new-ee-client" >new EventEngineHttpClient()</button>
+  <div id="game-container">
   </div>
-
-  <div>
-    <button id="new-ee-client" >new EventEngineHttpClient()</button>
-  </div>
-
-  <div>
-    <button id="new-ee-client" >new EventEngineHttpClient()</button>
-  </div>
-
-
-  <form id="event-form" action="/ajax/send" >
-    <label id="event-name-label" for="event-name-field">event name:</label>
-    <input type="text" id="event-name-field" name="event-name" value="client:dealMoreCards" /><br/>
-    <label id="event-data-label" for="event-data-field">event data:</label>
-    <textarea id="event-data-field" name="event-data">{"playerId":0}</textarea><br/>
-    <input type="submit" />
-  </form>
-
 </body>
 </html>
