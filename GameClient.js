@@ -58,9 +58,12 @@ this.Player = function() {
     init.apply(this, arguments);
 };
 
+this.player = new Player();
+
 this.Game = function() {
 
     var TEMPLATE;
+    var _numSelectedCards = [];
 
     function init() {
         TEMPLATE = $('#game-container .cards-in-play').html();
@@ -70,6 +73,19 @@ this.Game = function() {
             var cards = event.data.cardsInPlay;
 
             $('#game-container .cards-in-play').html(TEMPLATE).render({cards:cards}, PureDirectives.GAME);
+        });
+
+        $('.cards-in-play .card').live('click', function() {
+            var card = $(this);
+            card.toggleClass('selected');
+            var selectedCards = $('.cards-in-play .card.selected .json');
+            if (selectedCards.length == 3) {
+                selectedCards = $.map(selectedCards, function(card) {
+                    log($(card).html());
+                    return JSON.parse($(card).html());
+                });
+                player.selectCards(selectedCards);
+            }
         });
 
         //EventEngine.observe('client:endGame', proxy(this.endGame, this));
@@ -89,6 +105,9 @@ this.PureDirectives = {
                         attrStr += card.attributes[i];
                     }
                     return '/images/' + attrStr + '.png';
+                },
+                '.json' : function(arg) {
+                    return JSON.stringify(arg.item);
                 }
             }
         }

@@ -13,9 +13,12 @@ blockquote, q { quotes: "" ""; }
 
 /* main.css */
 
-#game-container { width:300px; }
+#game-container { width:330px; }
 
 .card { }
+.json { display:none; }
 
 .cards-in-play { }
-.cards-in-play .card { float:left; }
+.cards-in-play .card { float:left; padding:4px; }
+.cards-in-play .card.selected { border:solid 3px #45d6de; padding:1px; }
+.cards-in-play .card .json { }

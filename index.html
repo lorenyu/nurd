@@ -9,7 +9,6 @@
   <script type="text/javascript" src="GameClient.js" ></script>
   <script type="text/javascript">
   $(document).ready(function() {
-    var player = new Player();
     var game = new Game();
 
     new EventEngineHttpClient();
@@ -26,6 +25,7 @@
     <ul class="cards-in-play">
       <li class="card">
         <img class="card-img" />
+        <span class="json"></span>
       </li>
     </ul>
   </div>
