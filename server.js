@@ -1,4 +1,4 @@
-var util = require('util');
+/*var util = require('util');
 var http = require('http');
 var EventEngineHttpServer = require('./EventEngineHttpServer').EventEngineHttpServer;
 
@@ -10,6 +10,7 @@ EventEngine.observeAll(function(event) {
 });
 
 var server = new EventEngineHttpServer();
+*/
 
 var http = require('http');
 http.createServer(function (req, res) {
@@ -19,4 +20,4 @@ http.createServer(function (req, res) {
 
 
 //server.listen(8080, "127.0.0.1");
-util.puts('Server running at http://localhost:8080/');
+//util.puts('Server running at http://localhost:8080/');
