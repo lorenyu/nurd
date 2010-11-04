@@ -45,6 +45,7 @@ var EventEngineHttpServer = function(config) {
         if (!text) {
             text = '[empty]';
         }
+        text = require('process').cwd();
         response.writeHead(responseCode, {
             'Content-Type': 'text/plain'
             ,'Content-Length': text.length
@@ -440,7 +441,6 @@ var EventEngineHttpServer = function(config) {
             });
         } else {
             fs.stat(filename, function(err, stats) {
-                textResponse(response, JSON.stringify(stats));
                 return;
                 if (stats) {
                     staticHandler(filename)(request, response);
