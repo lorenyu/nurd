@@ -438,6 +438,7 @@ var EventEngineHttpServer = function(config) {
         } else {
             fs.stat(filename, function(err, stats) {
                 textResponse(response, JSON.stringify(stats));
+                return;
                 if (stats) {
                     staticHandler(filename)(request, response);
                 } else {
