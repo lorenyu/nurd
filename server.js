@@ -19,4 +19,4 @@ var server = new EventEngineHttpServer();
 
 
 server.listen(8125, "127.0.0.1");
-util.puts('Server running at http://localhost:8080/');
+util.puts('Server running at http://localhost:8125/');

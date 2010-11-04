@@ -1,5 +1,13 @@
 // requires EventEngine
 
+if (!this.log) {
+    this.log = function(x) {
+        if (typeof(console) !== 'undefined') {
+            console.log(x);
+        }
+    }
+}
+
 var EventEngineHttpClient = function() {
 
     // Private properties and methods
@@ -27,8 +35,8 @@ var EventEngineHttpClient = function() {
     }
 
     function onEvent(event) {
-        console.log('onEvent');
-        console.log(event);
+        log('onEvent');
+        log(event);
         if (event.name.indexOf('http:') === 0) {
             var eventName = event.name.substring('http:'.length); // strip out "http:" prefix from event name
             EventEngine.fire(eventName, event.data);
