@@ -15,15 +15,17 @@ this.Game = function() {
     this.cardsInPlay = [];
     this.players = [];
 
+    //this.playerTimeout = 60*60*1000; // 1 hour
+    this.playerTimeout = 10*1000; // 15 minutes
+
     function init() {
         EventEngine.observe('client:registerPlayer', proxy(function(event) {
             this.registerPlayer(event.data.registerId, event.data.secret);
         }, this));
-        EventEngine.observe('client:startGame', proxy(this.startGame, this));
-        EventEngine.observe('client:dealMoreCards', proxy(this.dealMoreCards, this));
         //EventEngine.observe('client:endGame', proxy(this.endGame, this));
 
         this.startGame();
+        //setInterval(proxy(this._cleanupPlayers, this), Math.floor(this.playerTimeout / 2)); // TODO: cleanup players
     }
     
     this._isValidSet = function(cards) {
@@ -63,6 +65,17 @@ this.Game = function() {
             }
         }
         return false;
+    }
+
+    this._cleanupPlayers = function() {
+        var now = (new Date()).getTime();
+        for (var i = 0; i < this.players.length; i += 1) {
+            var player = this.players[i];
+            if (player.lastSeen < now - this.playerTimeout) {
+                this.players.splice(i, 1);
+                i -= 1;
+            }
+        }
     }
 
     this.registerPlayer = function(registerId, secret) {

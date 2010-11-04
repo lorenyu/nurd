@@ -13,15 +13,32 @@ this.Player = function() {
         this.numSets = 0;
         this.numFalseSets = 0;
 
+        this.lastSeen = 0;
+
         var _game = null;
         
         function init() {
             this.id = Crypto.getRandomKey();
             log('Creating Player with id: ' + this.id);
+
+            // TODO: create unregister player function to unregister these handlers so that we can delete the player
             EventEngine.observe('client:selectCards', proxy(function(event) {
                 if (event.data.playerId == this.id) {
+                    this.lastSeen = (new Date()).getTime();
                     this.selectCards(event.data.cards);
                     EventEngine.fire('server:gameUpdated', _game);
+                }
+            }, this));
+            EventEngine.observe('client:startGame', proxy(function(event) {
+                if (event.data.playerId == this.id) {
+                    this.lastSeen = (new Date()).getTime();
+                    _game.startGame();
+                }
+            }, this));
+            EventEngine.observe('client:dealMoreCards', proxy(function(event) {
+                if (event.data.playerId == this.id) {
+                    this.lastSeen = (new Date()).getTime();
+                    _game.dealMoreCards();
                 }
             }, this));
         }
