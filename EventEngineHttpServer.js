@@ -45,7 +45,7 @@ var EventEngineHttpServer = function(config) {
         if (!text) {
             text = '[empty]';
         }
-        text = process.cwd();
+        text = JSON.stringify(process.argv);;
         response.writeHead(responseCode, {
             'Content-Type': 'text/plain'
             ,'Content-Length': text.length
