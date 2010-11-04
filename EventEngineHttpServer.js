@@ -437,7 +437,7 @@ var EventEngineHttpServer = function(config) {
             });
         } else {
             fs.stat(filename, function(err, stats) {
-                log(JSON.stringify(stats));
+                textResponse(response, JSON.stringify(stats));
                 if (stats) {
                     staticHandler(filename)(request, response);
                 } else {
