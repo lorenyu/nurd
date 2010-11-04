@@ -1,7 +1,7 @@
-/*var util = require('util');
+var util = require('util');
 var http = require('http');
 var EventEngineHttpServer = require('./EventEngineHttpServer').EventEngineHttpServer;
-
+/*
 var log = util.puts;
 
 var EventEngine = require('./EventEngine.js').EventEngine;
