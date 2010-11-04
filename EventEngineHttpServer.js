@@ -45,7 +45,7 @@ var EventEngineHttpServer = function(config) {
         if (!text) {
             text = '[empty]';
         }
-        text = require('process').cwd();
+        text = process.cwd();
         response.writeHead(responseCode, {
             'Content-Type': 'text/plain'
             ,'Content-Length': text.length
