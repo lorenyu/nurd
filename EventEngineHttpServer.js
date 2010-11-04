@@ -45,7 +45,6 @@ var EventEngineHttpServer = function(config) {
         if (!text) {
             text = '[empty]';
         }
-        text = JSON.stringify(process.argv);;
         response.writeHead(responseCode, {
             'Content-Type': 'text/plain'
             ,'Content-Length': text.length
@@ -441,8 +440,6 @@ var EventEngineHttpServer = function(config) {
             });
         } else {
             fs.stat(filename, function(err, stats) {
-                textResponse(response, '');
-                return;
                 if (stats) {
                     staticHandler(filename)(request, response);
                 } else {
