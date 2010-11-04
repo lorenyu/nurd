@@ -419,7 +419,7 @@ var EventEngineHttpServer = function(config) {
             notifyClientsAsync();
             break;
         default:
-            textResponse(response, 'Invalid command');
+            textResponse(response, 'Invalid command: ' + pathname);
         }
     }
 
