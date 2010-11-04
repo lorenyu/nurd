@@ -43,8 +43,8 @@ var EventEngineHttpServer = function(config) {
         responseCode = responseCode || 200;
 
         response.writeHead(responseCode, {
-            'Content-Type': 'text/plain',
-            'Content-Length': text.length
+            'Content-Type': 'text/plain'
+            //,'Content-Length': text.length
         });
         response.end(text);
     }
