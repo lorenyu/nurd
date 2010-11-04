@@ -441,10 +441,8 @@ var EventEngineHttpServer = function(config) {
         } else {
             fs.stat(filename, function(err, stats) {
                 if (stats) {
-                    textResponse(response, 'staticHandler'); return;
                     staticHandler(filename)(request, response);
                 } else {
-                    textResponse(response, 'defaultHandler'); return;
                     defaultHandler(request, response);
                 }
             });
