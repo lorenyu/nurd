@@ -10,5 +10,5 @@ EventEngine.observeAll(function(event) {
 });
 
 var server = new EventEngineHttpServer();
-server.listen(8080);
-util.puts('Server running at http://localhost:8080/');
+server.listen(80);
+util.puts('Server running at http://localhost:80/');
