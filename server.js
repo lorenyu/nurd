@@ -2,6 +2,7 @@ var util = require('util');
 var http = require('http');
 var path = require('path');
 var EventEngineHttpServer = require('./EventEngineHttpServer').EventEngineHttpServer;
+var Game = require('./GameServer.js').Game;
 
 var log = util.puts;
 
@@ -15,8 +16,7 @@ EventEngine.observeAll(function(event) {
 });
 
 var server = new EventEngineHttpServer();
-
-
+var game = new Game();
 
 server.listen(8125, "127.0.0.1");
 util.puts('Server running at http://localhost:8125/');

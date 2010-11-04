@@ -6,9 +6,6 @@ var util = require('util');
 var querystring = require('querystring');
 var EventEngine = require('./EventEngine.js').EventEngine;
 
-var Player = require('./Player.js').Player;
-var Game = require('./GameServer.js').Game;
-
 var log = console.log;
 
 var Client = function() {
@@ -21,9 +18,6 @@ var Client = function() {
         this.lastUpdated = 0;
         this.response = null;
         nextClientId += 1;
-
-        // game related fields (should they be here?)
-        this.player = null;
     }
 }();
 
@@ -36,8 +30,6 @@ var EventEngineHttpServer = function(config) {
     var events = [];
     var numClientsToNotifyByEventId = {};
     var clientTimeout = 3000; // amount of time in milliseconds it takes to timeout a client
-
-    var game;
 
     function textResponse(response, text, responseCode) {
         responseCode = responseCode || 200;
@@ -456,7 +448,6 @@ var EventEngineHttpServer = function(config) {
 
     // Constructor
     EventEngine.observeAll(onEvent);
-    game = new Game();
     setInterval(cleanupClients, clientTimeout);
 };
 

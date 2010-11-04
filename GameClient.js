@@ -38,6 +38,18 @@ this.Player = function() {
         EventEngine.observeAll(proxy(onEvent, this));
     }
 
+    this.requestMoreCards = function() {
+        EventEngine.fire('client:dealMoreCards', {
+            playerId: this.id
+        });
+    }
+
+    this.requestGameRestart = function() {
+        EventEngine.fire('client:startGame', {
+            playerId: this.id
+        });
+    }
+
     /*
         this.joinGame = function(game) {
             if (game.addPlayer(this)) {

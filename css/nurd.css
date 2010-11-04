@@ -13,7 +13,7 @@ blockquote, q { quotes: "" ""; }
 
 /* main.css */
 
-#game-container { width:330px; }
+#game-container { }
 
 .card { }
 .card .json { display:none; }
@@ -34,8 +34,8 @@ blockquote, q { quotes: "" ""; }
 .card .card-object.color2.shading1 { border-color:#5de100; background:rgba(93,225,0,0.4); }
 .card .card-object.color2.shading2 { border-color:#5de100; background:rgba(93,225,0,0.0); }
 
-.cards-in-play { }
-.cards-in-play .card { border:solid 2px #d4d3de; float:left; height:60px; margin:2px; overflow:hidden; padding:5px; width:60px; }
+.cards-in-play { background:#dadbeb; overflow:hidden; padding:12px; width:250px; }
+.cards-in-play .card { background:#ffffff; border:solid 2px #bab5a0; float:left; height:60px; margin:2px; overflow:hidden; padding:5px; width:60px; }
 .cards-in-play .card.selected { border:solid 2px #ffbb00; padding:5px;
     box-shadow:0 0 5px #ffbb00; -moz-box-shadow:0 0 10px #ffbb00; -webkit-box-shadow:0 0 5px #ffbb00; }
 .cards-in-play .card .json { }
