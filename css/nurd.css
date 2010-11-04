@@ -30,9 +30,9 @@ blockquote, q { quotes: "" ""; }
 .card .card-object.color1.shading0 { border-color:#133aac; background:rgba(19,58,172,1.0); }
 .card .card-object.color1.shading1 { border-color:#133aac; background:rgba(19,58,172,0.4); }
 .card .card-object.color1.shading2 { border-color:#133aac; background:rgba(19,58,172,0.0); }
-.card .card-object.color2.shading0 { border-color:#5de100; background:rgba(93,255,0,1.0); }
-.card .card-object.color2.shading1 { border-color:#5de100; background:rgba(93,255,0,0.4); }
-.card .card-object.color2.shading2 { border-color:#5de100; background:rgba(93,255,0,0.0); }
+.card .card-object.color2.shading0 { border-color:#5de100; background:rgba(93,225,0,1.0); }
+.card .card-object.color2.shading1 { border-color:#5de100; background:rgba(93,225,0,0.4); }
+.card .card-object.color2.shading2 { border-color:#5de100; background:rgba(93,225,0,0.0); }
 
 .cards-in-play { }
 .cards-in-play .card { border:solid 2px #d4d3de; float:left; height:60px; margin:2px; overflow:hidden; padding:5px; width:60px; }
