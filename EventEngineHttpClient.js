@@ -6,17 +6,6 @@ var EventEngineHttpClient = function() {
 
     var clientId = null;
 
-    function join() {
-        var url = '/ajax/join';
-        $.ajax({
-            url: url,
-            success: function(data) {
-                clientId = data.clientId;
-                listen();
-            }
-        });
-    }
-
     function listen() {
         // wait for events from the server with long polling
         var url = '/ajax/recv';
@@ -49,7 +38,8 @@ var EventEngineHttpClient = function() {
     }
 
     function onServerResponse(data) {
-        var events = data;
+        clientId = data.clientId;
+        var events = data.events;
         for (var i = 0, n = events.length; i < n; i += 1) {
             var event = events[i];
             EventEngine.fire(event.name, event.data);
@@ -73,7 +63,7 @@ var EventEngineHttpClient = function() {
 
     function init() {
         EventEngine.observeAll(onEvent);
-        join();
+        listen();
     }
 
     init();

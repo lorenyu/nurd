@@ -35,6 +35,7 @@ var EventEngineHttpServer = function(config) {
     var numClients = 0;
     var events = [];
     var numClientsToNotifyByEventId = {};
+    var clientTimeout = 1000; // amount of time in milliseconds it takes to timeout a client
 
     var game;
 
@@ -70,7 +71,10 @@ var EventEngineHttpServer = function(config) {
             if (client.response) {
                 var newEvents = getEventsBetween(client.lastUpdated, now);
                 if (newEvents.length > 0) { // need to check this so that we don't constantly sending empty lists of events
-                    jsonResponse(client.response, newEvents);
+                    jsonResponse(client.response, {
+                        clientId: client.id,
+                        events: newEvents
+                    });
                     client.lastUpdated = now;
                     client.response = null;
                     for (var i = 0, n = newEvents.length; i < n; i += 1) {
@@ -105,11 +109,30 @@ var EventEngineHttpServer = function(config) {
     }
 
     function cleanupEvents() {
-        while (events.length > 0 && numClientsToNotifyByEventId[events[0].id] === 0) {
-            numClientsToNotifyByEventId[events[0].id] = undefined;
+        var now = (new Date()).getTime();
+        while (events.length > 0 && (numClientsToNotifyByEventId[events[0].id] === 0 || events[0].serverTime < now - clientTimeout)) {
+            delete numClientsToNotifyByEventId[events[0].id];
             events.shift();
         }
     }
+
+    function cleanupClients() {
+        var now = (new Date()).getTime();
+        for (clientId in clientsById) if (clientsById.hasOwnProperty(clientId)) {
+            var client = clientsById[clientId];
+
+            if ((!client.response) && (client.lastUpdated < now - clientTimeout)) {
+                for (var i = 0, n = events.length; i < n; i += 1) {
+                    if (events[i].serverTime > client.lastUpdated) {
+                        numClientsToNotifyByEventId[events[i].id] -= 1;
+                    }
+                }
+                delete clientsById[clientId];
+                numClients -= 1;
+            }
+        }
+    }
+
 
     /*
      * getEventsBetween(minTime, maxTime)
@@ -120,7 +143,8 @@ var EventEngineHttpServer = function(config) {
         log('getEventsBetween:minTime:' + minTime + ',maxTime:' + maxTime);
         var result = [];
         var i = 0;
-        while (i < events.length && events[i].serverTime <= minTime) {
+        var n = events.length;
+        while (i < n && events[i].serverTime <= minTime) {
             log('skipping event:' + JSON.stringify(events[i]));
             i += 1;
         }
@@ -383,21 +407,16 @@ var EventEngineHttpServer = function(config) {
             break;
         case '/ajax/recv':
             var clientId = queryParams.id;
-            var client = clientsById[clientId];
+            if (clientsById.hasOwnProperty(clientId)) {
+                var client = clientsById[clientId];
+            } else {
+                var client = new Client();
+                numClients += 1;
+                clientsById[client.id] = client;
+            }
+            
             client.response = response;
             notifyClientsAsync();
-            break;
-        case '/ajax/join':
-            log('joining');
-            var client = new Client(); // TODO: do this in a smarter way without having to explicitly hit this URL
-            numClients += 1;
-            clientsById[client.id] = client;
-
-            jsonResponse(response, {
-                success: true,
-                clientId: client.id
-            });
-
             break;
         default:
             textResponse(response, 'Invalid command');
@@ -435,6 +454,7 @@ var EventEngineHttpServer = function(config) {
     // Constructor
     EventEngine.observeAll(onEvent);
     game = new Game();
+    setInterval(cleanupClients, clientTimeout);
 };
 
 this.Client = Client;
