@@ -42,9 +42,12 @@ var EventEngineHttpServer = function(config) {
     function textResponse(response, text, responseCode) {
         responseCode = responseCode || 200;
 
+        if (!text) {
+            text = '[empty]';
+        }
         response.writeHead(responseCode, {
             'Content-Type': 'text/plain'
-            //,'Content-Length': text.length
+            ,'Content-Length': text.length
         });
         response.end(text);
     }
