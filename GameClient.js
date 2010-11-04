@@ -106,6 +106,28 @@ this.PureDirectives = {
                     }
                     return '/images/' + attrStr + '.png';
                 },
+                '.card-css' : function(arg) {
+                    var card = arg.item;
+                    var shape = card.attributes[0];
+                    var color = card.attributes[1];
+                    var shading = card.attributes[2];
+                    var number = card.attributes[3];
+                    var html = '';
+                    var cls = ' shape'+shape + ' color'+color + ' shading'+shading;
+                    for (var i = 0; i <= number; i += 1) {
+                        html += '<div class="card-object ' + cls  + ' object'+ i + '"></div>';                   }
+                    return html;
+                },
+                '.card-css@class' : function(arg) {
+                    var card = arg.item;
+                    var shape = card.attributes[0];
+                    var color = card.attributes[1];
+                    var shading = card.attributes[2];
+                    var number = card.attributes[3];
+                    var html = '';
+                    var cls = ' shape'+shape + ' color'+color + ' shading'+shading + ' number' + number;
+                    return cls;
+                },
                 '.json' : function(arg) {
                     return JSON.stringify(arg.item);
                 }
