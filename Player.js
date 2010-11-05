@@ -22,25 +22,6 @@ this.Player = function() {
             log('Creating Player with id: ' + id);
 
             // TODO: create unregister player function to unregister these handlers so that we can delete the player
-            EventEngine.observe('client:selectCards', proxy(function(event) {
-                if (event.data.playerId == id) {
-                    this.lastSeen = (new Date()).getTime();
-                    this.selectCards(event.data.cards);
-                    EventEngine.fire('server:gameUpdated', _game);
-                }
-            }, this));
-            EventEngine.observe('client:startGame', proxy(function(event) {
-                if (event.data.playerId == id) {
-                    this.lastSeen = (new Date()).getTime();
-                    _game.startGame();
-                }
-            }, this));
-            EventEngine.observe('client:dealMoreCards', proxy(function(event) {
-                if (event.data.playerId == id) {
-                    this.lastSeen = (new Date()).getTime();
-                    _game.dealMoreCards();
-                }
-            }, this));
         }
 
         this.getId = function() {

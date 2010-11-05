@@ -13,6 +13,14 @@ this.Player = function() {
         EventEngine.observe('server:playerRegistered', proxy(function(event) {
             this.onPlayerRegistered(event.data.registerId, event.data.encPlayerId);
         }, this));
+
+        $(window).unload(proxy(function() {
+            if (this.id) {
+                EventEngine.fire('client:leave', {
+                    playerId: player.id
+                });
+            }
+        }, this));
     }
 
     function onEvent(event) {
@@ -39,12 +47,14 @@ this.Player = function() {
     }
 
     this.requestMoreCards = function() {
+        log('requesting more cards');
         EventEngine.fire('client:dealMoreCards', {
             playerId: this.id
         });
     }
 
     this.requestGameRestart = function() {
+        log('requesting game restart');
         EventEngine.fire('client:startGame', {
             playerId: this.id
         });

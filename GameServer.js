@@ -24,9 +24,47 @@ this.Game = function() {
         }, this));
         //EventEngine.observe('client:endGame', proxy(this.endGame, this));
 
+        EventEngine.observe('client:selectCards', proxy(function(event) {
+            var player = this.getPlayer(event.data.playerId);
+            if (player) {
+                player.lastSeen = (new Date()).getTime();
+                player.selectCards(event.data.cards);
+                EventEngine.fire('server:gameUpdated', this);
+            }
+        }, this));
+        EventEngine.observe('client:startGame', proxy(function(event) {
+            var player = this.getPlayer(event.data.playerId);
+            if (player) {
+                player.lastSeen = (new Date()).getTime();
+                this.startGame();
+            }
+        }, this));
+        EventEngine.observe('client:dealMoreCards', proxy(function(event) {
+            var player = this.getPlayer(event.data.playerId);
+            log('dealMoreCards');
+            if (player) {
+                player.lastSeen = (new Date()).getTime();
+                this.dealMoreCards();
+            }
+        }, this));
+        EventEngine.observe('client:leave', proxy(function(event) {
+            this.removePlayer(event.data.playerId);
+        }, this));
+
+
         this.startGame();
         //setInterval(proxy(this._cleanupPlayers, this), Math.floor(this.playerTimeout / 2)); // TODO: cleanup players
     }
+
+    this.getPlayer = function(playerId) {
+        for (var i = 0, n = this.players.length; i < n; i += 1) {
+            var player = this.players[i];
+            if (player.getId() == playerId) {
+                return player;
+            }
+        }
+        return null;
+    };
     
     this._isValidSet = function(cards) {
         var i, j, card, total;
@@ -99,6 +137,16 @@ this.Game = function() {
         }
         this.players.push(player);
         return true;
+    }
+
+    this.removePlayer = function(playerId) {
+        for (var i = 0, n = this.players.length; i < n; i += 1) {
+            if (this.players[i].getId() == playerId) {
+                this.players.splice(i, 1);
+                return true;
+            }
+        }
+        return false;
     }
 
     this.processSet = function(cards) {
