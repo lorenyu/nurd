@@ -7,17 +7,23 @@ var log = require('util').puts;
 this.Player = function() {
     // Private class properties and functions
 
+    var numPlayersCreated = 0;
+
     return function() {
         var id = 0; // needs to be private so players can't pretend to be each other
         this.score = 0;
         this.numSets = 0;
         this.numFalseSets = 0;
+        this.name;
 
         this.lastSeen = 0;
 
         var _game = null;
         
         function init() {
+            this.name = 'Player' + numPlayersCreated;
+            numPlayersCreated += 1;
+
             id = Crypto.getRandomKey();
             log('Creating Player with id: ' + id);
 

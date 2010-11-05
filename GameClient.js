@@ -162,6 +162,7 @@ this.PureDirectives = {
         },
         '.player-container' : {
             'player<-players' : {
+                '.name' : 'player.name',
                 '.score' : 'player.score',
                 '.num-sets' : 'player.numSets',
                 '.num-false-sets' : 'player.numFalseSets'

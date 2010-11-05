@@ -43,10 +43,12 @@ blockquote, q { quotes: "" ""; }
 .cards-in-play .card.number2 .card-object { position:relative; left:5px; }
 
 .players { float:left; }
-.players .player { }
-.players .player .name { }
-.players .player .score { }
-.players .player .num-sets { }
-.players .player .num-false-sets { }
+.players .player { border-bottom:1px dotted #C8C8C8; display:block; margin:2px 12px; }
+.players .player .field-name { font-family:Arial; font-size:0.8em; }
+.players .player .field-value {}
+.players .player .name { display:inline-block; font-size:1.1em; margin-right:22px; width:160px; }
+.players .player .score,
+.players .player .num-sets,
+.players .player .num-false-sets { background:#e8e8e8; display:inline-block; font-family:Arial; font-size:1em; height:17px; margin:0 5px; padding:5px; text-align:right; width:30px; }
 
 .game-controls { }
