@@ -125,6 +125,7 @@ var EventEngineHttpServer = function(config) {
                         numClientsToNotifyByEventId[events[i].id] -= 1;
                     }
                 }
+                log('deleting client: ' + clientId);
                 delete clientsById[clientId];
                 numClients -= 1;
             }

@@ -35,7 +35,10 @@ var EventEngineHttpClient = function(options) {
             $.ajax({
                 url: url,
                 data: data,
-                success: onServerResponse
+                success: onServerResponse,
+                complete: function() { // do this onComplete rather than onSuccess because the request might time out
+                    setTimeout(listen, 0);
+                }
             });
         //} else if (Prototype) { // TODO: Add support for Prototype
         //    new Ajax.Request(url, {
@@ -71,7 +74,6 @@ var EventEngineHttpClient = function(options) {
             var event = events[i];
             EventEngine.fire(event.name, event.data);
         }
-        setTimeout(listen, 0);
     }
 
     function notify(eventName, eventData) {
