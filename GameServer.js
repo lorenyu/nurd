@@ -83,7 +83,7 @@ this.Game = function() {
         var player = new Player();
         player.joinGame(this);
 
-        var encPlayerId = secret + player.id;
+        var encPlayerId = secret + player.getId();
         EventEngine.fire('server:playerRegistered', {
             registerId: registerId,
             encPlayerId: encPlayerId
