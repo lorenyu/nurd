@@ -90,7 +90,7 @@ this.Game = function() {
         $('.cards-in-play .card').live('click', function() {
             var card = $(this);
             card.toggleClass('selected');
-            var selectedCards = $('.cards-in-play .card.selected .json');
+            var selectedCards = $('.cards-in-play .card.selected').siblings('.json');
             if (selectedCards.length == 3) {
                 selectedCards = $.map(selectedCards, function(card) {
                     log($(card).html());
@@ -108,7 +108,7 @@ this.Game = function() {
 
 this.PureDirectives = {
     GAME: {
-        '.card' : {
+        '.card-container' : {
             'card<-cards' : {
 /*
                 'img@src' : function(arg) {
@@ -138,7 +138,7 @@ this.PureDirectives = {
                     var shading = card.attributes[2];
                     var number = card.attributes[3];
                     var html = '';
-                    var cls = ' shape'+shape + ' color'+color + ' shading'+shading + ' number' + number;
+                    var cls = 'card shape'+shape + ' color'+color + ' shading'+shading + ' number' + number;
                     return cls;
                 },
                 '.json' : function(arg) {
