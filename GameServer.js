@@ -121,7 +121,7 @@ this.Game = function() {
     }
 
     this.startGame = function() {
-        var deck = new Deck();
+        deck = new Deck();
         this.cardsInPlay = [];
 
         for (var i = 0; i < 12; i += 1) {
