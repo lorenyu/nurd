@@ -8,6 +8,7 @@
   <script type="text/javascript" src="EventEngineHttpClient.js" ></script>
   <script type="text/javascript" src="GameClient.js" ></script>
   <script type="text/javascript">
+
   $(document).ready(function() {
     var game = new Game();
 
@@ -15,10 +16,10 @@
       onInitialized: function() {
         player.register();
         
-        $('#restart-game-btn').click(function() {
+        $('#restart-game-btn').live('click', function() {
           player.requestGameRestart();
         });
-        $('#draw-cards-btn').click(function() {
+        $('#draw-cards-btn').live('click', function() {
           player.requestMoreCards();
         });
       }
