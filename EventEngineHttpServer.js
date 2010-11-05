@@ -29,7 +29,7 @@ var EventEngineHttpServer = function(config) {
     var numClients = 0;
     var events = [];
     var numClientsToNotifyByEventId = {};
-    var clientTimeout = 3000; // amount of time in milliseconds it takes to timeout a client
+    var clientTimeout = 10000; // amount of time in milliseconds it takes to timeout a client
 
     function textResponse(response, text, responseCode) {
         responseCode = responseCode || 200;

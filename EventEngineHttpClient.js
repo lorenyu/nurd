@@ -35,6 +35,7 @@ var EventEngineHttpClient = function(options) {
             $.ajax({
                 url: url,
                 data: data,
+                timeout: 30000,
                 success: onServerResponse,
                 complete: function() { // do this onComplete rather than onSuccess because the request might time out
                     setTimeout(listen, 0);

@@ -110,6 +110,7 @@ this.PureDirectives = {
     GAME: {
         '.card' : {
             'card<-cards' : {
+/*
                 'img@src' : function(arg) {
                     var card = arg.item;
                     var attrStr = '';
@@ -117,7 +118,7 @@ this.PureDirectives = {
                         attrStr += card.attributes[i];
                     }
                     return '/images/' + attrStr + '.png';
-                },
+                },*/
                 '.card-css' : function(arg) {
                     var card = arg.item;
                     var shape = card.attributes[0];
