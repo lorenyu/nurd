@@ -161,7 +161,9 @@ this.Game = function() {
                 for (var j = 0, m = this.cardsInPlay.length; j < m; j += 1) {
                     if (Card.equals(this.cardsInPlay[j], card)) {
                         if (this.cardsInPlay.length <= 12) { // replace the card if there are fewer than 12 cards
-                            this.cardsInPlay[j] = deck.drawCard();
+                            if (!deck.isEmpty()) {
+                                this.cardsInPlay[j] = deck.drawCard();
+                            }
                         } else { // if there are more than 12 cards in play just remove the card
                             this.cardsInPlay.splice(j, 1);
                         }
