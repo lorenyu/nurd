@@ -26,12 +26,15 @@ var EventEngineHttpClient = function(options) {
     function listen() {
         // wait for events from the server with long polling
         var url = '/ajax/recv';
+        if (clientId) {
+            var data = { id: clientId };
+        } else {
+            var data = {};
+        }
         if (jQuery) {
             $.ajax({
                 url: url,
-                data: {
-                    id: clientId
-                },
+                data: data,
                 success: onServerResponse
             });
         //} else if (Prototype) { // TODO: Add support for Prototype

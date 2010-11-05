@@ -394,6 +394,7 @@ var EventEngineHttpServer = function(config) {
         } else if (request.method == 'POST') {
             queryParams = request.queryParams; // TODO: clean this up. Shouldn't have to set queryParams property on the request object
         }
+        queryParams = queryParams || {};
 
         switch (pathname) {
         case '/ajax/send':
@@ -405,7 +406,7 @@ var EventEngineHttpServer = function(config) {
             break;
         case '/ajax/recv':
             var clientId = queryParams.id;
-            if (clientsById.hasOwnProperty(clientId)) {
+            if (clientId && clientsById.hasOwnProperty(clientId)) {
                 var client = clientsById[clientId];
             } else {
                 var client = new Client();
