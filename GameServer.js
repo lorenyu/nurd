@@ -185,7 +185,9 @@ this.Game = function() {
 
     this.dealMoreCards = function() {
         for (var i = 0; i < 3; i += 1) {
-            this.cardsInPlay.push(deck.drawCard());
+            if (!deck.isEmpty()) {
+                this.cardsInPlay.push(deck.drawCard());
+            }
         }
         EventEngine.fire('server:gameUpdated', this);
     }
