@@ -14,14 +14,14 @@
     new EventEngineHttpClient({
       onInitialized: function() {
         player.register();
+        
+        $('#restart-game-btn').click(function() {
+          player.requestGameRestart();
+        });
+        $('#draw-cards-btn').click(function() {
+          player.requestMoreCards();
+        });
       }
-    });
-
-    $('#restart-game-btn').click(function() {
-      player.requestGameRestart();
-    });
-    $('#draw-cards-btn').click(function() {
-      player.requestMoreCards();
     });
   });
 
