@@ -104,7 +104,7 @@ this.Game = function() {
             }, PureDirectives.GAME);
         });
 
-        $('.cards-in-play .card').live('click', function() {
+        $('.cards-in-play .card').live('mousedown', function() {
             var card = $(this);
             card.toggleClass('selected');
             var selectedCards = $('.cards-in-play .card.selected').siblings('.json');
