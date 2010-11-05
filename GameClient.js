@@ -14,13 +14,16 @@ this.Player = function() {
             this.onPlayerRegistered(event.data.registerId, event.data.encPlayerId);
         }, this));
 
-        $(window).unload(proxy(function() {
+        var leave = proxy(function() {
             if (this.id) {
                 EventEngine.fire('client:leave', {
                     playerId: player.id
                 });
             }
-        }, this));
+        }, this);
+        $(window).unload(leave);
+        $(window).onbeforeunload = leave;
+        
     }
 
     function onEvent(event) {
