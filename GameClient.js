@@ -78,13 +78,17 @@ this.Game = function() {
     var _numSelectedCards = [];
 
     function init() {
-        TEMPLATE = $('#game-container .cards-in-play').html();
+        TEMPLATE = $('#game-container').html();
 
         EventEngine.observe('server:gameUpdated', function(event) {
             log('server:gameUpdated');
             var cards = event.data.cardsInPlay;
+            var players = event.data.players;
 
-            $('#game-container .cards-in-play').html(TEMPLATE).render({cards:cards}, PureDirectives.GAME);
+            $('#game-container').html(TEMPLATE).render({
+                cards:cards,
+                players:players
+            }, PureDirectives.GAME);
         });
 
         $('.cards-in-play .card').live('click', function() {
@@ -144,6 +148,13 @@ this.PureDirectives = {
                 '.json' : function(arg) {
                     return JSON.stringify(arg.item);
                 }
+            }
+        },
+        '.player-container' : {
+            'player<-players' : {
+                '.score' : 'player.score',
+                '.num-sets' : 'player.numSets',
+                '.num-false-sets' : 'player.numFalseSets'
             }
         }
     }

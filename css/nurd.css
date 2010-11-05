@@ -34,10 +34,19 @@ blockquote, q { quotes: "" ""; }
 .card .card-object.color2.shading1 { border-color:#5de100; background:rgba(93,225,0,0.4); }
 .card .card-object.color2.shading2 { border-color:#5de100; background:rgba(93,225,0,0.0); }
 
-.cards-in-play { background:#dadbeb; overflow:hidden; padding:12px; width:360px; }
+.cards-in-play { background:#dadbeb; float:left; overflow:hidden; padding:12px; width:360px; }
 .cards-in-play .card { background:#ffffff; border:solid 2px #bab5a0; float:left; height:33px; margin:2px; overflow:hidden; padding:12px 5px; width:100px; }
 .cards-in-play .card.selected { border:solid 2px #ffbb00;
     box-shadow:0 0 5px #ffbb00; -moz-box-shadow:0 0 10px #ffbb00; -webkit-box-shadow:0 0 5px #ffbb00; }
 .cards-in-play .card.number0 .card-object { position:relative; left:34px; }
 .cards-in-play .card.number1 .card-object { position:relative; left:20px; }
 .cards-in-play .card.number2 .card-object { position:relative; left:5px; }
+
+.players { float:left; }
+.players .player { }
+.players .player .name { }
+.players .player .score { }
+.players .player .num-sets { }
+.players .player .num-false-sets { }
+
+.game-controls { }

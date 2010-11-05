@@ -32,12 +32,24 @@
 </head>
 <body>
   <div id="game-container">
-    <button id="restart-game-btn">Restart Game</button>
-    <button id="draw-cards-btn">Draw Cards</button>
+    <div class="game-controls">
+      <button id="restart-game-btn">Restart Game</button>
+      <button id="draw-cards-btn">Draw Cards</button>
+    </div>
     <ul class="cards-in-play">
       <li class="card-container">
         <div class="card-css"></div>
         <span class="json"></span>
+      </li>
+    </ul>
+    <ul class="players">
+      <li class="player-container">
+        <span class="player">
+          <span class="name"></span>
+          <span class="score"></span>
+          <span class="num-sets"></span>  
+          <span class="num-false-sets"></span>
+        </div>
       </li>
     </ul>
   </div>
