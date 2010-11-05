@@ -8,7 +8,7 @@ this.Player = function() {
     // Private class properties and functions
 
     return function() {
-        this.id = 0;
+        var id = 0; // needs to be private so players can't pretend to be each other
         this.score = 0;
         this.numSets = 0;
         this.numFalseSets = 0;
@@ -18,29 +18,33 @@ this.Player = function() {
         var _game = null;
         
         function init() {
-            this.id = Crypto.getRandomKey();
-            log('Creating Player with id: ' + this.id);
+            id = Crypto.getRandomKey();
+            log('Creating Player with id: ' + id);
 
             // TODO: create unregister player function to unregister these handlers so that we can delete the player
             EventEngine.observe('client:selectCards', proxy(function(event) {
-                if (event.data.playerId == this.id) {
+                if (event.data.playerId == id) {
                     this.lastSeen = (new Date()).getTime();
                     this.selectCards(event.data.cards);
                     EventEngine.fire('server:gameUpdated', _game);
                 }
             }, this));
             EventEngine.observe('client:startGame', proxy(function(event) {
-                if (event.data.playerId == this.id) {
+                if (event.data.playerId == id) {
                     this.lastSeen = (new Date()).getTime();
                     _game.startGame();
                 }
             }, this));
             EventEngine.observe('client:dealMoreCards', proxy(function(event) {
-                if (event.data.playerId == this.id) {
+                if (event.data.playerId == id) {
                     this.lastSeen = (new Date()).getTime();
                     _game.dealMoreCards();
                 }
             }, this));
+        }
+
+        this.getId = function() {
+            return id;
         }
 
         this.joinGame = function(game) {
@@ -71,5 +75,5 @@ this.Player = function() {
 }();
 
 this.Player.equals = function(playerA, playerB) {
-    return playerA.id == playerB.id;
+    return playerA.getId() === playerB.getId();
 };
