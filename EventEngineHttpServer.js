@@ -428,6 +428,10 @@ var EventEngineHttpServer = function(config) {
         var pathname = urlInfo.pathname;
         var queryParams = urlInfo.query;
 
+        if (pathname === '/') { // TODO: Make this a configuration option
+            pathname = '/index.html';
+        }
+
         log(pathname);
         var filename = '.' + pathname;
         if (request.method == 'POST') {
@@ -436,7 +440,7 @@ var EventEngineHttpServer = function(config) {
                 defaultHandler(request, response);
             });
         } else {
-            fs.stat(filename, function(err, stats) {
+            fs.stat(filename, function(err, stats) { // TODO: Don't blindly open any file. Just open ones within application root directory
                 if (stats) {
                     staticHandler(filename)(request, response);
                 } else {
