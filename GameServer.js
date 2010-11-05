@@ -49,6 +49,7 @@ this.Game = function() {
         }, this));
         EventEngine.observe('client:leave', proxy(function(event) {
             this.removePlayer(event.data.playerId);
+            EventEngine.fire('server:gameUpdated', this);
         }, this));
 
 
