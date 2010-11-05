@@ -11,8 +11,11 @@
   $(document).ready(function() {
     var game = new Game();
 
-    new EventEngineHttpClient();
-    player.register();
+    new EventEngineHttpClient({
+      onInitialized: function() {
+        player.register();
+      }
+    });
 
     $('#restart-game-btn').click(function() {
       player.requestGameRestart();

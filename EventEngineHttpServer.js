@@ -65,7 +65,10 @@ var EventEngineHttpServer = function(config) {
             log('client:' + JSON.stringify(client.id));
             if (client.response) {
                 var newEvents = getEventsBetween(client.lastUpdated, now);
-                if (newEvents.length > 0) { // need to check this so that we don't constantly sending empty lists of events
+
+                // check if newEvents.length > 0 so that we don't constantly sending empty lists of events
+                // also check if client.lastUpdated == 0 so we can give the client the clientId immediately
+                if (newEvents.length > 0 || client.lastUpdated === 0) {
                     jsonResponse(client.response, {
                         clientId: client.id,
                         events: newEvents

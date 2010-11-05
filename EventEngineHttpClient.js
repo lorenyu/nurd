@@ -8,11 +8,20 @@ if (!this.log) {
     }
 }
 
-var EventEngineHttpClient = function() {
+/*
+ *
+  options = {
+    onInitialized: function() { }
+  }
+
+ */
+var EventEngineHttpClient = function(options) {
 
     // Private properties and methods
 
     var clientId = null;
+    var initialized = false;
+    var onInitialized;
 
     function listen() {
         // wait for events from the server with long polling
@@ -47,6 +56,13 @@ var EventEngineHttpClient = function() {
 
     function onServerResponse(data) {
         clientId = data.clientId;
+        if (!initialized) {
+            initialized = true;
+            if (onInitialized) {
+                onInitialized();
+            }
+        }
+
         var events = data.events;
         for (var i = 0, n = events.length; i < n; i += 1) {
             var event = events[i];
@@ -70,6 +86,9 @@ var EventEngineHttpClient = function() {
     }
 
     function init() {
+        if (options) {
+            onInitialized = options.onInitialized;
+        }
         EventEngine.observeAll(onEvent);
         listen();
     }
