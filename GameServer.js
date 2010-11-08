@@ -268,9 +268,10 @@ this.Game = function() {
             this.cardsInPlay.push(deck.drawCard());
         }
         for (var i = 0, n = this.players.length; i < n; i += 1) {
-            players.score = 0;
-            players.numSets = 0;
-            players.numFalseSets = 0;
+            var player = this.players[i];
+            player.score = 0;
+            player.numSets = 0;
+            player.numFalseSets = 0;
         }
         EventEngine.fire('server:gameUpdated', this);
     }
