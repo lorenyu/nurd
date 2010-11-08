@@ -15,8 +15,8 @@ this.Game = function() {
     this.cardsInPlay = [];
     this.players = [];
 
-    //this.playerTimeout = 60*60*1000; // 1 hour
-    var playerTimeout = 10*1000; // 15 minutes
+    var playerTimeout = 15*60*1000; // 15 minutes
+    //var playerTimeout = 10*1000; // 10 seconds (for testing/debugging)
 
     function init() {
         EventEngine.observe('client:registerPlayer', proxy(function(event) {
