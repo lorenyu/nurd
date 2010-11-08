@@ -16,7 +16,7 @@ this.Game = function() {
     this.players = [];
 
     //this.playerTimeout = 60*60*1000; // 1 hour
-    this.playerTimeout = 10*1000; // 15 minutes
+    var playerTimeout = 10*1000; // 15 minutes
 
     function init() {
         EventEngine.observe('client:registerPlayer', proxy(function(event) {
@@ -27,7 +27,6 @@ this.Game = function() {
         EventEngine.observe('client:selectCards', proxy(function(event) {
             var player = this.getPlayer(event.data.playerId);
             if (player) {
-                player.lastSeen = (new Date()).getTime();
                 player.selectCards(event.data.cards);
                 EventEngine.fire('server:gameUpdated', this);
             }
@@ -35,7 +34,6 @@ this.Game = function() {
         EventEngine.observe('client:startGame', proxy(function(event) {
             var player = this.getPlayer(event.data.playerId);
             if (player) {
-                player.lastSeen = (new Date()).getTime();
                 this.startGame();
             }
         }, this));
@@ -43,7 +41,6 @@ this.Game = function() {
             var player = this.getPlayer(event.data.playerId);
             log('dealMoreCards');
             if (player) {
-                player.lastSeen = (new Date()).getTime();
                 this.dealMoreCards();
             }
         }, this));
@@ -51,10 +48,17 @@ this.Game = function() {
             this.removePlayer(event.data.playerId);
             EventEngine.fire('server:gameUpdated', this);
         }, this));
+        EventEngine.observe('client:stay', proxy(function(event) {
+            var player = this.getPlayer(event.data.playerId);
+            if (player) {
+                var now = (new Date()).getTime();
+                player.lastSeen = now;
+            }
+        }, this));
 
 
         this.startGame();
-        //setInterval(proxy(this._cleanupPlayers, this), Math.floor(this.playerTimeout / 2)); // TODO: cleanup players
+        setInterval(proxy(this._cleanupPlayers, this), Math.floor(playerTimeout / 2)); // TODO: cleanup players
     }
 
     this.getPlayer = function(playerId) {
@@ -107,25 +111,33 @@ this.Game = function() {
     }
 
     this._cleanupPlayers = function() {
+        log('cleaning up players');
         var now = (new Date()).getTime();
+        var numPlayers = this.players.length;
         for (var i = 0; i < this.players.length; i += 1) {
             var player = this.players[i];
-            if (player.lastSeen < now - this.playerTimeout) {
+            if (player.lastSeen < now - playerTimeout) {
+                log('removed player ' + i);
                 this.players.splice(i, 1);
                 i -= 1;
             }
+        }
+        if (numPlayers !== this.players.length) { // if a player left players, then notify other players
+            EventEngine.fire('server:gameUpdated', this);
         }
     }
 
     this.registerPlayer = function(registerId, secret) {
         log('Game:registerPlayer: registerId=' + registerId + ', secret=' + secret);
         var player = new Player();
+        player.lastSeen = (new Date()).getTime();
         player.joinGame(this);
 
         var encPlayerId = secret + player.getId();
         EventEngine.fire('server:playerRegistered', {
             registerId: registerId,
-            encPlayerId: encPlayerId
+            encPlayerId: encPlayerId,
+            playerTimeout: playerTimeout
         });
         EventEngine.fire('server:gameUpdated', this);
     }

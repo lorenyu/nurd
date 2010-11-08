@@ -12,6 +12,8 @@ this.Player = function() {
     function init() {
         EventEngine.observe('server:playerRegistered', proxy(function(event) {
             this.onPlayerRegistered(event.data.registerId, event.data.encPlayerId);
+            this.stayIntervalId = setInterval(proxy(this.stay, this), Math.floor(event.data.playerTimeout / 2));
+            log('stayIntervalId = ' + this.stayIntervalId);
         }, this));
 
         var leave = proxy(function() {
@@ -45,8 +47,8 @@ this.Player = function() {
     this.onPlayerRegistered = function(registerId, encPlayerId) {
         if (registerId === _registerId) {
             this.id = encPlayerId - _secret;
+            EventEngine.observeAll(proxy(onEvent, this));
         }
-        EventEngine.observeAll(proxy(onEvent, this));
     }
 
     this.requestMoreCards = function() {
@@ -59,6 +61,12 @@ this.Player = function() {
     this.requestGameRestart = function() {
         log('requesting game restart');
         EventEngine.fire('client:startGame', {
+            playerId: this.id
+        });
+    }
+
+    this.stay = function() {
+        EventEngine.fire('client:stay', {
             playerId: this.id
         });
     }
