@@ -109,7 +109,7 @@ this.Game = function() {
             var player = this.getPlayer(event.data.playerId);
             if (player) {
                 var name = event.data.name;
-                var regex = /^\w+$/i; // matches any string of alphanumeric or underscore characters
+                var regex = /^[\w. ]+$/i; // matches any string of alphanumeric or underscore characters
 
                 if (typeof(name) !== 'string') {
                     break;

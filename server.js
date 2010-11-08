@@ -12,7 +12,7 @@ process.chdir(serverDir);
 
 var EventEngine = require('./EventEngine.js').EventEngine;
 EventEngine.observeAll(function(event) {
-    log('server.js:received event:' + JSON.stringify(event));
+    //log('server.js:received event:' + JSON.stringify(event));
 });
 
 var server = new EventEngineHttpServer();

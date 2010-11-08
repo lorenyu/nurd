@@ -58,11 +58,11 @@ var EventEngineHttpServer = function(config) {
     }
 
     function notifyClients() {
-        log('notifyClients');
+        //log('notifyClients'); TODO remove
         var now = (new Date()).getTime();
         for (clientId in clientsById) if (clientsById.hasOwnProperty(clientId)) {
             var client = clientsById[clientId];
-            log('client:' + JSON.stringify(client.id));
+            //log('client:' + JSON.stringify(client.id)); TODO remove
             if (client.response) {
                 var newEvents = getEventsBetween(client.lastUpdated, now);
 
@@ -139,16 +139,16 @@ var EventEngineHttpServer = function(config) {
      * returns events whose serverTime property is > minTime and <= maxTime.
      */
     function getEventsBetween(minTime, maxTime) {
-        log('getEventsBetween:minTime:' + minTime + ',maxTime:' + maxTime);
+        //log('getEventsBetween:minTime:' + minTime + ',maxTime:' + maxTime);
         var result = [];
         var i = 0;
         var n = events.length;
         while (i < n && events[i].serverTime <= minTime) {
-            log('skipping event:' + JSON.stringify(events[i]));
+            // log('skipping event:' + JSON.stringify(events[i])); // TODO remove
             i += 1;
         }
         while (i < events.length && events[i].serverTime <= maxTime) {
-            log('adding event:' + JSON.stringify(events[i]));
+            // log('adding event:' + JSON.stringify(events[i])); TODO remove
             result.push(events[i]);
             i += 1;
         }
@@ -172,7 +172,7 @@ var EventEngineHttpServer = function(config) {
                 return;
             }
 
-            log("staticHandler:loadResponseData:loading " + filename + "...");
+            //log("staticHandler:loadResponseData:loading " + filename + "...");
             fs.readFile(filename, function (err, data) {
                 if (err) {
                     log("staticHandler:loadResponseData:Error loading " + filename);
@@ -182,7 +182,7 @@ var EventEngineHttpServer = function(config) {
                                 , "Content-Length": body.length
                               };
                     headers["Cache-Control"] = "public";
-                    log("staticHandler:loadResponseData:static file " + filename + " loaded");
+                    //log("staticHandler:loadResponseData:static file " + filename + " loaded");
                     callback();
                 }
             });
@@ -373,13 +373,12 @@ var EventEngineHttpServer = function(config) {
     };
 
     function getPostData(request, callback) {
-        log('getPostData');
         var text = '';
         request.on('data', function(chunk) {
             text += chunk;
         });
         request.on('end', function() {
-            log('getPostData:data= ' + text);
+            //log('getPostData:data= ' + text); TODO remove
             queryParams = querystring.parse(text);
             callback(queryParams);
         });
