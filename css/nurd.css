@@ -13,7 +13,7 @@ blockquote, q { quotes: "" ""; }
 
 /* main.css */
 
-#game-container { }
+#game-container { overflow:auto; }
 
 .card { }
 .card-container .json { display:none; }
@@ -52,3 +52,12 @@ blockquote, q { quotes: "" ""; }
 .players .player .num-false-sets { background:#e8e8e8; display:inline-block; font-family:Arial; font-size:1em; height:17px; margin:0 5px; padding:5px; text-align:right; width:30px; }
 
 .game-controls { }
+
+#chat { clear:both; margin:10px 0 0; }
+#chat .chat-form {}
+#chat .chat-form .msg {}
+#chat .chat-msgs { }
+#chat .chat-msgs .chat-msg { margin:5px 0 0; }
+#chat .chat-msgs .chat-msg .sender { background:#DADBEB; display:inline-block; margin:0 7px 0 0; padding:4px 5px;
+    border-radius:5px; -moz-border-radius:5px; -webkit-border-radius:5px; }
+#chat .chat-msgs .chat-msg .msg { display:inline-block;}

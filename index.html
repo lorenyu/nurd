@@ -7,6 +7,7 @@
   <script type="text/javascript" src="EventEngine.js" ></script>
   <script type="text/javascript" src="EventEngineHttpClient.js" ></script>
   <script type="text/javascript" src="GameClient.js" ></script>
+  <script type="text/javascript" src="ChatClient.js" ></script>
   <script type="text/javascript">
 
   $(document).ready(function() {
@@ -15,6 +16,7 @@
         var game = new Game();
       }
     });
+    
   });
   EventEngine.observeAll(function(event) {
     log('received event:' + event.name + ', data=' + JSON.stringify(event.data));
@@ -42,6 +44,14 @@
         <span class="num-sets-label field-name">Num Sets:</span> <span class="num-sets field-value"></span>  
         <span class="num-false-sets-label field-name">Num False Sets:</span> <span class="num-false-sets field-value"></span>
       </li>
+    </ul>
+  </div>
+  <div id="chat">
+    <form class="chat-form">
+      <input type="hidden" class="sender" />
+      <input type="text" class="msg" />
+    </form>
+    <ul class="chat-msgs">
     </ul>
   </div>
 </body>

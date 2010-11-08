@@ -6,6 +6,7 @@ var proxy = require('./jsutil.js').proxy;
 var Player = require('./Player.js').Player;
 var Card = require('./Card.js').Card;
 var Deck = require('./Deck.js').Deck;
+var ChatServer = require('./ChatServer.js').ChatServer;
 
 var log = util.puts;
 
@@ -17,6 +18,9 @@ this.Game = function() {
 
     var playerTimeout = 15*60*1000; // 15 minutes
     //var playerTimeout = 10*1000; // 10 seconds (for testing/debugging)
+
+    log('creating chat server');
+    var chatServer = new ChatServer();
 
     function init() {
 
@@ -206,7 +210,8 @@ this.Game = function() {
         EventEngine.fire('server:playerRegistered', {
             registerId: registerId,
             encPlayerId: encPlayerId,
-            playerTimeout: playerTimeout
+            playerTimeout: playerTimeout,
+            name: player.name
         });
         EventEngine.fire('server:gameUpdated', this);
     }
@@ -261,6 +266,11 @@ this.Game = function() {
 
         for (var i = 0; i < 12; i += 1) {
             this.cardsInPlay.push(deck.drawCard());
+        }
+        for (var i = 0, n = this.players.length; i < n; i += 1) {
+            players.score = 0;
+            players.numSets = 0;
+            players.numFalseSets = 0;
         }
         EventEngine.fire('server:gameUpdated', this);
     }

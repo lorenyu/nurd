@@ -156,6 +156,16 @@ this.Game = function() {
             }
         });
 
+        $('#chat').chat();
+        EventEngine.observe('client:changeName', function(event) {
+            $('#name-field').val(event.data.name);
+            $('#chat .chat-form .sender').val(event.data.name);
+        });
+        EventEngine.observe('server:playerRegistered', function(event) {
+            $('#name-field').val(event.data.name);
+            $('#chat .chat-form .sender').val(event.data.name);
+        });
+
         this.player.register();
         //EventEngine.observe('client:endGame', proxy(this.endGame, this));
     }
