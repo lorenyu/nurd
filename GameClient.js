@@ -11,10 +11,15 @@ this.Player = function() {
         
     function init() {
         EventEngine.observe('server:playerRegistered', proxy(function(event) {
-            this.onPlayerRegistered(event.data.registerId, event.data.encPlayerId);
+            this.onPlayerRegistered(event.data.registerId, event.data.encPlayerId, event.data.name);
             this.stayIntervalId = setInterval(proxy(this.stay, this), Math.floor(event.data.playerTimeout / 2));
             log('stayIntervalId = ' + this.stayIntervalId);
         }, this));
+
+        EventEngine.observe('client:changeName', function(event) {
+            $('#name-field').val(event.data.name);
+            $('#chat .chat-form .sender').val(event.data.name);
+        });
 
         $('#restart-game-btn').live('click', proxy(this.requestGameRestart, this));
         $('#draw-cards-btn').live('click', proxy(this.requestMoreCards, this));
@@ -41,10 +46,13 @@ this.Player = function() {
         });
     }
 
-    this.onPlayerRegistered = function(registerId, encPlayerId) {
+    this.onPlayerRegistered = function(registerId, encPlayerId, name) {
         if (registerId === _registerId) {
             this.id = encPlayerId - _secret;
             EventEngine.observeAll(proxy(onEvent, this));
+
+            $('#name-field').val(name);
+            $('#chat .chat-form .sender').val(name);
 
             var leave = proxy(function() {
                 if (this.id) {
@@ -157,14 +165,6 @@ this.Game = function() {
         });
 
         $('#chat').chat();
-        EventEngine.observe('client:changeName', function(event) {
-            $('#name-field').val(event.data.name);
-            $('#chat .chat-form .sender').val(event.data.name);
-        });
-        EventEngine.observe('server:playerRegistered', function(event) {
-            $('#name-field').val(event.data.name);
-            $('#chat .chat-form .sender').val(event.data.name);
-        });
 
         this.player.register();
         //EventEngine.observe('client:endGame', proxy(this.endGame, this));
