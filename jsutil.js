@@ -6,7 +6,7 @@ this.log = function(x) {
 
 this.proxy = function(fn, object) {
     return function() {
-        fn.apply(object, arguments);
+        return fn.apply(object, arguments);
     }
 };
 
