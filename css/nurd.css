@@ -55,7 +55,7 @@ blockquote, q { quotes: "" ""; }
 
 #chat { clear:both; margin:10px 0 0; }
 #chat .chat-form {}
-#chat .chat-form .msg {}
+#chat .chat-form .msg { width:350px; }
 #chat .chat-msgs { }
 #chat .chat-msgs .chat-msg { margin:5px 0 0; }
 #chat .chat-msgs .chat-msg .sender { background:#DADBEB; display:inline-block; margin:0 7px 0 0; padding:4px 5px;
