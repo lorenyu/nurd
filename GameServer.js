@@ -19,6 +19,10 @@ this.Game = function() {
     //var playerTimeout = 10*1000; // 10 seconds (for testing/debugging)
 
     function init() {
+
+        EventEngine.observeAll(proxy(this.onEvent, this));
+
+/*
         EventEngine.observe('client:registerPlayer', proxy(function(event) {
             this.registerPlayer(event.data.registerId, event.data.secret);
         }, this));
@@ -55,11 +59,76 @@ this.Game = function() {
                 player.lastSeen = now;
             }
         }, this));
+        EventEngine.observe('client:changeName', proxy(function(event) {
+            
+        }, this));
+*/
 
 
         this.startGame();
         setInterval(proxy(this._cleanupPlayers, this), Math.floor(playerTimeout / 2)); // TODO: cleanup players
     }
+
+    this.onEvent = function(event) {
+        switch (event.name) {
+        case 'client:registerPlayer':
+            this.registerPlayer(event.data.registerId, event.data.secret);
+            break;
+        case 'client:selectCards':
+            var player = this.getPlayer(event.data.playerId);
+            if (player) {
+                player.selectCards(event.data.cards);
+                EventEngine.fire('server:gameUpdated', this);
+            }
+            break;
+        case 'client:startGame':
+            var player = this.getPlayer(event.data.playerId);
+            if (player) {
+                this.startGame();
+            }
+            break;
+        case 'client:dealMoreCards':
+            var player = this.getPlayer(event.data.playerId);
+            log('dealMoreCards');
+            if (player) {
+                this.dealMoreCards();
+            }
+            break;
+        case 'client:leave':
+            this.removePlayer(event.data.playerId);
+            EventEngine.fire('server:gameUpdated', this);
+            break;
+        case 'client:stay':
+            var player = this.getPlayer(event.data.playerId);
+            if (player) {
+                var now = (new Date()).getTime();
+                player.lastSeen = now;
+            }
+            break;
+        case 'client:changeName':
+            var player = this.getPlayer(event.data.playerId);
+            if (player) {
+                var name = event.data.name;
+                var regex = /^\w+$/i; // matches any string of alphanumeric or underscore characters
+
+                if (typeof(name) !== 'string') {
+                    break;
+                }
+                if (!name) {
+                    break;
+                }
+                if (!regex.test(name)) {
+                    break;
+                }
+                player.name = name;
+                EventEngine.fire('server:gameUpdated', this);
+            }
+            break;
+        default:
+            log('unknown command: ' + event.name);
+            break;
+        };
+    };
 
     this.getPlayer = function(playerId) {
         for (var i = 0, n = this.players.length; i < n; i += 1) {
@@ -155,6 +224,7 @@ this.Game = function() {
     this.removePlayer = function(playerId) {
         for (var i = 0, n = this.players.length; i < n; i += 1) {
             if (this.players[i].getId() == playerId) {
+                log('removing player ' + playerId);
                 this.players.splice(i, 1);
                 return true;
             }

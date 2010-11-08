@@ -16,16 +16,13 @@ this.Player = function() {
             log('stayIntervalId = ' + this.stayIntervalId);
         }, this));
 
-        var leave = proxy(function() {
-            if (this.id) {
-                EventEngine.fire('client:leave', {
-                    playerId: player.id
-                });
-            }
-        }, this);
-        $(window).unload(leave);
-        $(window).onbeforeunload = leave;
-        
+        $('#restart-game-btn').live('click', proxy(this.requestGameRestart, this));
+        $('#draw-cards-btn').live('click', proxy(this.requestMoreCards, this));
+
+        $('#name-change-form').submit(proxy(function() {
+            this.changeName($('#name-field').val());
+            return false;
+        }, this));
     }
 
     function onEvent(event) {
@@ -48,6 +45,16 @@ this.Player = function() {
         if (registerId === _registerId) {
             this.id = encPlayerId - _secret;
             EventEngine.observeAll(proxy(onEvent, this));
+
+            var leave = proxy(function() {
+                if (this.id) {
+                    EventEngine.fire('client:leave', {
+                        playerId: this.id
+                    });
+                }
+            }, this);
+            $(window).unload(leave);
+            $(window).onbeforeunload = leave;
         }
     }
 
@@ -71,6 +78,14 @@ this.Player = function() {
         });
     }
 
+    this.changeName = function(name) {
+        // TODO: do some client-side validation
+        EventEngine.fire('client:changeName', {
+            playerId: this.id,
+            name: name
+        });
+    }
+
     /*
         this.joinGame = function(game) {
             if (game.addPlayer(this)) {
@@ -91,40 +106,57 @@ this.Player = function() {
     init.apply(this, arguments);
 };
 
-this.player = new Player();
-
 this.Game = function() {
 
     var TEMPLATE;
+    var CARDS_IN_PLAY_TEMPLATE;
+    var PLAYERS_TEMPLATE;
     var _numSelectedCards = [];
+
+    this.player = new Player();
 
     function init() {
         TEMPLATE = $('#game-container').html();
+        CARDS_IN_PLAY_TEMPLATE = $('.cards-in-play').html();
+        PLAYERS_TEMPLATE = $('.players').html();
+
+
+        var player = this.player;
 
         EventEngine.observe('server:gameUpdated', function(event) {
             log('server:gameUpdated');
             var cards = event.data.cardsInPlay;
             var players = event.data.players;
 
+/*
             $('#game-container').html(TEMPLATE).render({
                 cards:cards,
                 players:players
-            }, PureDirectives.GAME);
+            }, PureDirectives.GAME);*/
+
+            $('.players').html(PLAYERS_TEMPLATE).render({
+                players:players
+            }, PureDirectives.PLAYERS);
+
+            $('.cards-in-play').html(CARDS_IN_PLAY_TEMPLATE).render({
+                cards:cards
+            }, PureDirectives.CARDS_IN_PLAY);
         });
 
         $('.cards-in-play .card').live('mousedown', function() {
             var card = $(this);
             card.toggleClass('selected');
-            var selectedCards = $('.cards-in-play .card.selected').siblings('.json');
+            var selectedCards = $('.cards-in-play .card.selected');
             if (selectedCards.length == 3) {
                 selectedCards = $.map(selectedCards, function(card) {
-                    log($(card).html());
-                    return JSON.parse($(card).html());
+                    log($(card).attr('json'));
+                    return JSON.parse($(card).attr('json'));
                 });
                 player.selectCards(selectedCards);
             }
         });
 
+        this.player.register();
         //EventEngine.observe('client:endGame', proxy(this.endGame, this));
     }
 
@@ -132,8 +164,8 @@ this.Game = function() {
 };
 
 this.PureDirectives = {
-    GAME: {
-        '.card-container' : {
+    CARDS_IN_PLAY: {
+        '.card' : {
             'card<-cards' : {
 /*
                 'img@src' : function(arg) {
@@ -144,7 +176,7 @@ this.PureDirectives = {
                     }
                     return '/images/' + attrStr + '.png';
                 },*/
-                '.card-css' : function(arg) {
+                '.' : function(arg) {
                     var card = arg.item;
                     var shape = card.attributes[0];
                     var color = card.attributes[1];
@@ -156,7 +188,7 @@ this.PureDirectives = {
                         html += '<div class="card-object ' + cls  + ' object'+ i + '"></div>';                   }
                     return html;
                 },
-                '.card-css@class' : function(arg) {
+                '.@class' : function(arg) {
                     var card = arg.item;
                     var shape = card.attributes[0];
                     var color = card.attributes[1];
@@ -166,12 +198,14 @@ this.PureDirectives = {
                     var cls = 'card shape'+shape + ' color'+color + ' shading'+shading + ' number' + number;
                     return cls;
                 },
-                '.json' : function(arg) {
+                '.@json' : function(arg) {
                     return JSON.stringify(arg.item);
                 }
             }
-        },
-        '.player-container' : {
+        }
+    },
+    PLAYERS: {
+        '.player' : {
             'player<-players' : {
                 '.name' : 'player.name',
                 '.score' : 'player.score',

@@ -10,22 +10,12 @@
   <script type="text/javascript">
 
   $(document).ready(function() {
-    var game = new Game();
-
     new EventEngineHttpClient({
       onInitialized: function() {
-        player.register();
-        
-        $('#restart-game-btn').live('click', function() {
-          player.requestGameRestart();
-        });
-        $('#draw-cards-btn').live('click', function() {
-          player.requestMoreCards();
-        });
+        var game = new Game();
       }
     });
   });
-
   EventEngine.observeAll(function(event) {
     log('received event:' + event.name + ', data=' + JSON.stringify(event.data));
   });
@@ -38,19 +28,19 @@
       <button id="draw-cards-btn">Draw Cards</button>
     </div>
     <ul class="cards-in-play">
-      <li class="card-container">
-        <div class="card-css"></div>
-        <span class="json"></span>
+      <li class="card" json="">
       </li>
     </ul>
+    <form id="name-change-form" action="" >
+      <input type="text" id="name-field" name="name" value="" />
+      <button type="submit" id="change-name-btn" >Change Name</button>
+    </form>
     <ul class="players">
-      <li class="player-container">
-        <span class="player">
-          <span class="name"></span>
-          <span class="score-label field-name">Score:</span> <span class="score field-value"></span>
-          <span class="num-sets-label field-name">Num Sets:</span> <span class="num-sets field-value"></span>  
-          <span class="num-false-sets-label field-name">Num False Sets:</span> <span class="num-false-sets field-value"></span>
-        </div>
+      <li class="player">
+        <span class="name"></span>
+        <span class="score-label field-name">Score:</span> <span class="score field-value"></span>
+        <span class="num-sets-label field-name">Num Sets:</span> <span class="num-sets field-value"></span>  
+        <span class="num-false-sets-label field-name">Num False Sets:</span> <span class="num-false-sets field-value"></span>
       </li>
     </ul>
   </div>
