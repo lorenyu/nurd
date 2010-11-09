@@ -21,8 +21,8 @@ this.Player = function() {
             $('#chat .chat-form .sender').val(event.data.name);
         });
 
-        $('#restart-game-btn').live('click', proxy(this.requestGameRestart, this));
-        $('#draw-cards-btn').live('click', proxy(this.requestMoreCards, this));
+        $('#restart-game-btn').click(proxy(this.requestGameRestart, this));
+        $('#draw-cards-btn').click(proxy(this.requestMoreCards, this));
 
         $('#name-change-form').submit(proxy(function() {
             this.changeName($('#name-field').val());
@@ -149,19 +149,22 @@ this.Game = function() {
             $('.cards-in-play').html(CARDS_IN_PLAY_TEMPLATE).render({
                 cards:cards
             }, PureDirectives.CARDS_IN_PLAY);
-        });
 
-        $('.cards-in-play .card').live('mousedown', function() {
-            var card = $(this);
-            card.toggleClass('selected');
-            var selectedCards = $('.cards-in-play .card.selected');
-            if (selectedCards.length == 3) {
-                selectedCards = $.map(selectedCards, function(card) {
-                    log($(card).attr('json'));
-                    return JSON.parse($(card).attr('json'));
-                });
-                player.selectCards(selectedCards);
-            }
+
+
+            $('.cards-in-play .card').bind('mousedown', function() {
+                var card = $(this);
+                card.toggleClass('selected');
+                var selectedCards = $('.cards-in-play .card.selected');
+                if (selectedCards.length == 3) {
+                    selectedCards = $.map(selectedCards, function(card) {
+                        log($(card).attr('json'));
+                        return JSON.parse($(card).attr('json'));
+                    });
+                    player.selectCards(selectedCards);
+                }
+            });
+
         });
 
         $('#chat').chat();
