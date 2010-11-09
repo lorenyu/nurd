@@ -195,7 +195,7 @@ this.PureDirectives = {
                     var html = '';
                     var cls = ' shape'+shape + ' color'+color + ' shading'+shading;
                     for (var i = 0; i <= number; i += 1) {
-                        html += '<div class="card-object ' + cls  + ' object'+ i + '"></div>';                   }
+                        html += '<span class="card-object ' + cls  + ' object'+ i + '"></span>';                   }
                     return html;
                 },
                 '.@class' : function(arg) {
