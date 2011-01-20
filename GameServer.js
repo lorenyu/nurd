@@ -74,6 +74,10 @@ this.Game = function() {
     }
 
     this.onEvent = function(event) {
+        if (event.name.indexOf('client:') !== 0) {
+            return;
+        }
+
         switch (event.name) {
         case 'client:registerPlayer':
             this.registerPlayer(event.data.registerId, event.data.secret);
