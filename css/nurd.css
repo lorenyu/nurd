@@ -61,8 +61,7 @@ button { background: #e2e2e2; border: none; border-radius: 5px; padding: 4px 12p
     border-radius: 12px;}
 .cards-in-play .card { float:left; margin:2px; overflow:hidden; }
 .cards-in-play .card:hover { /*background: -webkit-linear-gradient(top, #fcf2b8 0%,#fce24e 50%,#f9d400 51%,#f7ed91 100%);*/ }
-.cards-in-play .card.selected { border:solid 2px #ffbb00;
-    box-shadow:0 0 5px #ffbb00; -moz-box-shadow:0 0 10px #ffbb00; -webkit-box-shadow:0 0 5px #ffbb00; }
+.cards-in-play .card.selected { background: -webkit-linear-gradient(top, #f2f7f9 0%,#def0f9 50%,#d7e8ef 51%,#c0e2f9 100%);}
 .cards-in-play .card.number0 .card-object { }
 .cards-in-play .card.number1 .card-object { }
 .cards-in-play .card.number2 .card-object { }
