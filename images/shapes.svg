@@ -7,6 +7,7 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="256"
@@ -19,7 +20,44 @@
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
-     id="defs2987" />
+     id="defs2987">
+    <pattern
+       inkscape:collect="always"
+       xlink:href="#Strips1_1"
+       id="pattern5226"
+       patternTransform="matrix(10,0,0,10,226.90909,-98.909091)" />
+    <pattern
+       inkscape:collect="always"
+       xlink:href="#Strips1_1"
+       id="pattern5224"
+       patternTransform="matrix(0.01465913,-2.477684,13.602152,0.08047664,95.441984,48.029364)" />
+    <pattern
+       inkscape:collect="always"
+       xlink:href="#Strips1_1"
+       id="pattern5222"
+       patternTransform="matrix(2.9090909,0,0,0.18181819,32,-96.363636)" />
+    <pattern
+       inkscape:collect="always"
+       xlink:href="#Strips1_1"
+       id="pattern5218"
+       patternTransform="matrix(1.6308646,0,0,-0.22894215,149.48205,33.476538)" />
+    <pattern
+       inkscape:stockid="Stripes 1:1"
+       id="Strips1_1"
+       patternTransform="translate(0,0) scale(10,10)"
+       height="1"
+       width="2"
+       patternUnits="userSpaceOnUse"
+       inkscape:collect="always">
+      <rect
+         id="rect4485"
+         height="2"
+         width="1"
+         y="-0.5"
+         x="0"
+         style="fill:black;stroke:none" />
+    </pattern>
+  </defs>
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -27,9 +65,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="3.8890873"
-     inkscape:cx="55.60566"
-     inkscape:cy="108.6411"
+     inkscape:zoom="2.75"
+     inkscape:cx="31.259583"
+     inkscape:cy="101.50484"
      inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:document-units="px"
@@ -71,7 +109,7 @@
        sodipodi:cx="98.223557"
        sodipodi:sides="3"
        id="path3006"
-       style="color:#000000;fill:#000000;fill-opacity:0.50196081;fill-rule:nonzero;stroke:#000000;stroke-width:3.15290523000000000;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;opacity:1"
+       style="color:#000000;fill:url(#pattern5224);fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:3.15290523;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        sodipodi:type="star" />
     <rect
        style="color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
@@ -120,23 +158,23 @@
        height="61.134327"
        width="61.134331"
        id="rect3002"
-       style="color:#000000;fill:#000000;fill-opacity:0.50196081;fill-rule:nonzero;stroke:#000000;stroke-width:2.86600000000000010;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;opacity:1;stroke-miterlimit:4;stroke-dasharray:none" />
+       style="color:#000000;fill:url(#pattern5222);fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2.86599994;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
     <rect
        y="-126.56716"
        x="193.43283"
        height="61.134331"
        width="61.134327"
        id="rect3004"
-       style="color:#000000;fill:#000000;fill-opacity:0.50196081;fill-rule:nonzero;stroke:#000000;stroke-width:2.86567163000000000;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;opacity:1" />
+       style="color:#000000;fill:url(#pattern5226);fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2.86567163;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
     <path
        transform="matrix(1.564189,0,0,1.5641891,-75.286716,-148.24636)"
-       d="m 169.96276,33.401562 c 0,10.792671 -8.74919,19.54186 -19.54186,19.54186 -10.79267,0 -19.54186,-8.749189 -19.54186,-19.54186 0,-10.792672 8.74919,-19.541861 19.54186,-19.541861 10.79267,0 19.54186,8.749189 19.54186,19.541861 z"
+       d="m 169.96276,33.401562 a 19.541861,19.541861 0 1 1 -39.08372,0 19.541861,19.541861 0 1 1 39.08372,0 z"
        sodipodi:ry="19.541861"
        sodipodi:rx="19.541861"
        sodipodi:cy="33.401562"
        sodipodi:cx="150.4209"
        id="path3008"
-       style="color:#000000;fill:#000000;fill-opacity:0.50196081;fill-rule:nonzero;stroke:#000000;stroke-width:1.83204948999999990;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;opacity:1"
+       style="color:#000000;fill:url(#pattern5218);fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.83204949;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        sodipodi:type="arc" />
     <path
        sodipodi:type="star"
