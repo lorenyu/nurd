@@ -13,12 +13,15 @@ blockquote, q { quotes: "" ""; }
 
 /* main.css */
 
-#game-container { overflow:auto;
-    background: -webkit-linear-gradient(top, #45484d 0%,#000000 100%);}
+body { background: -webkit-linear-gradient(top, #45484d 0%,#000000 100%); }
+.outer-container { margin: 0 auto; width: 1024px; }
+#game-container { overflow:auto; }
 
-.card { border:solid 2px #bab5a0; height:50px; padding-top: 14px; text-align: center; width:128px;
-      background: -webkit-linear-gradient(top, #ffffff 0%,#f3f3f3 50%,#ededed 51%,#ffffff 100%);
-      -webkit-border-radius: 10px; }
+button { background: #e2e2e2; border: none; border-radius: 5px; padding: 4px 12px;
+    background: -webkit-linear-gradient(top, #e2e2e2 0%,#dbdbdb 50%,#d1d1d1 51%,#fefefe 100%); }
+
+.card { border:solid 2px #bab5a0; border-radius: 10px; height:50px; padding-top: 14px; text-align: center; width:128px;
+      background: -webkit-linear-gradient(top, #ffffff 0%,#f3f3f3 50%,#ededed 51%,#ffffff 100%); }
 .card-container .json { display:none; }
 .card-container .card-img {display:none;}
 .card .card-object { display: inline-block; height:32px; margin:1px; width:32px;
@@ -53,9 +56,9 @@ blockquote, q { quotes: "" ""; }
 .card .card-object.color2.shading2 { border-color:#5de100; background:rgba(93,225,0,0.0); }
 */
 
-.cards-in-play { background:#dadbeb; border: solid 2px #383838; float:left; overflow:hidden; padding:14px 0 14px 14px; width:420px;
+.cards-in-play { background:#000000; border: solid 2px #383838; float:left; overflow:hidden; padding:14px 0 14px 14px; width:420px;
     background: -webkit-linear-gradient(top, #000000 0%,#45484d 100%);
-    -webkit-border-radius: 12px;}
+    border-radius: 12px;}
 .cards-in-play .card { float:left; margin:2px; overflow:hidden; }
 .cards-in-play .card:hover { /*background: -webkit-linear-gradient(top, #fcf2b8 0%,#fce24e 50%,#f9d400 51%,#f7ed91 100%);*/ }
 .cards-in-play .card.selected { border:solid 2px #ffbb00;
@@ -64,25 +67,27 @@ blockquote, q { quotes: "" ""; }
 .cards-in-play .card.number1 .card-object { }
 .cards-in-play .card.number2 .card-object { }
 
-.players { background: #fcfff4; float:left; margin-left: 22px; margin-top: 12px;
+.players { float:left; margin-left: 22px; margin-top: 12px; }
+.players .player:first-of-type { -webkit-border-top-left-radius: 5px; -webkit-border-top-right-radius: 5px; }
+.players .player:last-of-type { -webkit-border-bottom-left-radius: 5px; -webkit-border-bottom-right-radius: 5px; }
+.players .player { border-bottom:1px dotted #C8C8C8; display:block; padding:2px 12px;
     background: -webkit-linear-gradient(top, #fcfff4 0%,#dfe5d7 40%,#b3bead 100%); }
-.players .player { border-bottom:1px dotted #C8C8C8; display:block; margin:2px 12px; }
-.players .player .field-name { font-family:Arial; font-size:0.8em; }
+.players .player .field-name { font-family:Arial; font-size:0.75em; }
 .players .player .field-value {}
-.players .player .name { display:inline-block; font-size:1.1em; margin-right:22px; width:160px; }
+.players .player .name { display:inline-block; font-size:1.1em; margin-right:22px; width:140px; }
 .players .player .score,
 .players .player .num-sets,
 .players .player .num-false-sets { background:#e8e8e8; display:inline-block; font-family:Arial; font-size:1em; height:17px; margin:0 5px; padding:5px; text-align:right; width:30px; }
 
 #name-change-form { float: left; margin-left: 22px; }
+#name-field { padding: 4px; width: 178px; }
 
-.game-controls { }
+.game-controls { background:#000000; background: -webkit-linear-gradient(top, #000000 0%,#45484d 100%); }
 
-#chat { clear:both; margin:10px 0 0; }
-#chat .chat-form {}
-#chat .chat-form .msg { width:350px; }
+#chat { background: #ebebeb; border: solid 2px #383838; border-radius: 12px; clear:both; margin:10px 0 0; padding: 12px 12px; }
+#chat .chat-form { }
+#chat .chat-form .msg { padding: 4px; width:350px; }
 #chat .chat-msgs { height:450px; overflow:scroll; }
 #chat .chat-msgs .chat-msg { margin:5px 0 0; }
-#chat .chat-msgs .chat-msg .sender { background:#DADBEB; display:inline-block; margin:0 7px 0 0; padding:4px 5px;
-    border-radius:5px; -moz-border-radius:5px; -webkit-border-radius:5px; }
+#chat .chat-msgs .chat-msg .sender { background:#DADBEB; border-radius:5px; display:inline-block; margin:0 7px 0 0; padding:4px 5px; }
 #chat .chat-msgs .chat-msg .msg { display:inline-block;}
