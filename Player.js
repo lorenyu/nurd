@@ -14,7 +14,10 @@ this.Player = function() {
         this.score = 0;
         this.numSets = 0;
         this.numFalseSets = 0;
-        this.name;
+        this.name = null;
+        this.isRequestingMoreCards = false;
+        this.isRequestingGameRestart = false;
+        this.isRequestingGameEnd = false;
 
         this.lastSeen = 0;
 
@@ -32,7 +35,7 @@ this.Player = function() {
 
         this.getId = function() {
             return id;
-        }
+        };
 
         this.joinGame = function(game) {
             if (game.addPlayer(this)) {
@@ -40,7 +43,7 @@ this.Player = function() {
                 return true;
             }
             return false;
-        }
+        };
 
         this.selectCards = function(cards) {
             log('Player:selectCards(' + JSON.stringify(cards) + ')');
@@ -55,10 +58,10 @@ this.Player = function() {
                 this.score -= 1;
                 this.numFalseSets += 1;
             }
-        }
+        };
 
         init.apply(this, arguments);
-    }
+    };
 }();
 
 this.Player.equals = function(playerA, playerB) {

@@ -17,7 +17,10 @@ this.Game = function() {
     this.players = [];
 
     //var playerTimeout = 15*60*1000; // 15 minutes
-    var playerTimeout = 20*1000; // shorter timeout (useful for testing/debugging)
+    var playerTimeout = 20*1000, // shorter timeout (useful for testing/debugging)
+        moreCardsRequestThreshold = 2/3, // minimum percentage of card requests required to deal more cards
+        restartGameRequestThreshold = 2/3, // minimum percentage of restart game requests required to restart game
+        endGameRequestThreshold = 2/3; // minimum percentage of end game requests required to end game
 
     log('creating chat server');
     var chatServer = new ChatServer();
@@ -92,14 +95,36 @@ this.Game = function() {
         case 'client:startGame':
             var player = this.getPlayer(event.data.playerId);
             if (player) {
-                this.startGame();
+                player.isRequestingGameRestart = true;
+                log(this.numRestartGameRequests());
+                log(restartGameRequestThreshold * this.players.length);
+                if (this.numRestartGameRequests() >= restartGameRequestThreshold * this.players.length) {
+                    this.startGame();
+                } else {
+                    this.broadcastGameState();
+                }
             }
             break;
         case 'client:dealMoreCards':
             var player = this.getPlayer(event.data.playerId);
-            log('dealMoreCards');
             if (player) {
-                this.dealMoreCards();
+                player.isRequestingMoreCards = true;
+                if (this.numMoreCardsRequests() >= moreCardsRequestThreshold * this.players.length) {
+                    this.dealMoreCards();
+                } else {
+                    this.broadcastGameState();
+                }
+            }
+            break;
+        case 'client:endGame':
+            var player = this.getPlayer(event.data.playerId);
+            if (player) {
+                player.isRequestingGameEnd = true;
+                if (this.numEndGameRequests() >= endGameRequestThreshold * this.players.length) {
+                    this.endGame();
+                } else {
+                    this.broadcastGameState();
+                }
             }
             break;
         case 'client:leave':
@@ -147,6 +172,22 @@ this.Game = function() {
         }
         return null;
     };
+    
+    this.numMoreCardsRequests = function() {
+        return this.players.reduce(function(count, player) {
+            return count + (player.isRequestingMoreCards ? 1 : 0);
+        }, 0);
+    }
+    this.numEndGameRequests = function() {
+        return this.players.reduce(function(count, player) {
+            return count + (player.isRequestingGameEnd ? 1 : 0);
+        }, 0);
+    }
+    this.numRestartGameRequests = function() {
+        return this.players.reduce(function(count, player) {
+            return count + (player.isRequestingGameRestart ? 1 : 0);
+        }, 0);
+    }
     
     this._isValidSet = function(cards) {
         var i, j, card, total;
@@ -208,7 +249,10 @@ this.Game = function() {
         return {
             cardsInPlay : this.cardsInPlay,
             players : this.players,
-            deckSize : deck.numCards()
+            deckSize : deck.numCards(),
+            numMoreCardsRequests : this.numMoreCardsRequests(),
+            numRestartGameRequests : this.numRestartGameRequests(),
+            numEndGameRequests : this.numEndGameRequests(),
         };
     }
 
@@ -282,18 +326,34 @@ this.Game = function() {
             player.score = 0;
             player.numSets = 0;
             player.numFalseSets = 0;
+            player.isRequestingMoreCards = false;
+            player.isRequestingGameEnd = false;
+            player.isRequestingGameRestart = false;
         }
         EventEngine.fire('server:gameUpdated', this.gameState());
     }
 
     this.dealMoreCards = function() {
-        for (var i = 0; i < 3; i += 1) {
+        var i, player, n;
+        for (i = 0; i < 3; i += 1) {
             if (!deck.isEmpty()) {
                 this.cardsInPlay.push(deck.drawCard());
             }
         }
+        for (i = 0, n = this.players.length; i < n; i++) {
+            player = this.players[i];
+            player.isRequestingMoreCards = false;
+        }
         EventEngine.fire('server:gameUpdated', this.gameState());
     }
+    
+    this.endGame = function() {
+        EventEngine.fire('server:gameEnded', this.gameState());
+    };
+    
+    this.broadcastGameState = function() {
+        EventEngine.fire('server:gameUpdated', this.gameState());
+    };
 
     init.apply(this, arguments);
 };
