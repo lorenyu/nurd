@@ -89,6 +89,7 @@ this.Game = function() {
             var player = this.getPlayer(event.data.playerId);
             if (player) {
                 player.selectCards(event.data.cards);
+                this._sortPlayersByScore();
                 EventEngine.fire('server:gameUpdated', this.gameState());
             }
             break;
@@ -206,6 +207,17 @@ this.Game = function() {
         return this.players.reduce(function(count, player) {
             return count + (player.isRequestingGameRestart ? 1 : 0);
         }, 0);
+    }
+    this._sortPlayersByScore = function() {
+        this.players.sort(function(a, b) {
+            if (a.score > b.score) {
+                return -1;
+            } else if (a.score < b.score) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
     }
     
     this._isValidSet = function(cards) {
@@ -368,7 +380,10 @@ this.Game = function() {
     }
     
     this.endGame = function() {
-        EventEngine.fire('server:gameEnded', this.gameState());
+        this._sortPlayersByScore();
+        EventEngine.fire('server:gameEnded', {
+            players: this.players
+        });
     };
     
     this.broadcastGameState = function() {

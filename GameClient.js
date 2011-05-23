@@ -13,7 +13,7 @@ this.GameClient = function() {
         EventEngine.observe('server:playerRegistered', proxy(function(event) {
             this.onPlayerRegistered(event.data.registerId, event.data.encPlayerId, event.data.playerPublicId, event.data.name);
             this.stayIntervalId = setInterval(proxy(this.stay, this), Math.floor(event.data.playerTimeout / 2));
-            log('stayIntervalId = ' + this.stayIntervalId);
+            //log('stayIntervalId = ' + this.stayIntervalId);
         }, this));
 
         EventEngine.observe('client:changeName', function(event) {
@@ -69,7 +69,7 @@ this.GameClient = function() {
     }
 
     this.requestMoreCards = function() {
-        log('requesting more cards');
+        //log('requesting more cards');
         var btn = $('#draw-cards-btn');
         if (btn.hasClass('selected')) {
             btn.removeClass('selected');
@@ -85,7 +85,7 @@ this.GameClient = function() {
     }
 
     this.requestGameRestart = function() {
-        log('requesting game restart');
+        //log('requesting game restart');
         var btn = $('#restart-game-btn');
         if (btn.hasClass('selected')) {
             btn.removeClass('selected');
@@ -101,7 +101,7 @@ this.GameClient = function() {
     }
     
     this.requestEndGame = function() {
-        log('requesting game end');
+        //log('requesting game end');
         var btn = $('#end-game-btn');
         if (btn.hasClass('selected')) {
             btn.removeClass('selected');
@@ -168,7 +168,7 @@ this.Game = function() {
         var client = this.client;
 
         EventEngine.observe('server:gameUpdated', function(event) {
-            log('server:gameUpdated');
+            //log('server:gameUpdated');
             var cards = event.data.cardsInPlay,
                 me, player, players = event.data.players,
                 deckSize = event.data.deckSize,
@@ -204,7 +204,6 @@ this.Game = function() {
                 $('#end-game-btn').show();
             }
             
-            console.log(event.data);
             if (me.isRequestingMoreCards) {
                 $('#draw-cards-btn').addClass('selected');
             } else {
@@ -231,13 +230,40 @@ this.Game = function() {
                 var selectedCards = $('.cards-in-play .card.selected');
                 if (selectedCards.length == 3) {
                     selectedCards = $.map(selectedCards, function(card) {
-                        log($(card).attr('json'));
+                        //log($(card).attr('json'));
                         return JSON.parse($(card).attr('json'));
                     });
                     client.selectCards(selectedCards);
                 }
             });
 
+        });
+        
+        EventEngine.observe('server:gameEnded', function(event) {
+            var overlay = $('.game-end-overlay'),
+                players = event.data.players,
+                numPlayers = players.length;
+            overlay.find('.winner .name').text(players[0].name);
+            overlay.find('.winner .score').text(players[0].score);
+            if (numPlayers > 1) {
+                overlay.find('.runner-up.first .name').text(players[1].name);
+                overlay.find('.runner-up.first .score').text(players[1].score);
+                overlay.find('.runner-up.first').show();
+            } else {
+                overlay.find('.runner-up.first').hide();
+            }
+            if (numPlayers > 2) {
+                overlay.find('.runner-up.second .name').text(players[2].name);
+                overlay.find('.runner-up.second .score').text(players[1].score);
+                overlay.find('.runner-up.second').show();
+            } else {
+                overlay.find('.runner-up.second').hide();
+            }
+            overlay.show();
+        });
+        
+        $('.game-end-overlay .close').click(function(event) {
+            $(this).parents('.game-end-overlay').hide();
         });
 
         $('#chat').chat();
