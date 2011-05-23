@@ -115,7 +115,8 @@ var EventEngineHttpServer = function(config) {
     }
 
     function cleanupClients() {
-        var now = (new Date()).getTime();
+        var now = (new Date()).getTime(),
+            clientId;
         for (clientId in clientsById) if (clientsById.hasOwnProperty(clientId)) {
             var client = clientsById[clientId];
 
