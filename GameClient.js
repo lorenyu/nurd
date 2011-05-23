@@ -24,6 +24,7 @@ this.Player = function() {
 
         $('#restart-game-btn').click(proxy(this.requestGameRestart, this));
         $('#draw-cards-btn').click(proxy(this.requestMoreCards, this));
+        $('#end-game-btn').click(proxy(this.requestEndGame, this));
 
         $('#name-change-form').submit(proxy(function() {
             this.changeName($('#name-field').val());
@@ -77,6 +78,13 @@ this.Player = function() {
     this.requestGameRestart = function() {
         log('requesting game restart');
         EventEngine.fire('client:startGame', {
+            playerId: this.id
+        });
+    }
+    
+    this.requestEndGame = function() {
+        log('requesting game end');
+        EventEngine.fire('client:endGame', {
             playerId: this.id
         });
     }
