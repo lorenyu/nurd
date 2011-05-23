@@ -16,8 +16,8 @@ this.Game = function() {
     this.cardsInPlay = [];
     this.players = [];
 
-    var playerTimeout = 15*60*1000; // 15 minutes
-    //var playerTimeout = 10*1000; // 10 seconds (for testing/debugging)
+    //var playerTimeout = 15*60*1000; // 15 minutes
+    var playerTimeout = 20*1000; // shorter timeout (useful for testing/debugging)
 
     log('creating chat server');
     var chatServer = new ChatServer();
@@ -246,18 +246,16 @@ this.Game = function() {
             return false;
         }
 
-        if (!deck.isEmpty()) {
-            for (var i = 0, n = cards.length; i < n; i += 1) {
-                var card = cards[i];
-                for (var j = 0, m = this.cardsInPlay.length; j < m; j += 1) {
-                    if (Card.equals(this.cardsInPlay[j], card)) {
-                        if (this.cardsInPlay.length <= 12 && !deck.isEmpty()) { // replace the card if there are fewer than 12 cards and deck is not empty
-                            this.cardsInPlay[j] = deck.drawCard();
-                        } else { // if there are more than 12 cards in play just remove the card
-                            this.cardsInPlay.splice(j, 1);
-                        }
-                        break;
+        for (var i = 0, n = cards.length; i < n; i += 1) {
+            var card = cards[i];
+            for (var j = 0, m = this.cardsInPlay.length; j < m; j += 1) {
+                if (Card.equals(this.cardsInPlay[j], card)) {
+                    if (this.cardsInPlay.length <= 12 && !deck.isEmpty()) { // replace the card if there are fewer than 12 cards and deck is not empty
+                        this.cardsInPlay[j] = deck.drawCard();
+                    } else { // if there are more than 12 cards in play or no cards left just remove the card
+                        this.cardsInPlay.splice(j, 1);
                     }
+                    break;
                 }
             }
         }
