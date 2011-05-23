@@ -11,6 +11,7 @@ this.Player = function() {
 
     return function() {
         var id = 0; // needs to be private so players can't pretend to be each other
+        this.publicId = 0;
         this.score = 0;
         this.numSets = 0;
         this.numFalseSets = 0;
@@ -25,6 +26,7 @@ this.Player = function() {
         
         function init() {
             this.name = 'Player' + numPlayersCreated;
+            this.publicId = numPlayersCreated;
             numPlayersCreated += 1;
 
             id = Crypto.getRandomKey();

@@ -17,9 +17,14 @@ body { background: -webkit-linear-gradient(top, #45484d 0%,#000000 100%); }
 .outer-container { margin: 0 auto; width: 1024px; }
 #game-container { overflow:auto; }
 
+/* game controls */
 button { background: #e2e2e2; border: none; border-radius: 5px; padding: 4px 12px;
     background: -webkit-linear-gradient(top, #e2e2e2 0%,#dbdbdb 50%,#d1d1d1 51%,#fefefe 100%); }
+#restart-game-btn.selected { background: -webkit-linear-gradient(top, #f2f7f9 0%,#def0f9 50%,#d7e8ef 51%,#c0e2f9 100%);}
+#draw-cards-btn.selected { background: -webkit-linear-gradient(top, #f2f7f9 0%,#def0f9 50%,#d7e8ef 51%,#c0e2f9 100%);}
+#end-game-btn.selected { background: -webkit-linear-gradient(top, #f2f7f9 0%,#def0f9 50%,#d7e8ef 51%,#c0e2f9 100%);}
 
+/* game elements */
 .card { border:solid 2px #bab5a0; border-radius: 10px; height:50px; padding-top: 14px; text-align: center; width:128px;
       background: -webkit-linear-gradient(top, #ffffff 0%,#f3f3f3 50%,#ededed 51%,#ffffff 100%); }
 .card-container .json { display:none; }

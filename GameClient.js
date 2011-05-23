@@ -1,8 +1,7 @@
-this.Player = function() {
+this.GameClient = function() {
     this.id = 0;
-    this.score = 0;
-    this.numSets = 0;
-    this.numFalseSets = 0;
+    this.publicId = 0;
+    this.player = null;
 
     var _game = null;
 
@@ -12,7 +11,7 @@ this.Player = function() {
     function init() {
         
         EventEngine.observe('server:playerRegistered', proxy(function(event) {
-            this.onPlayerRegistered(event.data.registerId, event.data.encPlayerId, event.data.name);
+            this.onPlayerRegistered(event.data.registerId, event.data.encPlayerId, event.data.playerPublicId, event.data.name);
             this.stayIntervalId = setInterval(proxy(this.stay, this), Math.floor(event.data.playerTimeout / 2));
             log('stayIntervalId = ' + this.stayIntervalId);
         }, this));
@@ -48,9 +47,10 @@ this.Player = function() {
         });
     }
 
-    this.onPlayerRegistered = function(registerId, encPlayerId, name) {
+    this.onPlayerRegistered = function(registerId, encPlayerId, playerPublicId, name) {
         if (registerId === _registerId) {
             this.id = encPlayerId - _secret;
+            this.publicId = playerPublicId;
             EventEngine.observeAll(proxy(onEvent, this));
 
             $('#name-field').val(name);
@@ -70,23 +70,50 @@ this.Player = function() {
 
     this.requestMoreCards = function() {
         log('requesting more cards');
-        EventEngine.fire('client:dealMoreCards', {
-            playerId: this.id
-        });
+        var btn = $('#draw-cards-btn');
+        if (btn.hasClass('selected')) {
+            btn.removeClass('selected');
+            EventEngine.fire('client:cancelMoreCardsRequest', {
+                playerId: this.id
+            });
+        } else {
+            btn.addClass('selected');
+            EventEngine.fire('client:dealMoreCards', {
+                playerId: this.id
+            });
+        }
     }
 
     this.requestGameRestart = function() {
         log('requesting game restart');
-        EventEngine.fire('client:startGame', {
-            playerId: this.id
-        });
+        var btn = $('#restart-game-btn');
+        if (btn.hasClass('selected')) {
+            btn.removeClass('selected');
+            EventEngine.fire('client:cancelRestartGameRequest', {
+                playerId: this.id
+            });
+        } else {
+            btn.addClass('selected');
+            EventEngine.fire('client:startGame', {
+                playerId: this.id
+            });
+        }
     }
     
     this.requestEndGame = function() {
         log('requesting game end');
-        EventEngine.fire('client:endGame', {
-            playerId: this.id
-        });
+        var btn = $('#end-game-btn');
+        if (btn.hasClass('selected')) {
+            btn.removeClass('selected');
+            EventEngine.fire('client:cancelEndGameRequest', {
+                playerId: this.id
+            });
+        } else {
+            btn.addClass('selected');
+            EventEngine.fire('client:endGame', {
+                playerId: this.id
+            });
+        }
     }
 
     this.stay = function() {
@@ -130,7 +157,7 @@ this.Game = function() {
     var PLAYERS_TEMPLATE;
     var _numSelectedCards = [];
 
-    this.player = new Player();
+    this.client = new GameClient();
 
     function init() {
         TEMPLATE = $('#game-container').html();
@@ -138,13 +165,22 @@ this.Game = function() {
         PLAYERS_TEMPLATE = $('.players').html();
 
 
-        var player = this.player;
+        var client = this.client;
 
         EventEngine.observe('server:gameUpdated', function(event) {
             log('server:gameUpdated');
             var cards = event.data.cardsInPlay,
-                players = event.data.players,
-                deckSize = event.data.deckSize;
+                me, player, players = event.data.players,
+                deckSize = event.data.deckSize,
+                i, numPlayers;
+
+            for (i = 0, numPlayers = players.length; i < numPlayers; i++) {
+                player = players[i];
+                if (player.publicId === client.publicId) {
+                    client.player = me = player;
+                    player.isMe = true;
+                }
+            }
 
 /*
             $('#game-container').html(TEMPLATE).render({
@@ -167,6 +203,27 @@ this.Game = function() {
                 $('#draw-cards-btn').hide();
                 $('#end-game-btn').show();
             }
+            
+            console.log(event.data);
+            if (me.isRequestingMoreCards) {
+                $('#draw-cards-btn').addClass('selected');
+            } else {
+                $('#draw-cards-btn').removeClass('selected');
+            }
+            if (me.isRequestingGameRestart) {
+                $('#restart-game-btn').addClass('selected');
+            } else {
+                $('#restart-game-btn').removeClass('selected');
+            }
+            if (me.isRequestingGameEnd) {
+                $('#end-game-btn').addClass('selected');
+            } else {
+                $('#end-game-btn').removeClass('selected');
+            }
+            
+            $('#draw-cards-btn .num-requests').text(event.data.numMoreCardsRequests);
+            $('#restart-game-btn .num-requests').text(event.data.numRestartGameRequests);
+            $('#end-game-btn .num-requests').text(event.data.numEndGameRequests);
 
             $('.cards-in-play .card').bind('mousedown', function() {
                 var card = $(this);
@@ -177,7 +234,7 @@ this.Game = function() {
                         log($(card).attr('json'));
                         return JSON.parse($(card).attr('json'));
                     });
-                    player.selectCards(selectedCards);
+                    client.selectCards(selectedCards);
                 }
             });
 
@@ -185,7 +242,7 @@ this.Game = function() {
 
         $('#chat').chat();
 
-        this.player.register();
+        this.client.register();
         //EventEngine.observe('client:endGame', proxy(this.endGame, this));
     }
 
@@ -236,6 +293,14 @@ this.PureDirectives = {
     PLAYERS: {
         '.player' : {
             'player<-players' : {
+                '.@class' : function(arg) {
+                    var player = arg.item,
+                        cls = 'player';
+                    if (player.isMe) {
+                        cls += ' me';
+                    }
+                    return cls;
+                },
                 '.name' : 'player.name',
                 '.score' : 'player.score',
                 '.num-sets' : 'player.numSets',

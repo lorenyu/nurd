@@ -96,13 +96,18 @@ this.Game = function() {
             var player = this.getPlayer(event.data.playerId);
             if (player) {
                 player.isRequestingGameRestart = true;
-                log(this.numRestartGameRequests());
-                log(restartGameRequestThreshold * this.players.length);
                 if (this.numRestartGameRequests() >= restartGameRequestThreshold * this.players.length) {
                     this.startGame();
                 } else {
                     this.broadcastGameState();
                 }
+            }
+            break;
+        case 'client:cancelRestartGameRequest':
+            var player = this.getPlayer(event.data.playerId);
+            if (player) {
+                player.isRequestingGameRestart = false;
+                this.broadcastGameState();
             }
             break;
         case 'client:dealMoreCards':
@@ -116,6 +121,13 @@ this.Game = function() {
                 }
             }
             break;
+        case 'client:cancelMoreCardsRequest':
+            var player = this.getPlayer(event.data.playerId);
+            if (player) {
+                player.isRequestingMoreCards = false;
+                this.broadcastGameState();
+            }
+            break;
         case 'client:endGame':
             var player = this.getPlayer(event.data.playerId);
             if (player) {
@@ -125,6 +137,13 @@ this.Game = function() {
                 } else {
                     this.broadcastGameState();
                 }
+            }
+            break;
+        case 'client:cancelEndGameRequest':
+            var player = this.getPlayer(event.data.playerId);
+            if (player) {
+                player.isRequestingGameEnd = false;
+                this.broadcastGameState();
             }
             break;
         case 'client:leave':
@@ -266,6 +285,7 @@ this.Game = function() {
         EventEngine.fire('server:playerRegistered', {
             registerId: registerId,
             encPlayerId: encPlayerId,
+            playerPublicId: player.publicId,
             playerTimeout: playerTimeout,
             name: player.name
         });
