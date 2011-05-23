@@ -86,7 +86,7 @@ this.Game = function() {
             var player = this.getPlayer(event.data.playerId);
             if (player) {
                 player.selectCards(event.data.cards);
-                EventEngine.fire('server:gameUpdated', this);
+                EventEngine.fire('server:gameUpdated', this.gameState());
             }
             break;
         case 'client:startGame':
@@ -104,7 +104,7 @@ this.Game = function() {
             break;
         case 'client:leave':
             this.removePlayer(event.data.playerId);
-            EventEngine.fire('server:gameUpdated', this);
+            EventEngine.fire('server:gameUpdated', this.gameState());
             break;
         case 'client:stay':
             var player = this.getPlayer(event.data.playerId);
@@ -129,7 +129,7 @@ this.Game = function() {
                     break;
                 }
                 player.name = name;
-                EventEngine.fire('server:gameUpdated', this);
+                EventEngine.fire('server:gameUpdated', this.gameState());
             }
             break;
         default:
@@ -200,8 +200,16 @@ this.Game = function() {
             }
         }
         if (numPlayers !== this.players.length) { // if a player left players, then notify other players
-            EventEngine.fire('server:gameUpdated', this);
+            EventEngine.fire('server:gameUpdated', this.gameState());
         }
+    }
+    
+    this.gameState = function() {
+        return {
+            cardsInPlay : this.cardsInPlay,
+            players : this.players,
+            deckSize : deck.numCards()
+        };
     }
 
     this.registerPlayer = function(registerId, secret) {
@@ -217,7 +225,7 @@ this.Game = function() {
             playerTimeout: playerTimeout,
             name: player.name
         });
-        EventEngine.fire('server:gameUpdated', this);
+        EventEngine.fire('server:gameUpdated', this.gameState());
     }
 
     this.addPlayer = function(player) {
@@ -275,7 +283,7 @@ this.Game = function() {
             player.numSets = 0;
             player.numFalseSets = 0;
         }
-        EventEngine.fire('server:gameUpdated', this);
+        EventEngine.fire('server:gameUpdated', this.gameState());
     }
 
     this.dealMoreCards = function() {
@@ -284,7 +292,7 @@ this.Game = function() {
                 this.cardsInPlay.push(deck.drawCard());
             }
         }
-        EventEngine.fire('server:gameUpdated', this);
+        EventEngine.fire('server:gameUpdated', this.gameState());
     }
 
     init.apply(this, arguments);

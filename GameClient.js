@@ -10,6 +10,7 @@ this.Player = function() {
     var _secret;
         
     function init() {
+        
         EventEngine.observe('server:playerRegistered', proxy(function(event) {
             this.onPlayerRegistered(event.data.registerId, event.data.encPlayerId, event.data.name);
             this.stayIntervalId = setInterval(proxy(this.stay, this), Math.floor(event.data.playerTimeout / 2));
@@ -133,8 +134,9 @@ this.Game = function() {
 
         EventEngine.observe('server:gameUpdated', function(event) {
             log('server:gameUpdated');
-            var cards = event.data.cardsInPlay;
-            var players = event.data.players;
+            var cards = event.data.cardsInPlay,
+                players = event.data.players,
+                deckSize = event.data.deckSize;
 
 /*
             $('#game-container').html(TEMPLATE).render({
@@ -150,7 +152,13 @@ this.Game = function() {
                 cards:cards
             }, PureDirectives.CARDS_IN_PLAY);
 
-
+            if (deckSize > 0) {
+                $('#draw-cards-btn').show();
+                $('#end-game-btn').hide();
+            } else {
+                $('#draw-cards-btn').hide();
+                $('#end-game-btn').show();
+            }
 
             $('.cards-in-play .card').bind('mousedown', function() {
                 var card = $(this);

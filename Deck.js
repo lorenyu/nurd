@@ -33,6 +33,10 @@ this.Deck = function() {
     this.isEmpty = function() {
         return this.cards.length === 0;
     }
+    
+    this.numCards = function() {
+        return this.cards.length;
+    }
 
     init.apply(this, arguments);
 };
