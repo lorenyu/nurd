@@ -204,17 +204,17 @@ this.Game = function() {
                 $('#end-game-btn').show();
             }
             
-            if (me.isRequestingMoreCards) {
+            if (me && me.isRequestingMoreCards) {
                 $('#draw-cards-btn').addClass('selected');
             } else {
                 $('#draw-cards-btn').removeClass('selected');
             }
-            if (me.isRequestingGameRestart) {
+            if (me && me.isRequestingGameRestart) {
                 $('#restart-game-btn').addClass('selected');
             } else {
                 $('#restart-game-btn').removeClass('selected');
             }
-            if (me.isRequestingGameEnd) {
+            if (me && me.isRequestingGameEnd) {
                 $('#end-game-btn').addClass('selected');
             } else {
                 $('#end-game-btn').removeClass('selected');
