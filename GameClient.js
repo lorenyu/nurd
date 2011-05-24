@@ -168,6 +168,8 @@ this.Game = function() {
         var client = this.client;
 
         EventEngine.observe('server:gameUpdated', function(event) {
+            if (!client.id) { return; } // if player hasn't registered yet, there's no need updating the game state
+            
             //log('server:gameUpdated');
             var cards = event.data.cardsInPlay,
                 me, player, players = event.data.players,
@@ -204,17 +206,17 @@ this.Game = function() {
                 $('#end-game-btn').show();
             }
             
-            if (me && me.isRequestingMoreCards) {
+            if (me.isRequestingMoreCards) {
                 $('#draw-cards-btn').addClass('selected');
             } else {
                 $('#draw-cards-btn').removeClass('selected');
             }
-            if (me && me.isRequestingGameRestart) {
+            if (me.isRequestingGameRestart) {
                 $('#restart-game-btn').addClass('selected');
             } else {
                 $('#restart-game-btn').removeClass('selected');
             }
-            if (me && me.isRequestingGameEnd) {
+            if (me.isRequestingGameEnd) {
                 $('#end-game-btn').addClass('selected');
             } else {
                 $('#end-game-btn').removeClass('selected');
