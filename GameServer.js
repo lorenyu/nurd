@@ -80,13 +80,15 @@ this.Game = function() {
         if (event.name.indexOf('client:') !== 0) {
             return;
         }
+        
+        var player;
 
         switch (event.name) {
         case 'client:registerPlayer':
             this.registerPlayer(event.data.registerId, event.data.secret);
             break;
         case 'client:selectCards':
-            var player = this.getPlayer(event.data.playerId);
+            player = this.getPlayer(event.data.playerId);
             if (player) {
                 player.selectCards(event.data.cards);
                 this._sortPlayersByScore();
@@ -94,7 +96,7 @@ this.Game = function() {
             }
             break;
         case 'client:startGame':
-            var player = this.getPlayer(event.data.playerId);
+            player = this.getPlayer(event.data.playerId);
             if (player) {
                 player.isRequestingGameRestart = true;
                 if (this.numRestartGameRequests() >= restartGameRequestThreshold * this.players.length) {
@@ -105,14 +107,14 @@ this.Game = function() {
             }
             break;
         case 'client:cancelRestartGameRequest':
-            var player = this.getPlayer(event.data.playerId);
+            player = this.getPlayer(event.data.playerId);
             if (player) {
                 player.isRequestingGameRestart = false;
                 this.broadcastGameState();
             }
             break;
         case 'client:dealMoreCards':
-            var player = this.getPlayer(event.data.playerId);
+            player = this.getPlayer(event.data.playerId);
             if (player) {
                 player.isRequestingMoreCards = true;
                 if (this.numMoreCardsRequests() >= moreCardsRequestThreshold * this.players.length) {
@@ -123,14 +125,14 @@ this.Game = function() {
             }
             break;
         case 'client:cancelMoreCardsRequest':
-            var player = this.getPlayer(event.data.playerId);
+            player = this.getPlayer(event.data.playerId);
             if (player) {
                 player.isRequestingMoreCards = false;
                 this.broadcastGameState();
             }
             break;
         case 'client:endGame':
-            var player = this.getPlayer(event.data.playerId);
+            player = this.getPlayer(event.data.playerId);
             if (player) {
                 player.isRequestingGameEnd = true;
                 if (this.numEndGameRequests() >= endGameRequestThreshold * this.players.length) {
@@ -141,7 +143,7 @@ this.Game = function() {
             }
             break;
         case 'client:cancelEndGameRequest':
-            var player = this.getPlayer(event.data.playerId);
+            player = this.getPlayer(event.data.playerId);
             if (player) {
                 player.isRequestingGameEnd = false;
                 this.broadcastGameState();
@@ -152,14 +154,14 @@ this.Game = function() {
             EventEngine.fire('server:gameUpdated', this.gameState());
             break;
         case 'client:stay':
-            var player = this.getPlayer(event.data.playerId);
+            player = this.getPlayer(event.data.playerId);
             if (player) {
                 var now = (new Date()).getTime();
                 player.lastSeen = now;
             }
             break;
         case 'client:changeName':
-            var player = this.getPlayer(event.data.playerId);
+            player = this.getPlayer(event.data.playerId);
             if (player) {
                 var name = event.data.name;
                 var regex = /^[\w. ]+$/i; // matches any string of alphanumeric or underscore characters
@@ -180,7 +182,7 @@ this.Game = function() {
         default:
             log('unknown command: ' + event.name);
             break;
-        };
+        }
     };
 
     this.getPlayer = function(playerId) {
@@ -197,17 +199,17 @@ this.Game = function() {
         return this.players.reduce(function(count, player) {
             return count + (player.isRequestingMoreCards ? 1 : 0);
         }, 0);
-    }
+    };
     this.numEndGameRequests = function() {
         return this.players.reduce(function(count, player) {
             return count + (player.isRequestingGameEnd ? 1 : 0);
         }, 0);
-    }
+    };
     this.numRestartGameRequests = function() {
         return this.players.reduce(function(count, player) {
             return count + (player.isRequestingGameRestart ? 1 : 0);
         }, 0);
-    }
+    };
     this._sortPlayersByScore = function() {
         this.players.sort(function(a, b) {
             if (a.score > b.score) {
@@ -218,7 +220,7 @@ this.Game = function() {
                 return 0;
             }
         });
-    }
+    };
     
     this._isValidSet = function(cards) {
         var i, j, card, total;
@@ -248,7 +250,7 @@ this.Game = function() {
             }
         }
         return true;
-    }
+    };
 
     this._isCardInPlay = function(card) {
         for (var i = 0, n = this.cardsInPlay.length; i < n; i += 1) {
@@ -257,7 +259,7 @@ this.Game = function() {
             }
         }
         return false;
-    }
+    };
 
     this._cleanupPlayers = function() {
         log('cleaning up players');
@@ -274,7 +276,7 @@ this.Game = function() {
         if (numPlayers !== this.players.length) { // if a player left players, then notify other players
             EventEngine.fire('server:gameUpdated', this.gameState());
         }
-    }
+    };
     
     this.gameState = function() {
         return {
@@ -283,9 +285,9 @@ this.Game = function() {
             deckSize : deck.numCards(),
             numMoreCardsRequests : this.numMoreCardsRequests(),
             numRestartGameRequests : this.numRestartGameRequests(),
-            numEndGameRequests : this.numEndGameRequests(),
+            numEndGameRequests : this.numEndGameRequests()
         };
-    }
+    };
 
     this.registerPlayer = function(registerId, secret) {
         log('Game:registerPlayer: registerId=' + registerId + ', secret=' + secret);
@@ -302,7 +304,7 @@ this.Game = function() {
             name: player.name
         });
         EventEngine.fire('server:gameUpdated', this.gameState());
-    }
+    };
 
     this.addPlayer = function(player) {
         for (var i = 0, n = this.players.length; i < n; i += 1) {
@@ -312,7 +314,7 @@ this.Game = function() {
         }
         this.players.push(player);
         return true;
-    }
+    };
 
     this.removePlayer = function(playerId) {
         for (var i = 0, n = this.players.length; i < n; i += 1) {
@@ -323,7 +325,7 @@ this.Game = function() {
             }
         }
         return false;
-    }
+    };
 
     this.processSet = function(cards) {
         if (!this._isValidSet(cards)) {
@@ -344,16 +346,18 @@ this.Game = function() {
             }
         }
         return true;
-    }
+    };
 
     this.startGame = function() {
         deck = new Deck();
         this.cardsInPlay = [];
+        
+        var i;
 
-        for (var i = 0; i < 12; i += 1) {
+        for (i = 0; i < 12; i += 1) {
             this.cardsInPlay.push(deck.drawCard());
         }
-        for (var i = 0, n = this.players.length; i < n; i += 1) {
+        for (i = 0, n = this.players.length; i < n; i += 1) {
             var player = this.players[i];
             player.score = 0;
             player.numSets = 0;
@@ -363,7 +367,7 @@ this.Game = function() {
             player.isRequestingGameRestart = false;
         }
         EventEngine.fire('server:gameUpdated', this.gameState());
-    }
+    };
 
     this.dealMoreCards = function() {
         var i, player, n;
@@ -377,7 +381,7 @@ this.Game = function() {
             player.isRequestingMoreCards = false;
         }
         EventEngine.fire('server:gameUpdated', this.gameState());
-    }
+    };
     
     this.endGame = function() {
         this._sortPlayersByScore();
