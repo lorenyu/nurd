@@ -50,15 +50,17 @@ this.Player = function() {
         this.selectCards = function(cards) {
             log('Player:selectCards(' + JSON.stringify(cards) + ')');
             if (!_game) {
-                return;
+                return false;
             }
 
             if (_game.processSet(cards)) {
                 this.score += 1;
                 this.numSets += 1;
+                return true;
             } else {
                 this.score -= 1;
                 this.numFalseSets += 1;
+                return false;
             }
         };
 

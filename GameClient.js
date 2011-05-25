@@ -264,6 +264,24 @@ this.Game = function() {
             overlay.show();
         });
         
+        EventEngine.observe('server:playerScored', function(event) {
+            var $tmp = $('#tmp');
+            $tmp.html('<ul class="cards set">' + CARDS_IN_PLAY_TEMPLATE + '</ul>');
+            $tmp.find('.cards').render({
+                cards: event.data.cards
+            }, PureDirectives.CARDS_IN_PLAY);
+            $('#chat').chat( 'addMessage', event.data.player.name, $tmp.html() );
+        });
+        
+        EventEngine.observe('server:playerFailedSet', function(event) {
+            var $tmp = $('#tmp');
+            $tmp.html('<ul class="cards false-set">' + CARDS_IN_PLAY_TEMPLATE + '</ul>');
+            $tmp.find('.cards').render({
+                cards: event.data.cards
+            }, PureDirectives.CARDS_IN_PLAY);
+            $('#chat').chat( 'addMessage', event.data.player.name, $tmp.html() );
+        });
+        
         $('.game-end-overlay .close').click(function(event) {
             $(this).parents('.game-end-overlay').hide();
         });

@@ -81,7 +81,8 @@ this.Game = function() {
             return;
         }
         
-        var player;
+        var player,
+            success;
 
         switch (event.name) {
         case 'client:registerPlayer':
@@ -90,8 +91,13 @@ this.Game = function() {
         case 'client:selectCards':
             player = this.getPlayer(event.data.playerId);
             if (player) {
-                player.selectCards(event.data.cards);
+                success = player.selectCards(event.data.cards);
                 this._sortPlayersByScore();
+                if (success) {
+                    EventEngine.fire('server:playerScored', { player: player, cards: event.data.cards });
+                } else {
+                    EventEngine.fire('server:playerFailedSet', { player: player, cards: event.data.cards });
+                }
                 EventEngine.fire('server:gameUpdated', this.gameState());
             }
             break;

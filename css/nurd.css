@@ -16,6 +16,7 @@ blockquote, q { quotes: "" ""; }
 body { background: -webkit-linear-gradient(top, #45484d 0%,#000000 100%); }
 .outer-container { margin: 0 auto; width: 1024px; }
 #game-container { overflow:auto; }
+#tmp { display: none; }
 
 /* game controls */
 button { background: #e2e2e2; border: none; border-radius: 5px; cursor: pointer; padding: 4px 12px;
@@ -108,3 +109,7 @@ button { background: #e2e2e2; border: none; border-radius: 5px; cursor: pointer;
 #chat .chat-msgs .chat-msg { margin:5px 0 0; }
 #chat .chat-msgs .chat-msg .sender { background:#DADBEB; border-radius:5px; display:inline-block; margin:0 7px 0 0; padding:4px 5px; }
 #chat .chat-msgs .chat-msg .msg { display:inline-block;}
+#chat .chat-msgs .chat-msg .msg .cards { display:inline-block; }
+#chat .chat-msgs .chat-msg .msg .cards .card { display:inline-block; }
+#chat .chat-msgs .chat-msg .msg .cards.set .card { border-color:#d2ff52 #4FED44 #4FED44 #d2ff52; }
+#chat .chat-msgs .chat-msg .msg .cards.false-set .card { border-color:#FFA435 #e73827 #e73827 #FFA435; }
