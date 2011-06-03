@@ -4,7 +4,9 @@ var http = require('http');
 var url = require('url');
 var util = require('util');
 var querystring = require('querystring');
-var EventEngine = require('./EventEngine.js').EventEngine;
+var EventEngine = require('./EventEngine.js').EventEngine,
+    less = require('less'),
+    path = require('path');
 
 var log = console.log;
 
@@ -443,6 +445,30 @@ var EventEngineHttpServer = function(config) {
             fs.stat(filename, function(err, stats) { // TODO: Don't blindly open any file. Just open ones within application root directory
                 if (stats) {
                     staticHandler(filename)(request, response);
+                } else if (path.extname(filename) === '.css') { // if filename has extension ".less"
+                    var lessFilename = path.join(path.dirname(filename), path.basename(filename, '.css') + '.less');
+                    path.exists(lessFilename, function(exists) {
+                        if (exists) {
+                            fs.readFile(lessFilename, 'utf-8', function (err, data) {
+                                log('reading LESS file');
+                                if (err) {
+                                    log("staticHandler:loadResponseData:Error loading " + filename);
+                                } else {
+                                    less.render(data, function(e, css) {
+                                        headers = {
+                                            'Cache-Control': 'public',
+                                            'Content-Type': 'text/css',
+                                            'Content-Length': css.length
+                                        };
+                                        response.writeHead(200, headers);
+                                        response.end(request.method === "HEAD" ? "" : css);
+                                    });
+                                }
+                            });
+                        } else {
+                            defaultHandler(request, response);
+                        }
+                    });
                 } else {
                     defaultHandler(request, response);
                 }
