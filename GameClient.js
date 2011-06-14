@@ -256,7 +256,7 @@ this.Game = function() {
             }
             if (numPlayers > 2) {
                 overlay.find('.runner-up.second .name').text(players[2].name);
-                overlay.find('.runner-up.second .score').text(players[1].score);
+                overlay.find('.runner-up.second .score').text(players[2].score);
                 overlay.find('.runner-up.second').show();
             } else {
                 overlay.find('.runner-up.second').hide();
