@@ -442,11 +442,13 @@ var EventEngineHttpServer = function(config) {
                 defaultHandler(request, response);
             });
         } else {
-            fs.stat(filename, function(err, stats) { // TODO: Don't blindly open any file. Just open ones within application root directory
+            var staticPath = path.join('public', path.dirname(filename), path.basename(filename));
+            console.log('static path: ' + staticPath);
+            fs.stat(staticPath, function(err, stats) { // TODO: Don't blindly open any file. Just open ones within application root directory
                 if (stats) {
-                    staticHandler(filename)(request, response);
+                    staticHandler(staticPath)(request, response);
                 } else if (path.extname(filename) === '.css') { // if filename has extension ".less"
-                    var lessFilename = path.join(path.dirname(filename), path.basename(filename, '.css') + '.less');
+                    var lessFilename = path.join('public', path.dirname(filename), path.basename(filename, '.css') + '.less');
                     path.exists(lessFilename, function(exists) {
                         if (exists) {
                             fs.readFile(lessFilename, 'utf-8', function (err, data) {
