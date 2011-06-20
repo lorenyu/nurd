@@ -2,7 +2,7 @@ var util = require('util'),
     http = require('http'),
     path = require('path'),
     EventEngineHttpServer = require('./EventEngineHttpServer').EventEngineHttpServer;
-var Game = require('./GameServer.js').Game;
+var Game = require('./nurd/GameServer.js').Game;
 
 var log = util.puts;
 

@@ -1,12 +1,12 @@
 var util = require('util');
 var http = require('http');
-var EventEngine = require('./EventEngine.js').EventEngine;
-var proxy = require('./jsutil.js').proxy;
+var EventEngine = require('../EventEngine.js').EventEngine;
+var proxy = require('../jsutil.js').proxy;
 
 var Player = require('./Player.js').Player;
 var Card = require('./Card.js').Card;
-var Deck = require('./Deck.js').Deck;
-var ChatServer = require('./ChatServer.js').ChatServer;
+var Deck = require('./Deck.js');
+var ChatServer = require('../ChatServer.js').ChatServer;
 
 var log = util.puts;
 

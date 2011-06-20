@@ -1,6 +1,6 @@
-var proxy = require('./jsutil.js').proxy;
-var Crypto = require('./jsutil.js').Crypto;
-var EventEngine = require('./EventEngine.js').EventEngine;
+var proxy = require('../jsutil.js').proxy;
+var Crypto = require('../jsutil.js').Crypto;
+var EventEngine = require('../EventEngine.js').EventEngine;
 
 var log = require('util').puts;
 

@@ -1,6 +1,6 @@
 var Card = require('./Card.js').Card;
 
-this.Deck = function() {
+var Deck = module.exports = function() {
 
     this.cards = [];
     
