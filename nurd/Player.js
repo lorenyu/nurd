@@ -1,10 +1,13 @@
-var proxy = require('../jsutil.js').proxy;
-var Crypto = require('../jsutil.js').Crypto;
-var EventEngine = require('../EventEngine.js').EventEngine;
+var util = require('util'),
+    proxy = require('../jsutil.js').proxy,
+    Crypto = require('../jsutil.js').Crypto,
+    EventEngine = require('../EventEngine.js').EventEngine;
 
 var log = require('util').puts;
 
 this.Player = function() {
+    process.EventEmitter.call(this);
+    
     // Private class properties and functions
 
     var numPlayersCreated = 0;
@@ -40,11 +43,28 @@ this.Player = function() {
         };
 
         this.joinGame = function(game) {
-            if (game.addPlayer(this)) {
-                _game = game;
-                return true;
+            _game = game;
+            this.emit('message', {
+                type: 'joinGame',
+                player: this,
+                game: game
+            });
+            return true;
+        };
+        
+        this.leaveGame = function() {
+            if (!_game) {
+                return false;
             }
-            return false;
+            _game.removePlayer(this);
+            this.emit('message', {
+                type: 'leaveGame',
+                player: this,
+                game: _game
+            });
+            
+            _game = null;
+            return true;
         };
 
         this.selectCards = function(cards) {
@@ -71,3 +91,5 @@ this.Player = function() {
 this.Player.equals = function(playerA, playerB) {
     return playerA.getId() === playerB.getId();
 };
+
+util.inherits(this.Player, process.EventEmitter);

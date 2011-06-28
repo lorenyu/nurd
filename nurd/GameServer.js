@@ -1,5 +1,4 @@
 var util = require('util');
-var http = require('http');
 var EventEngine = require('../EventEngine.js').EventEngine;
 var proxy = require('../jsutil.js').proxy;
 
@@ -11,6 +10,7 @@ var ChatServer = require('../ChatServer.js').ChatServer;
 var log = util.puts;
 
 this.Game = function() {
+    process.EventEmitter.call(this);
 
     var deck = new Deck();
     this.cardsInPlay = [];
@@ -158,6 +158,7 @@ this.Game = function() {
         case 'client:leave':
             this.removePlayer(event.data.playerId);
             EventEngine.fire('server:gameUpdated', this.gameState());
+            this.emit('server:gameUpdate', this.gameState());
             break;
         case 'client:stay':
             player = this.getPlayer(event.data.playerId);
@@ -183,6 +184,7 @@ this.Game = function() {
                 }
                 player.name = name;
                 EventEngine.fire('server:gameUpdated', this.gameState());
+                this.emit('server:gameUpdated', this.gameState());
             }
             break;
         default:
@@ -402,3 +404,5 @@ this.Game = function() {
 
     init.apply(this, arguments);
 };
+
+util.inherits(Game, process.EventEmitter);

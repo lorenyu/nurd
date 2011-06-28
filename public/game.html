@@ -1,28 +1,48 @@
 <html>
 <head>
-  <link type="text/css" rel="stylesheet" href="/css/nurd.css" />
-  <script type="text/javascript" src="/js/lib/jquery-1.4.3.js" ></script>
-  <script type="text/javascript" src="/js/lib/pure.js" ></script>
-  <script type="text/javascript" src="/socket.io/socket.io.js" ></script>
-  <script type="text/javascript" src="jsutil.js" ></script>
-  <script type="text/javascript" src="EventEngine.js" ></script>
-  <script type="text/javascript" src="EventEngineHttpClient.js" ></script>
-  <script type="text/javascript" src="GameClient.js" ></script>
-  <script type="text/javascript" src="ChatClient.js" ></script>
-  <script type="text/javascript">
+    <link type="text/css" rel="stylesheet" href="/css/nurd.css" />
+    <script type="text/javascript" src="/js/lib/jquery-1.4.3.js" ></script>
+    <script type="text/javascript" src="/js/lib/pure.js" ></script>
+    <script type="text/javascript" src="/socket.io/socket.io.js" ></script>
+    <script type="text/javascript" src="/js/nurd/util.js" ></script>
+    <script type="text/javascript" src="/js/nurd/EventEmitter.js" ></script>
+    <script type="text/javascript" src="/js/nurd/Model.js" ></script>
+    <script type="text/javascript" src="/js/nurd/View.js" ></script>
+    <script type="text/javascript" src="/js/nurd/Client.js" ></script>
+    <!--script type="text/javascript" src="/ChatClient.js" ></script-->
+    <script type="text/javascript">
+    var devSocket;
+    $(document).ready(function() {
+        //var socket = io.connect(),
+        //  nurdSocket = socket.of('nurd')
+        var socket = new io.Socket(),
+            game = new nurd.Model(),
+            gameClient = new nurd.Client(game),
+            gameView = new nurd.View(game, gameClient);
+        devSocket = socket;
+        
+        $(gameClient).bind('message', function(event, data) {
+            //nurdSocket.of('client').emit('message', event.data);
+            console.log('sending message on: ' + (new Date()).getTime());
+            //console.log('client:');
+            //console.log(data);
+            socket.send(data);
+        });
+        //nurdSocket.of('server').on('message', function(data) {
+        socket.on('message', function(data) {
+            console.log('received message on: ' + (new Date()).getTime());
+            //console.log('server:');
+            //console.log(data);
+            game.update(data);
+        });
 
-  $(document).ready(function() {
-    new EventEngineHttpClient({
-      onInitialized: function() {
-        var game = new Game();
-      }
+        socket.connect();
+        gameClient.register();
+        
+        // $('#chat').chat();
+        // gameClient.register(); // TODO: add authentication
     });
-    
-  });
-  EventEngine.observeAll(function(event) {
-    log('received event:' + event.name + ', data=' + JSON.stringify(event.data));
-  });
-  </script>
+    </script>
 </head>
 <body>
   <div class="outer-container">
