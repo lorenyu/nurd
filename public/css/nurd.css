@@ -99,9 +99,6 @@ blockquote, q {
 }
 /* end reset CSS */
 /* main.css */
-body {
-  background: -webkit-linear-gradient(top, #45484d 0%, #000000 100%);
-}
 .outer-container {
   margin: 0 auto;
   width: 1024px;
@@ -112,14 +109,34 @@ body {
 #tmp {
   display: none;
 }
+.button {
+  background: #e2e2e2;
+  border: none;
+  border-radius: 5px;
+  color: #000000;
+  cursor: pointer;
+  padding: 4px 12px;
+  text-decoration: none;
+  background: -webkit-linear-gradient(top, #e2e2e2 0%, #dbdbdb 50%, #d1d1d1 51%, #fefefe 100%);
+}
+.button:hover {
+  background: #ebf1f6;
+  background: -webkit-linear-gradient(top, #ebf1f6 0%, #abd3ee 50%, #89c3eb 51%, #d5ebfb 100%);
+}
 /* game controls */
 button {
   background: #e2e2e2;
   border: none;
   border-radius: 5px;
+  color: #000000;
   cursor: pointer;
   padding: 4px 12px;
+  text-decoration: none;
   background: -webkit-linear-gradient(top, #e2e2e2 0%, #dbdbdb 50%, #d1d1d1 51%, #fefefe 100%);
+}
+button:hover {
+  background: #ebf1f6;
+  background: -webkit-linear-gradient(top, #ebf1f6 0%, #abd3ee 50%, #89c3eb 51%, #d5ebfb 100%);
 }
 #restart-game-btn.selected {
   background: -webkit-linear-gradient(top, #f2f7f9 0%, #def0f9 50%, #d7e8ef 51%, #c0e2f9 100%);
@@ -189,7 +206,7 @@ button {
   overflow: hidden;
   padding: 14px 0 14px 14px;
   width: 420px;
-  background: -webkit-linear-gradient(top, #000000 0%, #45484d 100%);
+  background: -webkit-linear-gradient(top, #070708 0%, #45484d 100%);
   border-radius: 12px;
 }
 .cards-in-play .card {
@@ -367,4 +384,89 @@ button {
 }
 #chat .chat-msgs .chat-msg .msg .cards .card .card-object.shading2 {
   -webkit-mask-position-y: -32px;
+}
+.page {
+  background: -webkit-linear-gradient(top, #45484d 0%, #000000 100%);
+  font-family: Helvetica, Verdana, Arial;
+}
+.page .title {
+  margin-bottom: 12px;
+}
+.page .title h1 {
+  color: #DAF5EE;
+  font-size: 3.2em;
+}
+.page .title h2 {
+  color: #A5C4BC;
+  font-size: 1.6em;
+}
+.module {
+  background: -webkit-linear-gradient(top, #070708 0%, #45484d 100%);
+  border: inset #45484d 4px;
+  padding: 22px;
+}
+.game-page {
+  background: -webkit-linear-gradient(top, #45484d 0%, #000000 100%);
+  font-family: Helvetica, Verdana, Arial;
+}
+.game-page .title {
+  margin-bottom: 12px;
+}
+.game-page .title h1 {
+  color: #DAF5EE;
+  font-size: 3.2em;
+}
+.game-page .title h2 {
+  color: #A5C4BC;
+  font-size: 1.6em;
+}
+.title-page {
+  background: -webkit-linear-gradient(top, #45484d 0%, #000000 100%);
+  font-family: Helvetica, Verdana, Arial;
+}
+.title-page .title {
+  margin-bottom: 12px;
+}
+.title-page .title h1 {
+  color: #DAF5EE;
+  font-size: 3.2em;
+}
+.title-page .title h2 {
+  color: #A5C4BC;
+  font-size: 1.6em;
+}
+.title-page .login {
+  background: -webkit-linear-gradient(top, #070708 0%, #45484d 100%);
+  border: inset #45484d 4px;
+  padding: 22px;
+  font-size: 1.4em;
+  text-align: center;
+}
+.title-page .login form {
+  display: block;
+  margin-bottom: 24px;
+}
+.title-page .login form input {
+  font-size: 1.0em;
+  padding: 10px;
+}
+.title-page .login .btn {
+  background: #e2e2e2;
+  border: none;
+  border-radius: 5px;
+  color: #000000;
+  cursor: pointer;
+  padding: 4px 12px;
+  text-decoration: none;
+  background: -webkit-linear-gradient(top, #e2e2e2 0%, #dbdbdb 50%, #d1d1d1 51%, #fefefe 100%);
+  display: inline-block;
+  font-size: 1.0em;
+  padding: 12px;
+}
+.title-page .login .btn:hover {
+  background: #ebf1f6;
+  background: -webkit-linear-gradient(top, #ebf1f6 0%, #abd3ee 50%, #89c3eb 51%, #d5ebfb 100%);
+}
+.title-page .login .btn:nth-of-type(1) {
+  margin-top: 0;
 }

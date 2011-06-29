@@ -24,52 +24,18 @@
   });
   </script>
 </head>
-<body>
-  <div class="outer-container">
-  <div id="game-container">
-    <div class="game-controls">
-      <button id="restart-game-btn">Restart Game (<span class="num-requests">0</span>)</button>
-      <button id="draw-cards-btn">Draw Cards (<span class="num-requests">0</span>)</button>
-      <button id="end-game-btn" style="display:none">End Game (<span class="num-requests">0</span>)</button>
-    </div>
-    <ul class="cards-in-play">
-      <li class="card" json="">
-      </li>
-    </ul>
-    <form id="name-change-form" action="" >
-      <input type="text" id="name-field" name="name" value="" />
-      <button type="submit" id="change-name-btn" >Change Name</button>
-    </form>
-    <ul class="players">
-      <li class="player">
-        <span class="name"></span>
-        <span class="score-label field-name">Score:</span> <span class="score field-value"></span>
-        <span class="num-sets-label field-name">Sets:</span> <span class="num-sets field-value"></span>  
-        <span class="num-false-sets-label field-name">False Sets:</span> <span class="num-false-sets field-value"></span>
-      </li>
-    </ul>
-  </div>
-  <div id="chat">
-    <form class="chat-form">
-      <input type="hidden" class="sender" />
-      <label >Chat</label>
-      <input type="text" class="msg" />
-    </form>
-    <ul class="chat-msgs">
-    </ul>
-  </div>
-  </div>
-  <div class="game-end-overlay-container">
-    <div class="game-end-overlay" style="display:none;" >
-      <ol class="winners">
-        <li class="winner champion"><span class="name"></span> wins with <span class="score"></span> points!</li>
-        <li class="winner runner-up first"><span class="name"></span> is runner up with <span class="score"></span> points!</li>
-        <li class="winner runner-up second"><span class="name"></span> is second runner up with <span class="score"></span> points!</li>
-      </ol>
-      <button class="close">Close</button>
-    </div>
-  </div>
-  <div id="tmp">
-  </div>
+<body class="outer-container title-page">
+    <hgroup class="title">
+        <h1>Nurd</h1>
+        <h2>an online real-time multiplayer pattern matching game by Loren Yu</h2>
+    </hgroup>
+    <note>
+    <section class="login">
+        <form>
+            <input type="input" name="username">
+            <input type="submit" class="btn" value="Enter">
+        </form>
+        <a href="/profiles" class="btn">Manage Profiles <strong>(Coming Soon)</strong></a>
+    </section>
 </body>
 </html>

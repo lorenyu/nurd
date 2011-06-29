@@ -45,41 +45,39 @@
     });
     </script>
 </head>
-<body>
-  <div class="outer-container">
-  <div id="game-container">
-    <div class="game-controls">
-      <button id="restart-game-btn">Restart Game (<span class="num-requests">0</span>)</button>
-      <button id="draw-cards-btn">Draw Cards (<span class="num-requests">0</span>)</button>
-      <button id="end-game-btn" style="display:none">End Game (<span class="num-requests">0</span>)</button>
+<body class="outer-container game-page">
+    <div id="game-container">
+        <div class="game-controls">
+          <button id="restart-game-btn">Restart Game (<span class="num-requests">0</span>)</button>
+          <button id="draw-cards-btn">Draw Cards (<span class="num-requests">0</span>)</button>
+          <button id="end-game-btn" style="display:none">End Game (<span class="num-requests">0</span>)</button>
+        </div>
+        <ul class="cards-in-play">
+          <li class="card" json="">
+          </li>
+        </ul>
+        <form id="name-change-form" action="" >
+          <input type="text" id="name-field" name="name" value="" />
+          <button type="submit" id="change-name-btn" >Change Name</button>
+        </form>
+        <ul class="players">
+          <li class="player">
+            <span class="name"></span>
+            <span class="score-label field-name">Score:</span> <span class="score field-value"></span>
+            <span class="num-sets-label field-name">Sets:</span> <span class="num-sets field-value"></span>  
+            <span class="num-false-sets-label field-name">False Sets:</span> <span class="num-false-sets field-value"></span>
+          </li>
+        </ul>
     </div>
-    <ul class="cards-in-play">
-      <li class="card" json="">
-      </li>
-    </ul>
-    <form id="name-change-form" action="" >
-      <input type="text" id="name-field" name="name" value="" />
-      <button type="submit" id="change-name-btn" >Change Name</button>
-    </form>
-    <ul class="players">
-      <li class="player">
-        <span class="name"></span>
-        <span class="score-label field-name">Score:</span> <span class="score field-value"></span>
-        <span class="num-sets-label field-name">Sets:</span> <span class="num-sets field-value"></span>  
-        <span class="num-false-sets-label field-name">False Sets:</span> <span class="num-false-sets field-value"></span>
-      </li>
-    </ul>
-  </div>
-  <div id="chat">
-    <form class="chat-form">
-      <input type="hidden" class="sender" />
-      <label >Chat</label>
-      <input type="text" class="msg" />
-    </form>
-    <ul class="chat-msgs">
-    </ul>
-  </div>
-  </div>
+    <div id="chat">
+        <form class="chat-form">
+          <input type="hidden" class="sender" />
+          <label >Chat</label>
+          <input type="text" class="msg" />
+        </form>
+        <ul class="chat-msgs">
+        </ul>
+    </div>
   <div class="game-end-overlay-container">
     <div class="game-end-overlay" style="display:none;" >
       <ol class="winners">

@@ -2,6 +2,9 @@
 @green-gradient: -webkit-linear-gradient(top, #9dd53a 0%,#a1d54f 50%,#80c217 51%,#7cbc0a 100%);
 @red-gradient: -webkit-linear-gradient(top, #f85032 0%,#f16f5c 50%,#f6290c 51%,#f02f17 71%,#e73827 100%);
 @blue-highlight: -webkit-linear-gradient(top, #f2f7f9 0%,#def0f9 50%,#d7e8ef 51%,#c0e2f9 100%);
+@black-gradient: -webkit-linear-gradient(top, #45484d 0%,#000000 100%);
+@black-gradient-reverse: -webkit-linear-gradient(top, #070708 0%,#45484d 100%);
+@light-gray-gradient: -webkit-linear-gradient(top, #ffffff 0%,#f3f3f3 50%,#ededed 51%,#ffffff 100%);
 
 @card-width: 128px;
 .card-object-size(@card-width) {
@@ -34,14 +37,20 @@ blockquote, q { quotes: "" ""; }
 
 /* main.css */
 
-body { background: -webkit-linear-gradient(top, #45484d 0%,#000000 100%); }
 .outer-container { margin: 0 auto; width: 1024px; }
 #game-container { overflow:auto; }
 #tmp { display: none; }
 
+.button {
+    background: #e2e2e2; border: none; border-radius: 5px; color: #000000; cursor: pointer; padding: 4px 12px; text-decoration: none;
+    background: -webkit-linear-gradient(top, #e2e2e2 0%,#dbdbdb 50%,#d1d1d1 51%,#fefefe 100%);
+    &:hover {
+        background: #ebf1f6; background: -webkit-linear-gradient(top, #ebf1f6 0%,#abd3ee 50%,#89c3eb 51%,#d5ebfb 100%);
+    }
+}
+
 /* game controls */
-button { background: #e2e2e2; border: none; border-radius: 5px; cursor: pointer; padding: 4px 12px;
-    background: -webkit-linear-gradient(top, #e2e2e2 0%,#dbdbdb 50%,#d1d1d1 51%,#fefefe 100%); }
+button { .button; }
 #restart-game-btn.selected { background: @blue-highlight; }
 #draw-cards-btn.selected { background: @blue-highlight; }
 #end-game-btn.selected { background: @blue-highlight; }
@@ -52,7 +61,7 @@ button { background: #e2e2e2; border: none; border-radius: 5px; cursor: pointer;
 
 .card(@card-width) {
     border:solid 2px #bab5a0; border-radius: @card-width * 0.08; height:@card-width * 0.40; padding-top: @card-width * 0.10; text-align: center; width: @card-width;
-    background: -webkit-linear-gradient(top, #ffffff 0%,#f3f3f3 50%,#ededed 51%,#ffffff 100%);
+    background: @light-gray-gradient;
     .card-object { display: inline-block; margin:1px; .card-object-size(@card-width); }
     .card-object {
         &.shape0 { .card-object-mask-position-x(0, @card-width); }
@@ -72,7 +81,7 @@ button { background: #e2e2e2; border: none; border-radius: 5px; cursor: pointer;
 }
 
 .cards-in-play { background:#000000; border: solid 2px #383838; float:left; overflow:hidden; padding:14px 0 14px 14px; width:420px;
-    background: -webkit-linear-gradient(top, #000000 0%,#45484d 100%);
+    background: @black-gradient-reverse;
     border-radius: 12px;}
 .cards-in-play .card { float:left; margin:2px; overflow:hidden; }
 .cards-in-play .card:hover { /*background: -webkit-linear-gradient(top, #fcf2b8 0%,#fce24e 50%,#f9d400 51%,#f7ed91 100%);*/ }
@@ -133,3 +142,52 @@ button { background: #e2e2e2; border: none; border-radius: 5px; cursor: pointer;
     }
 }
 #chat .chat-msgs .chat-msg .msg .cards .card { display:inline-block; .card(64px); }
+
+.page {
+    background: @black-gradient;
+    font-family: Helvetica, Verdana, Arial;
+    .title {
+        margin-bottom: 12px;
+        h1 { color: #DAF5EE; font-size: 3.2em; }
+        h2 { color: #A5C4BC; font-size: 1.6em; }
+    }
+}
+
+.module {
+    background: @black-gradient-reverse;
+    border: inset #45484d 4px;
+    padding: 22px;
+}
+
+.game-page {
+    .page;
+}
+
+.title-page {
+    .page;
+    .login {
+        .module;
+        font-size: 1.4em;
+        text-align: center;
+        form {
+            display: block;
+            margin-bottom: 24px;
+            input {
+                font-size: 1.0em;
+                padding: 10px;
+            }
+        }
+        .btn {
+            .button;
+            display: inline-block;
+            font-size: 1.0em;
+            padding: 12px;
+            &:nth-of-type(1) {
+                margin-top: 0;
+            }
+        }
+    }
+}
+
+
+
