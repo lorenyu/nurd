@@ -35,20 +35,23 @@ app.use(express.static(__dirname + '/public'));
 app.listen(PORT, HOST);
 
 var game = new Game();
-var io = io.listen(app); 
-io.on('connection', function(client){
+var io = io.listen(app, {
+    transports: ['flashsocket', 'htmlfile', 'xhr-multipart', 'xhr-polling', 'jsonp-polling']
+});
+var nurdSocket = io; //io.of('/nurd');
+nurdSocket.sockets.on('connection', function(client){
     var player = new Player();
     game.addPlayer(player);
     
     client.on('message', function(data){
         data.player = player;
-        console.log('received message on: ' + (new Date()).getTime());
+        //console.log('received message on: ' + (new Date()).getTime() % 10000);
         //console.log(data);
         player.emit('message', data);
     });
     game.on('message', function(data) {
-        console.log('sending message on: ' + (new Date()).getTime());
-        client.send(data);
+        //console.log('sending message on: ' + (new Date()).getTime() % 10000);
+        client.json.send(data);
     });
     client.on('disconnect', function(){
         player.leaveGame();
