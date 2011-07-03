@@ -386,10 +386,11 @@ button:hover {
   -webkit-mask-position-y: -32px;
 }
 .page {
-  background: -webkit-linear-gradient(top, #45484d 0%, #000000 100%);
+  background: -webkit-linear-gradient(top, #ffffff 0%, #f3f3f3 50%, #ededed 51%, #ffffff 100%);
   font-family: Helvetica, Verdana, Arial;
 }
 .page .title {
+  margin-top: 6px;
   margin-bottom: 12px;
 }
 .page .title h1 {
@@ -406,10 +407,11 @@ button:hover {
   padding: 22px;
 }
 .game-page {
-  background: -webkit-linear-gradient(top, #45484d 0%, #000000 100%);
+  background: -webkit-linear-gradient(top, #ffffff 0%, #f3f3f3 50%, #ededed 51%, #ffffff 100%);
   font-family: Helvetica, Verdana, Arial;
 }
 .game-page .title {
+  margin-top: 6px;
   margin-bottom: 12px;
 }
 .game-page .title h1 {
@@ -421,10 +423,11 @@ button:hover {
   font-size: 1.6em;
 }
 .title-page {
-  background: -webkit-linear-gradient(top, #45484d 0%, #000000 100%);
+  background: -webkit-linear-gradient(top, #ffffff 0%, #f3f3f3 50%, #ededed 51%, #ffffff 100%);
   font-family: Helvetica, Verdana, Arial;
 }
 .title-page .title {
+  margin-top: 6px;
   margin-bottom: 12px;
 }
 .title-page .title h1 {
