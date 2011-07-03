@@ -1,6 +1,21 @@
 - placeholder.define('title', 'Lobby')
 - placeholder.define('subtitle', 'Nurd Lobby')
 
+:placeholder(define='script')
+    script
+        $(document).ready(function() {
+            var socket = io.connect();
+            $('[action]').bind('click', function() {
+                console.log($(this).attr('action'));
+                socket.json.send({
+                    type: $(this).attr('action')
+                });
+            });
+            socket.on('message', function(data) {
+                console.log(data);
+            });
+        });
+
 .solo Solo
     .btn(action="start-solo-game") Solo
 .multiplayer Multiplayer
