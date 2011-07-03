@@ -28,14 +28,15 @@ app.helpers({
 });
 
 
-
-
-
-
-
-
-
 var games = {};
+
+app.set('view engine', 'jade');
+app.get('/', function(req, res, next) {
+    res.render('index');
+});
+app.get('/:page', function(req, res, next) {
+    res.render(req.params.page);
+});
 app.get('/game/:gameid', function(req, res, next) {
     var game = games[req.params.gameid];
     if (!game) {

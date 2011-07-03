@@ -390,7 +390,6 @@ button:hover {
   font-family: Helvetica, Verdana, Arial;
 }
 .page .title {
-  margin-top: 6px;
   margin-bottom: 12px;
 }
 .page .title h1 {
@@ -411,7 +410,6 @@ button:hover {
   font-family: Helvetica, Verdana, Arial;
 }
 .game-page .title {
-  margin-top: 6px;
   margin-bottom: 12px;
 }
 .game-page .title h1 {
@@ -427,7 +425,6 @@ button:hover {
   font-family: Helvetica, Verdana, Arial;
 }
 .title-page .title {
-  margin-top: 6px;
   margin-bottom: 12px;
 }
 .title-page .title h1 {

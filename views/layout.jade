@@ -1,0 +1,11 @@
+html
+    head
+        link(type="text/css", rel="stylesheet", href="/css/nurd.css")
+        script(type="text/javascript", src="/js/lib/jquery-1.4.3.js")
+        script(type="text/javascript", src="/js/lib/pure.js")
+        script(type="text/javascript", src="/socket.io/socket.io.js")
+    body.outer-container.title-page
+        hgroup.title
+            h1 #{placeholder('title')}
+            h2 #{placeholder('subtitle')}
+        != body

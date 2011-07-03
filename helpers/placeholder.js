@@ -6,6 +6,7 @@ var placeholder = module.exports.filter = function(str, attrs) {
         name;
     attrs = attrs || {};
     name = attrs.define;
+    name = name.substr(1, name.length-2); // remove leading and trailing quotes
     if (name) {
         placeholder.data[name] = jade.render(str.replace(/\\n/g, '\n'));
     }
