@@ -3,8 +3,15 @@ var util = require('util'),
     path = require('path'),
     io = require('socket.io'),
     jade = require('jade'),
+    express = require('express'),
+    placeholder = require('placeholder'),
     Game = require('./nurd/Game.js'),
     Player = require('./nurd/Player.js').Player;
+
+placeholder.install({
+    express: express,
+    jade: jade
+});
     
 var server,
     socket,
@@ -17,16 +24,7 @@ var log = util.puts;
 var serverDir = path.dirname(process.argv[1]);
 process.chdir(serverDir);
 
-var express = require('express');
 var app = express.createServer();
-
-
-var placeholder = require('./helpers/placeholder.js');
-jade.filters.placeholder = placeholder.filter;
-app.helpers({
-    placeholder: placeholder.helper
-});
-
 
 var games = {};
 
