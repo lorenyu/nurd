@@ -1,0 +1,75 @@
+- placeholder.define('title', 'Game ' + gameid)
+
+placeholder(define='script'):
+    script
+        $(document).ready(function() {
+            var socket = io.connect('/nurd/game/#{gameid}'),
+                game = new nurd.Model(),
+                gameClient = new nurd.Client(game),
+                gameView = new nurd.View(game, gameClient);
+            devSocket = socket;
+            
+            $(gameClient).bind('message', function(event, data) {
+                socket.json.send(data);
+            });
+            socket.on('message', function(data) {
+                game.update(data);
+            });
+    
+            gameClient.register();
+            
+            // $('#chat').chat();
+            // gameClient.register(); // TODO: add authentication
+        });
+
+#game-container
+    .game-controls
+        button#restart-game-btn Restart Game (
+            span.num-requests 0
+            | )
+        button#draw-cards-btn Draw Cards (
+            span.num-requests 0
+            | )
+        button#end-game-btn(style="display:none") End Game (
+            span.num-requests 0
+            | )
+    ul.cards-in-play
+        li.card(json="")
+    form#name-change-form(action="")
+        input#name-field(type="text", name="name", value="")
+        button#change-name-btn(type="submit") Change Name
+    ul.players
+        li.player
+            span.name
+            span.score-label.field-name Score: 
+                span.score.field-value
+            span.num-sets-label.field-name Sets:
+                span.num-sets.field-value
+            span.num-false-sets-label.field-name False Sets:
+                span.num-false-sets.field-value
+#chat
+    form.chat-form
+        input.sender(type="hidden")
+        label Chat
+        input.msg(type="text")
+    ul.chat-msgs
+.game-end-overlay-container
+    .game-end-overlay(style="display:none;")
+        ol.winners
+            li.winner.champion
+                span.name
+                | wins with
+                span.score
+                | points!
+            li.winner.first.runner-up
+                span.name
+                | is runner up with
+                span.score
+                | points!
+            li.winner.second.runner-up
+                span.name
+                | is second runner up with
+                span.score
+                | points!        
+        .close Close
+#tmp
