@@ -1,4 +1,3 @@
-require.paths.unshift(__dirname + '/node_modules');
 var util = require('util'),
     http = require('http'),
     path = require('path'),
