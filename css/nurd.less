@@ -3,6 +3,8 @@
 @red-gradient: -webkit-linear-gradient(top, #f85032 0%,#f16f5c 50%,#f6290c 51%,#f02f17 71%,#e73827 100%);
 @blue-highlight: -webkit-linear-gradient(top, #f2f7f9 0%,#def0f9 50%,#d7e8ef 51%,#c0e2f9 100%);
 
+@sky-gradient: -webkit-linear-gradient(top, #2987E6 0%,#72D0ED 100%);
+
 @card-width: 128px;
 .card-object-size(@card-width) {
     width: @card-width/4;
@@ -34,7 +36,7 @@ blockquote, q { quotes: "" ""; }
 
 /* main.css */
 
-body { background: -webkit-linear-gradient(top, #45484d 0%,#000000 100%); }
+body { background: @sky-gradient; }
 .outer-container { margin: 0 auto; width: 1024px; }
 #game-container { overflow:auto; }
 #tmp { display: none; }
@@ -51,7 +53,7 @@ button { background: #e2e2e2; border: none; border-radius: 5px; cursor: pointer;
 .card-container .card-img {display:none;}
 
 .card(@card-width) {
-    border:solid 2px #bab5a0; border-radius: @card-width * 0.08; height:@card-width * 0.40; padding-top: @card-width * 0.10; text-align: center; width: @card-width;
+    border-radius: @card-width * 0.08; box-shadow: 6px 8px 30px #1C94C7; height:@card-width * 0.40; padding-top: @card-width * 0.10; text-align: center; width: @card-width;
     background: -webkit-linear-gradient(top, #ffffff 0%,#f3f3f3 50%,#ededed 51%,#ffffff 100%);
     .card-object { display: inline-block; margin:1px; .card-object-size(@card-width); }
     .card-object {
@@ -71,9 +73,7 @@ button { background: #e2e2e2; border: none; border-radius: 5px; cursor: pointer;
     .card(@card-width);
 }
 
-.cards-in-play { background:#000000; border: solid 2px #383838; float:left; overflow:hidden; padding:14px 0 14px 14px; width:420px;
-    background: -webkit-linear-gradient(top, #000000 0%,#45484d 100%);
-    border-radius: 12px;}
+.cards-in-play { background: url(/images/board.png); background-size: 100% 100%; border-radius: 12px; height: 468px; margin: 0 auto; overflow:hidden; padding:61px 43px 6px 53px; width:420px; }
 .cards-in-play .card { float:left; margin:2px; overflow:hidden; }
 .cards-in-play .card:hover { /*background: -webkit-linear-gradient(top, #fcf2b8 0%,#fce24e 50%,#f9d400 51%,#f7ed91 100%);*/ }
 .cards-in-play .card.selected { background: @blue-highlight }
@@ -109,15 +109,15 @@ button { background: #e2e2e2; border: none; border-radius: 5px; cursor: pointer;
 #name-change-form { float: left; margin-left: 22px; }
 #name-field { padding: 4px; width: 178px; }
 
-.game-controls { background:#000000; background: -webkit-linear-gradient(top, #000000 0%,#45484d 100%); }
+.game-controls {  }
 
 #chat {
-    background: #ebebeb; border: solid 2px #383838; border-radius: 12px; clear:both; margin:10px 0 0; padding: 12px 12px;
+    background: url(/images/board.png); background-size: 100% 100%; margin:10px auto; padding: 82px 40px; width: 600px;
     .chat-form {
         .msg { padding: 4px; width:350px; }
     }
     .chat-msgs {
-        height:450px; overflow:scroll;
+        height: 570px;
         .chat-msg {
             margin:5px 0 0;
             .sender { background:#DADBEB; border-radius:5px; display:inline-block; margin:0 7px 0 0; padding:4px 5px; }
@@ -133,3 +133,21 @@ button { background: #e2e2e2; border: none; border-radius: 5px; cursor: pointer;
     }
 }
 #chat .chat-msgs .chat-msg .msg .cards .card { display:inline-block; .card(64px); }
+
+@import url(/css/animations.css);
+.moon { background: url(/images/moon.png) repeat-x 0 0; background-size: 100% 100%; top: 50px; height: 70px; right: 180px; position: fixed; width: 70px; z-index: -1; }
+.cloud-1 {
+    background: url(/images/cloud-1.png) repeat-x 0 0; bottom: 0; height: 320px; left: 0; position: fixed; width: 100%; z-index: -1;
+	-webkit-animation: cloud1 12s infinite alternate;
+    -webkit-animation-timing-function: ease-in-out;
+}
+.cloud-2 {
+    background: url(/images/cloud-2.png) repeat-x 0 0; bottom: 0; height: 271px; left: 0; position: fixed; width: 100%; z-index: -1;
+    -webkit-animation: cloud2 12s infinite alternate;
+    -webkit-animation-timing-function: ease-in-out;
+}
+.cloud-3 {
+    background: url(/images/cloud-3.png) repeat-x 0 0; bottom: 0; height: 225px; left: 0; position: fixed; width: 100%; z-index: -1;
+    -webkit-animation: cloud3 12s infinite alternate;
+    -webkit-animation-timing-function: ease-in-out;
+}
