@@ -38,7 +38,7 @@ blockquote, q { quotes: "" ""; }
 
 body { background: rgb(191,234,244); }
 .outer-container { margin: 0 auto; width: 1024px; }
-#game-container { overflow:auto; }
+#game-container { overflow:auto; position: relative; }
 #tmp { display: none; }
 
 /* game controls */
@@ -92,6 +92,32 @@ button { background: #e2e2e2; border: none; border-radius: 5px; cursor: pointer;
 .players .player .score,
 .players .player .num-sets,
 .players .player .num-false-sets { background:#e8e8e8; display:inline-block; font-family:Arial; font-size:1em; height:17px; margin:0 5px; padding:5px; text-align:right; width:30px; }
+
+.balloons {
+    height: 500px; position: absolute; right: 12px; top: 12px; width: 220px;
+    .balloon {
+        bottom: 0; position: absolute;
+        -moz-transition: bottom 1s ease-in-out; -webkit-transition: bottom 1s ease-in-out;
+
+        .background { background: url(/images/balloons.png); height: 59px; margin: 0 auto; width: 52px; }
+        .name { background: rgba(232, 247, 255, 0.8); font-family: Arial; position: relative; text-align: center; top: -47px; }
+        &[color="0"] .background { }
+        &[color="1"] .background { background-position: -54px 0; }
+        &[color="2"] .background { background-position: -108px 0; }
+        &[color="3"] .background { background-position: -162px 0; }
+        &[color="4"] .background { background-position: -216px 0; }
+        &[color="5"] .background { background-position: 0 -61px; }
+        &[color="6"] .background { background-position: -54px -61px; }
+        &[color="7"] .background { background-position: -108px -61px; }
+        &[color="8"] .background { background-position: -162px -61px; }
+        &[color="9"] .background { background-position: -216px -61px; }
+        &[color="10"] .background { background-position: 0 -122px; }
+        &[color="11"] .background { background-position: -54px -122px; }
+        &[color="12"] .background { background-position: -108px -122px; }
+        &[color="13"] .background { background-position: -162px -122px; }
+        &[color="14"] .background { background-position: -216px -122px; }
+    }
+}
 
 .game-end-overlay-container { height: 0; left: 0; position: fixed; top: 0; text-align: center; width: 100%; }
 .game-end-overlay { background: #fcfff4; font-family: Verdana; margin: 48px auto 0; padding: 22px 38px; width: 500px;

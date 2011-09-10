@@ -156,6 +156,7 @@ this.Game = function() {
     var CARDS_IN_PLAY_TEMPLATE;
     var PLAYERS_TEMPLATE;
     var _numSelectedCards = [];
+    var jade = require('jade');
 
     this.client = new GameClient();
 
@@ -163,6 +164,11 @@ this.Game = function() {
         TEMPLATE = $('#game-container').html();
         CARDS_IN_PLAY_TEMPLATE = $('.cards-in-play').html();
         PLAYERS_TEMPLATE = $('.players').html();
+        
+        var cardsInPlayRenderer = jade.compile($('#cards-in-play-view').text());
+        var playersRenderer = jade.compile($('#players-view').text());
+        var balloonRenderer = jade.compile($('#balloon-view').text());
+        var nextBalloonColor = 0;
 
 
         var client = this.client;
@@ -184,19 +190,26 @@ this.Game = function() {
                 }
             }
 
-/*
-            $('#game-container').html(TEMPLATE).render({
-                cards:cards,
-                players:players
-            }, PureDirectives.GAME);*/
-
-            $('.players').html(PLAYERS_TEMPLATE).render({
-                players:players
-            }, PureDirectives.PLAYERS);
-
-            $('.cards-in-play').html(CARDS_IN_PLAY_TEMPLATE).render({
-                cards:cards
-            }, PureDirectives.CARDS_IN_PLAY);
+            var playerIds = _.pluck(players, 'publicId');
+            var currentPlayerIds = $('.players-container .player').map(function(index, player) {
+                return parseInt($(player).attr('playerid'));
+            });
+            var newPlayerIds = _.difference(playerIds, currentPlayerIds);
+            var removedPlayerIds = _.difference(currentPlayerIds, playerIds);
+            
+            _.each(removedPlayerIds, function(playerId) {
+                $('.balloons .balloon[playerid=' + playerId + ']').remove();
+            });
+            _.each(newPlayerIds, function(playerId) {
+                var player = _.detect(players, function(player) { return player.publicId == playerId; });
+                player.color = nextBalloonColor;
+                nextBalloonColor = (nextBalloonColor + 1) % 15;
+                $('.balloons').append(balloonRenderer.call(player));
+            });
+            
+            
+            $('.players-container').html(playersRenderer.call({ players: players }));
+            $('.cards-in-play-container').html(cardsInPlayRenderer.call({ cards: cards }));
 
             if (deckSize > 0) {
                 $('#draw-cards-btn').show();
@@ -265,12 +278,21 @@ this.Game = function() {
         });
         
         EventEngine.observe('server:playerScored', function(event) {
+            /*
+            TODO: fix this
             var $tmp = $('#tmp');
             $tmp.html('<ul class="cards set">' + CARDS_IN_PLAY_TEMPLATE + '</ul>');
             $tmp.find('.cards').render({
                 cards: event.data.cards
             }, PureDirectives.CARDS_IN_PLAY);
-            $('#chat').chat( 'addMessage', event.data.player.name, $tmp.html() );
+            //$('#chat').chat( 'addMessage', player.name, $tmp.html() );
+            */
+            
+            var player = event.data.player,
+                balloon = $('.balloon[playerid=' + player.publicId + ']');
+                
+            balloon.css('bottom', (player.score * 17.64) + 'px');
+            
         });
         
         EventEngine.observe('server:playerFailedSet', function(event) {
