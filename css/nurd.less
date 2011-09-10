@@ -36,7 +36,7 @@ blockquote, q { quotes: "" ""; }
 
 /* main.css */
 
-body { background: @sky-gradient; }
+body { background: rgb(191,234,244); }
 .outer-container { margin: 0 auto; width: 1024px; }
 #game-container { overflow:auto; }
 #tmp { display: none; }
@@ -112,7 +112,7 @@ button { background: #e2e2e2; border: none; border-radius: 5px; cursor: pointer;
 .game-controls {  }
 
 #chat {
-    background: url(/images/board.png); background-size: 100% 100%; margin:10px auto; padding: 82px 40px; width: 600px;
+    margin:0 auto; padding: 12px 24px ; width: 600px;
     .chat-form {
         .msg { padding: 4px; width:350px; }
     }
@@ -135,19 +135,20 @@ button { background: #e2e2e2; border: none; border-radius: 5px; cursor: pointer;
 #chat .chat-msgs .chat-msg .msg .cards .card { display:inline-block; .card(64px); }
 
 @import url(/css/animations.css);
-.moon { background: url(/images/moon.png) repeat-x 0 0; background-size: 100% 100%; top: 50px; height: 70px; right: 180px; position: fixed; width: 70px; z-index: -1; }
+.sky { background: @sky-gradient; height: 500px; left: 0; position: absolute; top: 0; width: 100%; z-index: -1; }
+.moon { background: url(/images/moon.png) repeat-x 0 0; background-size: 100% 100%; top: 50px; height: 70px; right: 180px; position: absolute; width: 70px; z-index: -1; }
 .cloud-1 {
-    background: url(/images/cloud-1.png) repeat-x 0 0; bottom: 0; height: 320px; left: 0; position: fixed; width: 100%; z-index: -1;
-	-webkit-animation: cloud1 12s infinite alternate;
-    -webkit-animation-timing-function: ease-in-out;
+    background: url(/images/cloud-1.png) repeat-x 0 0; top: 287px; height: 430px; left: 0; position: absolute; width: 100%; z-index: -1;
+	-webkit-animation: cloud1 280s infinite normal;
+    -webkit-animation-timing-function: linear;
 }
 .cloud-2 {
-    background: url(/images/cloud-2.png) repeat-x 0 0; bottom: 0; height: 271px; left: 0; position: fixed; width: 100%; z-index: -1;
-    -webkit-animation: cloud2 12s infinite alternate;
-    -webkit-animation-timing-function: ease-in-out;
+    background: url(/images/cloud-2.png) repeat-x 0 0; top: 336px; height: 381px; left: 0; position: absolute; width: 100%; z-index: -1;
+    -webkit-animation: cloud2 240s infinite normal;
+    -webkit-animation-timing-function: linear;
 }
 .cloud-3 {
-    background: url(/images/cloud-3.png) repeat-x 0 0; bottom: 0; height: 225px; left: 0; position: fixed; width: 100%; z-index: -1;
-    -webkit-animation: cloud3 12s infinite alternate;
-    -webkit-animation-timing-function: ease-in-out;
+    background: url(/images/cloud-3.png) repeat-x 0 0; top: 382px; height: 335px; left: 0; position: absolute; width: 100%; z-index: -1;
+    -webkit-animation: cloud3 200s infinite normal;
+    -webkit-animation-timing-function: linear;
 }
