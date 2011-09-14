@@ -79,8 +79,8 @@
     #tmp
 </script>
 
-<script id="cards-in-play-view" class="jade" type="text/jade">
-ul.cards-in-play
+<script id="cards-view" class="jade" type="text/jade">
+ul.cards(class=this.class || '')
     - each card in this.cards
         - var shape = card.attributes[0];
         - var color = card.attributes[1];
@@ -125,7 +125,7 @@ ul.players
       <button id="draw-cards-btn">Draw Cards (<span class="num-requests">0</span>)</button>
       <button id="end-game-btn" style="display:none">End Game (<span class="num-requests">0</span>)</button>
     </div>
-    <div class="cards-in-play-container">
+    <div class="cards-in-play">
     </div>
     <div class="balloons">
     </div>
@@ -139,7 +139,8 @@ ul.players
   <div id="chat">
     <form class="chat-form">
       <input type="hidden" class="sender" />
-      <input type="text" class="msg" placeholder="Chat Away..." />
+      <label>Chat: </label>
+      <input type="text" class="msg" placeholder="Start typing here..." />
     </form>
     <ul class="chat-msgs">
     </ul>

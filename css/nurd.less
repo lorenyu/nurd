@@ -136,19 +136,19 @@ button { background: #e2e2e2; border: none; border-radius: 5px; cursor: pointer;
 .game-controls {  }
 
 #chat {
-    margin:0 auto; padding: 12px 24px ; width: 600px;
+    font-family: arial; margin:0 auto; padding: 12px 24px ; width: 600px;
     .chat-form {
-        .msg { padding: 4px; width:350px; }
+        label { font-weight: bold; }
+        .msg { background: transparent; border: 0; font-size: 16px; padding: 4px; width:350px; }
     }
     .chat-msgs {
         height: 570px;
         .chat-msg {
             margin:5px 0 0;
-            .sender { background:#DADBEB; border-radius:5px; display:inline-block; margin:0 7px 0 0; padding:4px 5px; }
-            .msg {
-                display:inline-block;
-                .cards {
-                    display:inline-block;
+            .sender { background:#E1F3F7; border-radius:3px; display:inline-block; margin:0 7px 0 0; padding:4px 5px; }
+            .msg { display:inline-block;
+                .cards { display:inline-block;
+                    .card { border: solid 3px; }
                     &.set { .card { border-color:#d2ff52 #4FED44 #4FED44 #d2ff52; } }
                     &.false-set { .card { border-color:#FFA435 #e73827 #e73827 #FFA435; } }
                 }

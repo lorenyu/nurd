@@ -165,7 +165,7 @@ this.Game = function() {
         CARDS_IN_PLAY_TEMPLATE = $('.cards-in-play').html();
         PLAYERS_TEMPLATE = $('.players').html();
         
-        var cardsInPlayRenderer = jade.compile($('#cards-in-play-view').text());
+        var cardsRenderer = jade.compile($('#cards-view').text());
         var playersRenderer = jade.compile($('#players-view').text());
         var balloonRenderer = jade.compile($('#balloon-view').text());
         var nextBalloonColor = 0;
@@ -209,7 +209,7 @@ this.Game = function() {
             
             
             $('.players-container').html(playersRenderer.call({ players: players }));
-            $('.cards-in-play-container').html(cardsInPlayRenderer.call({ cards: cards }));
+            $('.cards-in-play').html(cardsRenderer.call({ cards: cards }));
 
             if (deckSize > 0) {
                 $('#draw-cards-btn').show();
@@ -278,30 +278,15 @@ this.Game = function() {
         });
         
         EventEngine.observe('server:playerScored', function(event) {
-            /*
-            TODO: fix this
-            var $tmp = $('#tmp');
-            $tmp.html('<ul class="cards set">' + CARDS_IN_PLAY_TEMPLATE + '</ul>');
-            $tmp.find('.cards').render({
-                cards: event.data.cards
-            }, PureDirectives.CARDS_IN_PLAY);
-            //$('#chat').chat( 'addMessage', player.name, $tmp.html() );
-            */
-            
             var player = event.data.player,
                 balloon = $('.balloon[playerid=' + player.publicId + ']');
                 
             balloon.css('bottom', (player.score * 17.64) + 'px');
-            
+            $('#chat').chat( 'addMessage', player.name, cardsRenderer.call({ 'class' : 'set', cards : event.data.cards }) );
         });
         
         EventEngine.observe('server:playerFailedSet', function(event) {
-            var $tmp = $('#tmp');
-            $tmp.html('<ul class="cards false-set">' + CARDS_IN_PLAY_TEMPLATE + '</ul>');
-            $tmp.find('.cards').render({
-                cards: event.data.cards
-            }, PureDirectives.CARDS_IN_PLAY);
-            $('#chat').chat( 'addMessage', event.data.player.name, $tmp.html() );
+            $('#chat').chat( 'addMessage', event.data.player.name, cardsRenderer.call({ 'class' : 'false-set', cards: event.data.cards }) );
         });
         
         $('.game-end-overlay .close').click(function(event) {
