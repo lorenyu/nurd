@@ -7,18 +7,25 @@
 
 @card-width: 128px;
 .card-object-size(@card-width) {
-    width: @card-width/4;
-    height: @card-width/4;
-    -webkit-mask-image: url(/images/shapes.png);
-    -webkit-mask-size: @card-width @card-width;
-    -webkit-mask-repeat: no-repeat;
+    width: 30*(@card-width/128);
+    height: 30*(@card-width/128);
+    background-image: url(/images/shapes.png);
+    background-size: (572/2*(@card-width/128)) (188/2*(@card-width/128));
+    background-repeat: no-repeat;
 }
 
 .card-object-mask-position-y(@shading, @card-width) {
-    -webkit-mask-position-y: (@card-width/4) * -@shading;
+    -webkit-mask-position-y: 32 * -@shading;
 }
 .card-object-mask-position-x(@shape, @card-width) {
-    -webkit-mask-position-x: (@card-width/4) * -@shape;
+    -webkit-mask-position-x: 32 * -@shape;
+}
+
+.card-object-background-position-y(@shading, @card-width) {
+    background-position-y: 32 * -@shading * (@card-width/128);
+}
+.card-object-background-position-x(@color, @shape, @card-width) {
+    background-position-x: 32 * (-3*@color - @shape) * (@card-width/128);
 }
 
 /* reset CSS: from http://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/ */
@@ -57,15 +64,18 @@ button { background: #e2e2e2; border: none; border-radius: 5px; cursor: pointer;
     background: -webkit-linear-gradient(top, #ffffff 0%,#f3f3f3 50%,#ededed 51%,#ffffff 100%);
     .card-object { display: inline-block; margin:1px; .card-object-size(@card-width); }
     .card-object {
-        &.shape0 { .card-object-mask-position-x(0, @card-width); }
-        &.shape1 { .card-object-mask-position-x(1, @card-width); }
-        &.shape2 { .card-object-mask-position-x(2, @card-width); }
-        &.color0 { background: @blue-gradient; }
-        &.color1 { background: @green-gradient }
-        &.color2 { background: @red-gradient }
-        &.shading1 { .card-object-mask-position-y(1, @card-width); }
-        &.shading0 { .card-object-mask-position-y(0, @card-width); }
-        &.shading2 { .card-object-mask-position-y(2, @card-width);  }
+        &.color0.shape0 { .card-object-background-position-x(0, 0, @card-width); }
+        &.color0.shape1 { .card-object-background-position-x(0, 1, @card-width); }
+        &.color0.shape2 { .card-object-background-position-x(0, 2, @card-width); }
+        &.color1.shape0 { .card-object-background-position-x(1, 0, @card-width); }
+        &.color1.shape1 { .card-object-background-position-x(1, 1, @card-width); }
+        &.color1.shape2 { .card-object-background-position-x(1, 2, @card-width); }
+        &.color2.shape0 { .card-object-background-position-x(2, 0, @card-width); }
+        &.color2.shape1 { .card-object-background-position-x(2, 1, @card-width); }
+        &.color2.shape2 { .card-object-background-position-x(2, 2, @card-width); }
+        &.shading1 { .card-object-background-position-y(1, @card-width); }
+        &.shading0 { .card-object-background-position-y(0, @card-width); }
+        &.shading2 { .card-object-background-position-y(2, @card-width);  }
     }
 }
 
