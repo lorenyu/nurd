@@ -1,9 +1,17 @@
-@blue-gradient: -webkit-linear-gradient(top, #6db3f2 0%,#54a3ee 50%,#3690f0 51%,#1e69de 100%);
-@green-gradient: -webkit-linear-gradient(top, #9dd53a 0%,#a1d54f 50%,#80c217 51%,#7cbc0a 100%);
-@red-gradient: -webkit-linear-gradient(top, #f85032 0%,#f16f5c 50%,#f6290c 51%,#f02f17 71%,#e73827 100%);
-@blue-highlight: -webkit-linear-gradient(top, #f2f7f9 0%,#def0f9 50%,#d7e8ef 51%,#c0e2f9 100%);
+.blue-highlight() {
+    background: -moz-linear-gradient(top, #f2f7f9 0%,#def0f9 50%,#d7e8ef 51%,#c0e2f9 100%); background: -webkit-linear-gradient(top, #f2f7f9 0%,#def0f9 50%,#d7e8ef 51%,#c0e2f9 100%); background: linear-gradient(top, #f2f7f9 0%,#def0f9 50%,#d7e8ef 51%,#c0e2f9 100%);
+}
 
-@sky-gradient: -webkit-linear-gradient(top, #2987E6 0%,#72D0ED 100%);
+.sky-gradient() {
+    background: -moz-linear-gradient(top, #2987E6 0%,#72D0ED 100%); background: -webkit-linear-gradient(top, #2987E6 0%,#72D0ED 100%); background: linear-gradient(top, #2987E6 0%,#72D0ED 100%);
+}
+
+.button-gradient() {
+    background: -moz-linear-gradient(top, #e2e2e2 0%,#dbdbdb 50%,#d1d1d1 51%,#fefefe 100%); background: -webkit-linear-gradient(top, #e2e2e2 0%,#dbdbdb 50%,#d1d1d1 51%,#fefefe 100%); background: linear-gradient(top, #e2e2e2 0%,#dbdbdb 50%,#d1d1d1 51%,#fefefe 100%);
+}
+.card-gradient() {
+    background: -moz-linear-gradient(top, #ffffff 0%,#f3f3f3 50%,#ededed 51%,#ffffff 100%); background: -webkit-linear-gradient(top, #ffffff 0%,#f3f3f3 50%,#ededed 51%,#ffffff 100%); background: linear-gradient(top, #ffffff 0%,#f3f3f3 50%,#ededed 51%,#ffffff 100%);
+}
 
 @card-width: 128px;
 .card-object-size(@card-width) {
@@ -53,10 +61,10 @@ body { background: rgb(191,234,244); }
 
 /* game controls */
 button { background: #e2e2e2; border: none; border-radius: 5px; cursor: pointer; padding: 4px 12px;
-    background: -webkit-linear-gradient(top, #e2e2e2 0%,#dbdbdb 50%,#d1d1d1 51%,#fefefe 100%); }
-#restart-game-btn.selected { background: @blue-highlight; }
-#draw-cards-btn.selected { background: @blue-highlight; }
-#end-game-btn.selected { background: @blue-highlight; }
+    .button-gradient(); }
+#restart-game-btn.selected { .blue-highlight(); }
+#draw-cards-btn.selected { .blue-highlight(); }
+#end-game-btn.selected { .blue-highlight(); }
 
 /* game elements */
 .card-container .json { display:none; }
@@ -64,7 +72,7 @@ button { background: #e2e2e2; border: none; border-radius: 5px; cursor: pointer;
 
 .card(@card-width) {
     border-radius: @card-width * 0.08; box-shadow: 6px 8px 30px #1C94C7; height:@card-width * 0.40; padding-top: @card-width * 0.10; text-align: center; width: @card-width;
-    background: -webkit-linear-gradient(top, #ffffff 0%,#f3f3f3 50%,#ededed 51%,#ffffff 100%);
+    .card-gradient();
     .card-object { display: inline-block; margin:1px; .card-object-size(@card-width); }
     .card-object {
         /*
@@ -115,7 +123,7 @@ button { background: #e2e2e2; border: none; border-radius: 5px; cursor: pointer;
 .cards-in-play { background: url(/images/board.png); background-size: 100% 100%; border-radius: 12px; height: 398px; margin: 0 auto; overflow:hidden; padding:57px 43px 6px 53px; width:420px; }
 .cards-in-play .card { float:left; margin:2px; overflow:hidden; }
 .cards-in-play .card:hover { /*background: -webkit-linear-gradient(top, #fcf2b8 0%,#fce24e 50%,#f9d400 51%,#f7ed91 100%);*/ }
-.cards-in-play .card.selected { background: @blue-highlight }
+.cards-in-play .card.selected { .blue-highlight(); }
 .cards-in-play .card.number0 .card-object { }
 .cards-in-play .card.number1 .card-object { }
 .cards-in-play .card.number2 .card-object { }
@@ -198,7 +206,7 @@ button { background: #e2e2e2; border: none; border-radius: 5px; cursor: pointer;
 #chat .chat-msgs .chat-msg .msg .cards .card { display:inline-block; .card(64px); }
 
 @import url(/css/animations.css);
-.sky { background: @sky-gradient; height: 500px; left: 0; position: absolute; top: 0; width: 100%; z-index: -1; }
+.sky { .sky-gradient(); height: 500px; left: 0; position: absolute; top: 0; width: 100%; z-index: -1; }
 .moon { background: url(/images/moon.png) repeat-x 0 0; background-size: 100% 100%; top: 50px; height: 70px; right: 180px; position: absolute; width: 70px; z-index: -1; }
 .cloud-1 {
     background: url(/images/cloud-1.png) repeat-x 0 0; top: 287px; height: 430px; left: 0; position: absolute; width: 100%; z-index: -1;
