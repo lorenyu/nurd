@@ -9,7 +9,7 @@ this.GameClient = function() {
     var _secret;
         
     function init() {
-        
+
         EventEngine.observe('server:playerRegistered', proxy(function(event) {
             this.onPlayerRegistered(event.data.registerId, event.data.encPlayerId, event.data.playerPublicId, event.data.name);
             this.stayIntervalId = setInterval(proxy(this.stay, this), Math.floor(event.data.playerTimeout / 2));
@@ -32,10 +32,7 @@ this.GameClient = function() {
     }
 
     function onEvent(event) {
-        switch(event.name) {
         
-        default: break;
-        }
     }
 
     this.register = function() {
@@ -45,7 +42,7 @@ this.GameClient = function() {
             registerId: _registerId,
             secret: _secret
         });
-    }
+    };
 
     this.onPlayerRegistered = function(registerId, encPlayerId, playerPublicId, name) {
         if (registerId === _registerId) {
@@ -66,7 +63,7 @@ this.GameClient = function() {
             $(window).unload(leave);
             $(window).onbeforeunload = leave;
         }
-    }
+    };
 
     this.requestMoreCards = function() {
         //log('requesting more cards');
@@ -82,7 +79,7 @@ this.GameClient = function() {
                 playerId: this.id
             });
         }
-    }
+    };
 
     this.requestGameRestart = function() {
         //log('requesting game restart');
@@ -98,7 +95,7 @@ this.GameClient = function() {
                 playerId: this.id
             });
         }
-    }
+    };
     
     this.requestEndGame = function() {
         //log('requesting game end');
@@ -114,13 +111,13 @@ this.GameClient = function() {
                 playerId: this.id
             });
         }
-    }
+    };
 
     this.stay = function() {
         EventEngine.fire('client:stay', {
             playerId: this.id
         });
-    }
+    };
 
     this.changeName = function(name) {
         // TODO: do some client-side validation
@@ -128,7 +125,7 @@ this.GameClient = function() {
             playerId: this.id,
             name: name
         });
-    }
+    };
 
     /*
         this.joinGame = function(game) {
@@ -145,7 +142,7 @@ this.GameClient = function() {
             playerId: this.id,
             cards: cards
         });
-    }
+    };
 
     init.apply(this, arguments);
 };
@@ -161,15 +158,10 @@ this.Game = function() {
     this.client = new GameClient();
 
     function init() {
-        TEMPLATE = $('#game-container').html();
-        CARDS_IN_PLAY_TEMPLATE = $('.cards-in-play').html();
-        PLAYERS_TEMPLATE = $('.players').html();
-        
         var cardsRenderer = jade.compile($('#cards-view').text());
         var playersRenderer = jade.compile($('#players-view').text());
         var balloonRenderer = jade.compile($('#balloon-view').text());
         var nextBalloonColor = 0;
-
 
         var client = this.client;
 
@@ -192,7 +184,7 @@ this.Game = function() {
 
             var playerIds = _.pluck(players, 'publicId');
             var currentPlayerIds = $('.players-container .player').map(function(index, player) {
-                return parseInt($(player).attr('playerid'));
+                return parseInt($(player).attr('playerid'), 10);
             });
             var newPlayerIds = _.difference(playerIds, currentPlayerIds);
             var removedPlayerIds = _.difference(currentPlayerIds, playerIds);
