@@ -16,6 +16,7 @@ this.Player = function() {
         this.numSets = 0;
         this.numFalseSets = 0;
         this.name = null;
+        this.color = 0;
         this.isRequestingMoreCards = false;
         this.isRequestingGameRestart = false;
         this.isRequestingGameEnd = false;
@@ -27,6 +28,7 @@ this.Player = function() {
         function init() {
             this.name = 'Player' + numPlayersCreated;
             this.publicId = numPlayersCreated;
+            this.color = this.publicId % 15;
             numPlayersCreated += 1;
 
             id = Crypto.getRandomKey();
