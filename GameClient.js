@@ -149,9 +149,6 @@ this.GameClient = function() {
 
 this.Game = function() {
 
-    var TEMPLATE;
-    var CARDS_IN_PLAY_TEMPLATE;
-    var PLAYERS_TEMPLATE;
     var _numSelectedCards = [];
     var jade = require('jade');
 
@@ -161,9 +158,13 @@ this.Game = function() {
         var cardsRenderer = jade.compile($('#cards-view').text());
         var playersRenderer = jade.compile($('#players-view').text());
         var balloonRenderer = jade.compile($('#balloon-view').text());
-        var nextBalloonColor = 0;
 
         var client = this.client;
+        
+        EventEngine.observe('server:playerNameChanged', function(event) {
+            var playerId = event.data.playerId;
+            $('.balloons .balloon[playerid=' + playerId + '] .name').text(event.data.name);
+        });
 
         EventEngine.observe('server:gameUpdated', function(event) {
             if (!client.id) { return; } // if player hasn't registered yet, there's no need updating the game state
@@ -194,11 +195,8 @@ this.Game = function() {
             });
             _.each(newPlayerIds, function(playerId) {
                 var player = _.detect(players, function(player) { return player.publicId == playerId; });
-                player.color = nextBalloonColor;
-                nextBalloonColor = (nextBalloonColor + 1) % 15;
                 $('.balloons').append(balloonRenderer.call(player));
             });
-            
             
             $('.players-container').html(playersRenderer.call({ players: players }));
             $('.cards-in-play').html(cardsRenderer.call({ cards: cards }));

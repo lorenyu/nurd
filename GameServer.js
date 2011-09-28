@@ -181,7 +181,14 @@ this.Game = function() {
                 if (!regex.test(name)) {
                     break;
                 }
+                var prevName = player.name;
                 player.name = name;
+                
+                EventEngine.fire('server:playerNameChanged', {
+                    playerId : player.publicId,
+                    prevName : prevName,
+                    name : name
+                });
                 EventEngine.fire('server:gameUpdated', this.gameState());
             }
             break;
