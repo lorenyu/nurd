@@ -118,17 +118,28 @@ button { background: #e2e2e2; border: none; border-radius: 5px; cursor: pointer;
 .cards-in-play .card.number1 .card-object { }
 .cards-in-play .card.number2 .card-object { }
 
-.players { float:left; margin-left: 22px; margin-top: 12px; }
-.players .player:first-of-type { -webkit-border-top-left-radius: 5px; -webkit-border-top-right-radius: 5px; }
-.players .player:last-of-type { -webkit-border-bottom-left-radius: 5px; -webkit-border-bottom-right-radius: 5px; }
-.players .player { border-bottom:1px dotted #C8C8C8; display:block; padding:2px 12px;
-    background: -webkit-linear-gradient(top, #fcfff4 0%,#dfe5d7 40%,#b3bead 100%); }
-.players .player .field-name { font-family:Arial; font-size:0.75em; }
-.players .player .field-value {}
-.players .player .name { display:inline-block; font-size:1.1em; margin-right:22px; width:140px; }
-.players .player .score,
-.players .player .num-sets,
-.players .player .num-false-sets { background:#e8e8e8; display:inline-block; font-family:Arial; font-size:1em; height:17px; margin:0 5px; padding:5px; text-align:right; width:30px; }
+.players { position: absolute; left: 0; top: 75px; width: 250px;
+    .player{ background: #BFEAF4; border-radius: 18px; font-family: Arial; float: left; margin: 6px; padding: 12px; position: relative;
+        &:nth-of-type(2n) { top: 4px; }
+        &:nth-of-type(3n) { top: -4px; }
+        .background { background: url(/images/balloons.png); background-size: 75px 48px; display: inline-block; height: 16px; margin-right: 6px; width: 15px; }
+        &[color="0"] { .background { background-position: 0px 0; } }
+        &[color="1"] { .background { background-position: -15px 0; } }
+        &[color="2"] { .background { background-position: -30px 0; } }
+        &[color="3"] { .background { background-position: -45px 0; } }
+        &[color="4"] { .background { background-position: -60px 0; } }
+        &[color="5"] { .background { background-position: 0px -16px; } }
+        &[color="6"] { .background { background-position: -15x -16px; } }
+        &[color="7"] { .background { background-position: -30px -16px; } }
+        &[color="8"] { .background { background-position: -45px -16px; } }
+        &[color="9"] { .background { background-position: -60px -16px; } }
+        &[color="10"] { .background { background-position: 0px -32px; } }
+        &[color="11"] { .background { background-position: -15px -32px; } }
+        &[color="12"] { .background { background-position: -30px -32px; } }
+        &[color="13"] { .background { background-position: -45px -32px; } }
+        &[color="14"] { .background { background-position: -60px -32px; } }
+    }
+}
 
 .balloons { height: 500px; position: absolute; right: 12px; top: 12px; width: 220px;
     .balloon {
