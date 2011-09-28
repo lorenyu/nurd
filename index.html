@@ -13,7 +13,6 @@
   <script type="text/javascript">
 
   $(document).ready(function() {
-      
       var jade = require('jade');
       var pageRenderer = jade.compile($('#page-view').text());
       
@@ -80,7 +79,7 @@
 </script>
 
 <script id="cards-view" class="jade" type="text/jade">
-ul.cards(class=this.class || '')
+ul.cards(class=this['class'] || '')
     - each card in this.cards
         - var shape = card.attributes[0];
         - var color = card.attributes[1];
@@ -95,14 +94,9 @@ ul.cards(class=this.class || '')
 <script id="players-view" class="jade" type="text/jade">
 ul.players
     - each player in this.players
-        li.player(class=player.isMe, playerid=player.publicId)
+        li.player(class=player.isMe ? 'me' : '', playerid=player.publicId, color=player.color)
+            .background
             span.name= player.name
-            span.score-label.field-name Score: 
-            span.score.field-value= player.score
-            span.num-sets-label.field-name Trios: 
-            span.num-sets.field-value= player.numSets
-            span.num-false-sets-label.field-name False Trios: 
-            span.num-false-sets.field-value= player.numFalseSets
 </script>
 
 <script id="balloon-view" class="jade" type="text/jade">
