@@ -45,11 +45,14 @@ blockquote, q { quotes: "" ""; }
 /* main.css */
 
 body { background: rgb(191,234,244); }
-.outer-container { margin: 0 auto; width: 1024px; }
-#game-container { overflow:auto; position: relative; }
+.outer-container { margin: 0 auto; position: relative; width: 1024px; }
+h1 { margin-bottom: 12px; text-align: center; }
+#game-container { background: transparent url(/images/board.png) no-repeat top center; background-size: 516px 461px; min-height: 520px; overflow:auto; position: relative; }
+
 #tmp { display: none; }
 
 /* game controls */
+.game-controls { margin-top: 10px; text-align: center; }
 button { background: #e2e2e2; border: none; border-radius: 5px; cursor: pointer; padding: 4px 12px;
     .button-gradient(); }
 #restart-game-btn.selected { .blue-highlight(); }
@@ -110,7 +113,7 @@ button { background: #e2e2e2; border: none; border-radius: 5px; cursor: pointer;
     .card(@card-width);
 }
 
-.cards-in-play { background: url(/images/board.png); background-size: 100% 100%; border-radius: 12px; height: 398px; margin: 0 auto; overflow:hidden; padding:57px 43px 6px 53px; width:420px; }
+.cards-in-play { height: 398px; margin: 20px auto 0; overflow:hidden; padding:6px 43px 6px 53px; width:420px; }
 .cards-in-play .card { float:left; margin:2px; overflow:hidden; }
 .cards-in-play .card:hover { /*background: -webkit-linear-gradient(top, #fcf2b8 0%,#fce24e 50%,#f9d400 51%,#f7ed91 100%);*/ }
 .cards-in-play .card.selected { .blue-highlight(); }
