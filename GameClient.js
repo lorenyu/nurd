@@ -29,16 +29,18 @@ this.GameClient = function() {
             this.changeName($('#name-field').val());
             return false;
         }, this));
+        $('#name-change-form #name-field').focus();
     }
 
     function onEvent(event) {
         
     }
 
-    this.register = function() {
+    this.register = function(name) {
         _registerId = Crypto.getRandomKey();
         _secret = Crypto.getRandomKey();
         EventEngine.fire('client:registerPlayer', {
+            name: name,
             registerId: _registerId,
             secret: _secret
         });
@@ -149,17 +151,14 @@ this.GameClient = function() {
 
 this.Game = function() {
 
-    var _numSelectedCards = [];
-    var jade = require('jade');
-
-    this.client = new GameClient();
+    var _numSelectedCards = [],
+        jade = require('jade'),
+        client = this.client = new GameClient();
 
     function init() {
         var cardsRenderer = jade.compile($('#cards-view').text());
         var playersRenderer = jade.compile($('#players-view').text());
         var balloonRenderer = jade.compile($('#balloon-view').text());
-
-        var client = this.client;
         
         EventEngine.observe('server:playerNameChanged', function(event) {
             var playerId = event.data.playerId;
@@ -284,8 +283,12 @@ this.Game = function() {
         });
 
         $('#chat').chat();
-
-        this.client.register();
+        
+        EventEngine.observe('client:changeName', function(event) {
+            client.register(event.data.name);
+            $('.name-form-overlay-container').hide();
+        });
+        
         //EventEngine.observe('client:endGame', proxy(this.endGame, this));
     }
 

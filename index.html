@@ -139,14 +139,8 @@ ul.players
       <button id="draw-cards-btn">Draw Cards (<span class="num-requests">0</span>)</button>
       <button id="end-game-btn" style="display:none">End Game (<span class="num-requests">0</span>)</button>
     </div>
-    <div class="cards-in-play">
-    </div>
-    <form id="name-change-form" action="" >
-      <input type="text" id="name-field" name="name" value="" />
-      <button type="submit" id="change-name-btn" >Change Name</button>
-    </form>
-    <div class="players-container">
-    </div>
+    <div class="cards-in-play"></div>
+    <div class="players-container"></div>
   </div>
   <div id="chat">
     <form class="chat-form">
@@ -166,6 +160,16 @@ ul.players
         <li class="winner runner-up second"><span class="name"></span> is second runner up with <span class="score"></span> points!</li>
       </ol>
       <button class="close">Close</button>
+    </div>
+  </div>
+  <div class="name-form-overlay-container">
+    <div class="name-form-overlay">
+      <h3><img src="/images/logo.png" alt="Tttrio - A fast real-time multiplayer pattern-matching game to hone your logical skills"></h3>
+      <h4>A fast real-time multiplayer pattern-matching game to hone your logical skills</h4>
+      <form id="name-change-form" action="" >
+        <label for="name-field">Name</label><input type="text" id="name-field" name="name" value="" placeholder="Enter Name" ><br>
+        <button type="submit" id="change-name-btn" >Enter</button>
+      </form>
     </div>
   </div>
  </div>
