@@ -124,54 +124,58 @@ ul.players
   
 </head>
 <body>
- <div class="background-container">
-  <div class="sky"></div>
-  <div class="moon"></div>
-  <div class="cloud-1"></div>
-  <div class="cloud-2"></div>
-  <div class="cloud-3"></div>
-  <div class="outer-container">
-  <div class="balloons"></div>
-  <h1><img src="/images/logo.png" alt="Tttrio - A fast real-time multiplayer pattern-matching game to hone your logical skills" ></h1>
-  <div id="game-container">
-    <div class="game-controls">
-      <button id="restart-game-btn">Restart Game (<span class="num-requests">0</span>)</button>
-      <button id="draw-cards-btn">Draw Cards (<span class="num-requests">0</span>)</button>
-      <button id="end-game-btn" style="display:none">End Game (<span class="num-requests">0</span>)</button>
+    <div class="background-container">
+        <div class="sky"></div>
+        <div class="moon"></div>
+        <div class="cloud-1"></div>
+        <div class="cloud-2"></div>
+        <div class="cloud-3"></div>
+        <div class="outer-container">
+            <div class="balloons"></div>
+            <header>
+                <h1><img src="/images/logo.png" alt="Tttrio - A fast real-time multiplayer pattern-matching game to hone your logical skills" ></h1>
+            </header>
+            <div id="game-container">
+                <div class="game-controls">
+                    <button id="restart-game-btn">Restart Game (<span class="num-requests">0</span>)</button>
+                    <button id="draw-cards-btn">Draw Cards (<span class="num-requests">0</span>)</button>
+                    <button id="end-game-btn" style="display:none">End Game (<span class="num-requests">0</span>)</button>
+                </div>
+                <div class="cards-in-play"></div>
+                <div class="players-container"></div>
+            </div>
+            <div id="chat">
+                <form class="chat-form">
+                    <input type="hidden" class="sender" />
+                    <label>Chat: </label>
+                    <input type="text" class="msg" placeholder="Start typing here..." />
+                </form>
+                <ul class="chat-msgs"></ul>
+            </div>
+        </div>
+        <footer>
+            Made by <a href="http://www.lorenyu.com">Loren Yu</a>
+        </footer>
+        <div class="game-end-overlay-container">
+            <div class="game-end-overlay" style="display:none;" >
+                <ol class="winners">
+                    <li class="winner champion"><span class="name"></span> wins with <span class="score"></span> points!</li>
+                    <li class="winner runner-up first"><span class="name"></span> is runner up with <span class="score"></span> points!</li>
+                    <li class="winner runner-up second"><span class="name"></span> is second runner up with <span class="score"></span> points!</li>
+                </ol>
+                <button class="close">Close</button>
+            </div>
+        </div>
+        <div class="name-form-overlay-container">
+            <div class="name-form-overlay">
+                <h3><img src="/images/logo.png" alt="Tttrio - A fast real-time multiplayer pattern-matching game to hone your logical skills"></h3>
+                <h4>A fast real-time multiplayer pattern-matching game to hone your logical skills</h4>
+                <form id="name-change-form" action="" >
+                    <label for="name-field">Name</label><input type="text" id="name-field" name="name" value="" placeholder="Enter Name" ><br>
+                    <button type="submit" id="change-name-btn" >Enter</button>
+                </form>
+            </div>
+        </div>
     </div>
-    <div class="cards-in-play"></div>
-    <div class="players-container"></div>
-  </div>
-  <div id="chat">
-    <form class="chat-form">
-      <input type="hidden" class="sender" />
-      <label>Chat: </label>
-      <input type="text" class="msg" placeholder="Start typing here..." />
-    </form>
-    <ul class="chat-msgs">
-    </ul>
-  </div>
-  </div>
-  <div class="game-end-overlay-container">
-    <div class="game-end-overlay" style="display:none;" >
-      <ol class="winners">
-        <li class="winner champion"><span class="name"></span> wins with <span class="score"></span> points!</li>
-        <li class="winner runner-up first"><span class="name"></span> is runner up with <span class="score"></span> points!</li>
-        <li class="winner runner-up second"><span class="name"></span> is second runner up with <span class="score"></span> points!</li>
-      </ol>
-      <button class="close">Close</button>
-    </div>
-  </div>
-  <div class="name-form-overlay-container">
-    <div class="name-form-overlay">
-      <h3><img src="/images/logo.png" alt="Tttrio - A fast real-time multiplayer pattern-matching game to hone your logical skills"></h3>
-      <h4>A fast real-time multiplayer pattern-matching game to hone your logical skills</h4>
-      <form id="name-change-form" action="" >
-        <label for="name-field">Name</label><input type="text" id="name-field" name="name" value="" placeholder="Enter Name" ><br>
-        <button type="submit" id="change-name-btn" >Enter</button>
-      </form>
-    </div>
-  </div>
- </div>
 </body>
 </html>

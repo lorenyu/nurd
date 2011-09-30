@@ -190,7 +190,7 @@ button { background: #e2e2e2; border: none; border-radius: 5px; cursor: pointer;
         #name-change-form { margin-top: 24px;
             label { font-size: 22px; }
             #name-field { border: solid 3px #BFEAF4; font-size: 22px; margin-left: 12px; padding: 4px; width: 300px; }
-            #change-name-btn { .high-impact-button-gradient(); font-size: 24px; margin-top: 12px; padding: 6px 24px; }
+            #change-name-btn { .high-impact-button-gradient(); color: #E3F6FC; font-size: 24px; margin-top: 12px; padding: 6px 24px; }
         }
     }
 }
@@ -205,7 +205,7 @@ button { background: #e2e2e2; border: none; border-radius: 5px; cursor: pointer;
         .msg { background: transparent; border: 0; font-size: 16px; padding: 4px; width:350px; }
     }
     .chat-msgs {
-        height: 570px;
+        height: 250px;
         .chat-msg {
             margin:5px 0 0;
             .sender { background:#E1F3F7; border-radius:3px; display:inline-block; margin:0 7px 0 0; padding:4px 5px; }
@@ -220,6 +220,10 @@ button { background: #e2e2e2; border: none; border-radius: 5px; cursor: pointer;
     }
 }
 #chat .chat-msgs .chat-msg .msg .cards .card { display:inline-block; .card(64px); }
+
+footer { border-top: solid 1px #666; color: #666; font-weight: bold; padding: 12px; text-align: center;
+    a { color: #2987E6; }
+}
 
 @import url(/css/animations.css);
 .sky { .sky-gradient(); height: 500px; left: 0; position: absolute; top: 0; width: 100%; z-index: -1; }
