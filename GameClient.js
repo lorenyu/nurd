@@ -224,7 +224,14 @@ this.Game = function() {
                 $('#end-game-btn').removeClass('selected');
             }
             
-            $('#draw-cards-btn .num-requests').text(event.data.numMoreCardsRequests);
+            var numMoreCardsRequests = event.data.numMoreCardsRequests;
+            $('#draw-cards-btn .num-requests').text(numMoreCardsRequests).attr('value', numMoreCardsRequests).attr('max', Math.ceil(players.length * 2/3));
+            if (numMoreCardsRequests > 0) {
+                $('#draw-cards-btn .num-requests').css({ visibility : 'visible' });
+            } else {
+                $('#draw-cards-btn .num-requests').css({ visibility : 'hidden' });
+            }
+            
             $('#restart-game-btn .num-requests').text(event.data.numRestartGameRequests);
             $('#end-game-btn .num-requests').text(event.data.numEndGameRequests);
 
@@ -275,7 +282,11 @@ this.Game = function() {
         });
         
         EventEngine.observe('server:playerFailedSet', function(event) {
-            $('#chat').chat( 'addMessage', event.data.player.name, cardsRenderer.call({ 'class' : 'false-set', cards: event.data.cards }) );
+            var player = event.data.player,
+                balloon = $('.balloon[playerid=' + player.publicId + ']');
+                
+            balloon.css('bottom', (player.score * 17.64) + 'px');
+            $('#chat').chat( 'addMessage', player.name, cardsRenderer.call({ 'class' : 'set', cards : event.data.cards }) );
         });
         
         $('.game-end-overlay .close').click(function(event) {

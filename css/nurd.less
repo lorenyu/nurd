@@ -58,7 +58,15 @@ h1 { margin: 12px 0; text-align: center; }
 button { background: #e2e2e2; border: none; border-radius: 5px; cursor: pointer; padding: 4px 12px;
     .button-gradient(); }
 #restart-game-btn.selected { .blue-highlight(); }
-#draw-cards-btn.selected { .blue-highlight(); }
+#draw-cards-btn { background: transparent; padding: 0;
+    .deck { background: #606D73; height: 80px; border-radius: 5px; display: block;
+        .top-card { .button-gradient(); border-radius: 5px; display: block; height: 64px; width: 128px;
+            .logo { background: transparent url(/images/logo.png) no-repeat center center; background-size: 110px; display: block; height: 64px; width: 128px; }
+        }
+    }
+    &.selected .deck .top-card { .blue-highlight(); }
+    progress { margin-bottom: 4px; width: 128px; }
+}
 #end-game-btn.selected { .blue-highlight(); }
 
 /* game elements */

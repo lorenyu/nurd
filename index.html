@@ -138,7 +138,10 @@ ul.players
             <div id="game-container">
                 <div class="game-controls">
                     <button id="restart-game-btn">Restart Game (<span class="num-requests">0</span>)</button>
-                    <button id="draw-cards-btn">Draw Cards (<span class="num-requests">0</span>)</button>
+                    <button id="draw-cards-btn">
+                        <progress class="num-requests" max="" value="0">0</progress>
+                        <span class="deck"><span class="top-card"><span class="logo"></span></span></span>
+                    </button>
                     <button id="end-game-btn" style="display:none">End Game (<span class="num-requests">0</span>)</button>
                 </div>
                 <div class="cards-in-play"></div>
