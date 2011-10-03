@@ -1,22 +1,33 @@
-@blue-gradient: -webkit-linear-gradient(top, #6db3f2 0%,#54a3ee 50%,#3690f0 51%,#1e69de 100%);
-@green-gradient: -webkit-linear-gradient(top, #9dd53a 0%,#a1d54f 50%,#80c217 51%,#7cbc0a 100%);
-@red-gradient: -webkit-linear-gradient(top, #f85032 0%,#f16f5c 50%,#f6290c 51%,#f02f17 71%,#e73827 100%);
-@blue-highlight: -webkit-linear-gradient(top, #f2f7f9 0%,#def0f9 50%,#d7e8ef 51%,#c0e2f9 100%);
+.blue-highlight() { background: -moz-linear-gradient(top, #f2f7f9 0%,#def0f9 50%,#d7e8ef 51%,#c0e2f9 100%); background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f2f7f9), color-stop(50%,#def0f9), color-stop(51%,#d7e8ef), color-stop(100%,#c0e2f9)); background: -webkit-linear-gradient(top, #f2f7f9 0%,#def0f9 50%,#d7e8ef 51%,#c0e2f9 100%); background: linear-gradient(top, #f2f7f9 0%,#def0f9 50%,#d7e8ef 51%,#c0e2f9 100%); }
+.sky-gradient() { background: -moz-linear-gradient(top, #2987E6 0%,#72D0ED 100%); background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#2987E6), color-stop(100%,#72D0ED)); background: -webkit-linear-gradient(top, #2987E6 0%,#72D0ED 100%); background: linear-gradient(top, #2987E6 0%,#72D0ED 100%); }
+.button-gradient() { background: -moz-linear-gradient(top, #e2e2e2 0%,#dbdbdb 50%,#d1d1d1 51%,#fefefe 100%); background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e2e2e2), color-stop(50%,#dbdbdb), color-stop(51%,#d1d1d1), color-stop(100%,#fefefe)); background: -webkit-linear-gradient(top, #e2e2e2 0%,#dbdbdb 50%,#d1d1d1 51%,#fefefe 100%); background: linear-gradient(top, #e2e2e2 0%,#dbdbdb 50%,#d1d1d1 51%,#fefefe 100%); }
+.high-impact-button-gradient() { background: #87e0fd; /* Old browsers */ background: -moz-linear-gradient(top, #87e0fd 0%, #53cbf1 40%, #05abe0 100%); /* FF3.6+ */ background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#87e0fd), color-stop(40%,#53cbf1), color-stop(100%,#05abe0)); /* Chrome,Safari4+ */ background: -webkit-linear-gradient(top, #87e0fd 0%,#53cbf1 40%,#05abe0 100%); /* Chrome10+,Safari5.1+ */ background: -o-linear-gradient(top, #87e0fd 0%,#53cbf1 40%,#05abe0 100%); /* Opera11.10+ */ background: -ms-linear-gradient(top, #87e0fd 0%,#53cbf1 40%,#05abe0 100%); /* IE10+ */ background: linear-gradient(top, #87e0fd 0%,#53cbf1 40%,#05abe0 100%); /* W3C */ }
+.card-gradient() { background: -moz-linear-gradient(top, #ffffff 0%,#f3f3f3 50%,#ededed 51%,#ffffff 100%); background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(50%,#f3f3f3), color-stop(51%,#ededed), color-stop(100%,#ffffff)); background: -webkit-linear-gradient(top, #ffffff 0%,#f3f3f3 50%,#ededed 51%,#ffffff 100%); background: linear-gradient(top, #ffffff 0%,#f3f3f3 50%,#ededed 51%,#ffffff 100%); }
 
 @card-width: 128px;
 .card-object-size(@card-width) {
-    width: @card-width/4;
-    height: @card-width/4;
-    -webkit-mask-image: url(/images/shapes.png);
-    -webkit-mask-size: @card-width @card-width;
-    -webkit-mask-repeat: no-repeat;
+    width: 30*(@card-width/128);
+    height: 30*(@card-width/128);
+    background-image: url(/images/shapes.png);
+    background-size: (572/2*(@card-width/128)) (188/2*(@card-width/128));
+    background-repeat: no-repeat;
 }
 
 .card-object-mask-position-y(@shading, @card-width) {
-    -webkit-mask-position-y: (@card-width/4) * -@shading;
+    -webkit-mask-position-y: 32 * -@shading;
 }
 .card-object-mask-position-x(@shape, @card-width) {
-    -webkit-mask-position-x: (@card-width/4) * -@shape;
+    -webkit-mask-position-x: 32 * -@shape;
+}
+
+.card-object-background-position-y(@shading, @card-width) {
+    background-position-y: 32 * -@shading * (@card-width/128);
+}
+.card-object-background-position-x(@color, @shape, @card-width) {
+    background-position-x: 32 * (-3*@color - @shape) * (@card-width/128);
+}
+.card-object-background-position(@color, @shape, @shading, @card-width) {
+    background-position: (32 * (-3*@color - @shape) * (@card-width/128)) (32 * -@shading * (@card-width/128));
 }
 
 /* reset CSS: from http://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/ */
@@ -34,36 +45,77 @@ blockquote, q { quotes: "" ""; }
 
 /* main.css */
 
-body { background: -webkit-linear-gradient(top, #45484d 0%,#000000 100%); }
-.outer-container { margin: 0 auto; width: 1024px; }
-#game-container { overflow:auto; }
+body { background: rgb(191,234,244); font-family: arial;}
+.background-container { }
+.outer-container { margin: 0 auto; position: relative; width: 1024px; }
+h1 { margin: 12px 0; text-align: center; }
+#game-container { background: transparent url(/images/board.png) no-repeat top center; background-size: 516px 461px; min-height: 520px; overflow:auto; position: relative; }
+
 #tmp { display: none; }
 
 /* game controls */
+.game-controls { margin-top: 10px; text-align: center; }
 button { background: #e2e2e2; border: none; border-radius: 5px; cursor: pointer; padding: 4px 12px;
-    background: -webkit-linear-gradient(top, #e2e2e2 0%,#dbdbdb 50%,#d1d1d1 51%,#fefefe 100%); }
-#restart-game-btn.selected { background: @blue-highlight; }
-#draw-cards-btn.selected { background: @blue-highlight; }
-#end-game-btn.selected { background: @blue-highlight; }
+    .button-gradient(); }
+#restart-game-btn.selected { .blue-highlight(); }
+#draw-cards-btn { background: transparent; padding: 0;
+    .deck { background: #606D73; height: 80px; border-radius: 5px; display: block;
+        .top-card { .button-gradient(); border-radius: 5px; display: block; height: 64px; width: 128px;
+            .logo { background: transparent url(/images/logo.png) no-repeat center center; background-size: 110px; display: block; height: 64px; width: 128px; }
+        }
+    }
+    &.selected .deck .top-card { .blue-highlight(); }
+    progress { margin-bottom: 4px; width: 128px; }
+}
+#end-game-btn.selected { .blue-highlight(); }
 
 /* game elements */
 .card-container .json { display:none; }
 .card-container .card-img {display:none;}
 
 .card(@card-width) {
-    border:solid 2px #bab5a0; border-radius: @card-width * 0.08; height:@card-width * 0.40; padding-top: @card-width * 0.10; text-align: center; width: @card-width;
-    background: -webkit-linear-gradient(top, #ffffff 0%,#f3f3f3 50%,#ededed 51%,#ffffff 100%);
+    border-radius: @card-width * 0.08; box-shadow: 6px 8px 26px #4F93B0; height:@card-width * (64.0/128 - 16.0/128); padding-top: @card-width * (16.0/128); text-align: center; width: @card-width;
+    .card-gradient();
     .card-object { display: inline-block; margin:1px; .card-object-size(@card-width); }
     .card-object {
-        &.shape0 { .card-object-mask-position-x(0, @card-width); }
-        &.shape1 { .card-object-mask-position-x(1, @card-width); }
-        &.shape2 { .card-object-mask-position-x(2, @card-width); }
-        &.color0 { background: @blue-gradient; }
-        &.color1 { background: @green-gradient }
-        &.color2 { background: @red-gradient }
-        &.shading1 { .card-object-mask-position-y(1, @card-width); }
-        &.shading0 { .card-object-mask-position-y(0, @card-width); }
-        &.shading2 { .card-object-mask-position-y(2, @card-width);  }
+        /*
+        &.color0.shape0 { .card-object-background-position-x(0, 0, @card-width); }
+        &.color0.shape1 { .card-object-background-position-x(0, 1, @card-width); }
+        &.color0.shape2 { .card-object-background-position-x(0, 2, @card-width); }
+        &.color1.shape0 { .card-object-background-position-x(1, 0, @card-width); }
+        &.color1.shape1 { .card-object-background-position-x(1, 1, @card-width); }
+        &.color1.shape2 { .card-object-background-position-x(1, 2, @card-width); }
+        &.color2.shape0 { .card-object-background-position-x(2, 0, @card-width); }
+        &.color2.shape1 { .card-object-background-position-x(2, 1, @card-width); }
+        &.color2.shape2 { .card-object-background-position-x(2, 2, @card-width); }
+        */
+        &.color0.shape0.shading0 { .card-object-background-position(0, 0, 0, @card-width); }
+        &.color0.shape0.shading1 { .card-object-background-position(0, 0, 1, @card-width); }
+        &.color0.shape0.shading2 { .card-object-background-position(0, 0, 2, @card-width); }
+        &.color0.shape1.shading0 { .card-object-background-position(0, 1, 0, @card-width); }
+        &.color0.shape1.shading1 { .card-object-background-position(0, 1, 1, @card-width); }
+        &.color0.shape1.shading2 { .card-object-background-position(0, 1, 2, @card-width); }
+        &.color0.shape2.shading0 { .card-object-background-position(0, 2, 0, @card-width); }
+        &.color0.shape2.shading1 { .card-object-background-position(0, 2, 1, @card-width); }
+        &.color0.shape2.shading2 { .card-object-background-position(0, 2, 2, @card-width); }
+        &.color1.shape0.shading0 { .card-object-background-position(1, 0, 0, @card-width); }
+        &.color1.shape0.shading1 { .card-object-background-position(1, 0, 1, @card-width); }
+        &.color1.shape0.shading2 { .card-object-background-position(1, 0, 2, @card-width); }
+        &.color1.shape1.shading0 { .card-object-background-position(1, 1, 0, @card-width); }
+        &.color1.shape1.shading1 { .card-object-background-position(1, 1, 1, @card-width); }
+        &.color1.shape1.shading2 { .card-object-background-position(1, 1, 2, @card-width); }
+        &.color1.shape2.shading0 { .card-object-background-position(1, 2, 0, @card-width); }
+        &.color1.shape2.shading1 { .card-object-background-position(1, 2, 1, @card-width); }
+        &.color1.shape2.shading2 { .card-object-background-position(1, 2, 2, @card-width); }
+        &.color2.shape0.shading0 { .card-object-background-position(2, 0, 0, @card-width); }
+        &.color2.shape0.shading1 { .card-object-background-position(2, 0, 1, @card-width); }
+        &.color2.shape0.shading2 { .card-object-background-position(2, 0, 2, @card-width); }
+        &.color2.shape1.shading0 { .card-object-background-position(2, 1, 0, @card-width); }
+        &.color2.shape1.shading1 { .card-object-background-position(2, 1, 1, @card-width); }
+        &.color2.shape1.shading2 { .card-object-background-position(2, 1, 2, @card-width); }
+        &.color2.shape2.shading0 { .card-object-background-position(2, 2, 0, @card-width); }
+        &.color2.shape2.shading1 { .card-object-background-position(2, 2, 1, @card-width); }
+        &.color2.shape2.shading2 { .card-object-background-position(2, 2, 2, @card-width); }
     }
 }
 
@@ -71,27 +123,60 @@ button { background: #e2e2e2; border: none; border-radius: 5px; cursor: pointer;
     .card(@card-width);
 }
 
-.cards-in-play { background:#000000; border: solid 2px #383838; float:left; overflow:hidden; padding:14px 0 14px 14px; width:420px;
-    background: -webkit-linear-gradient(top, #000000 0%,#45484d 100%);
-    border-radius: 12px;}
+.cards-in-play { height: 398px; margin: 20px auto 0; overflow:hidden; padding:6px 43px 6px 53px; width:420px; }
 .cards-in-play .card { float:left; margin:2px; overflow:hidden; }
 .cards-in-play .card:hover { /*background: -webkit-linear-gradient(top, #fcf2b8 0%,#fce24e 50%,#f9d400 51%,#f7ed91 100%);*/ }
-.cards-in-play .card.selected { background: @blue-highlight }
+.cards-in-play .card.selected { .blue-highlight(); }
 .cards-in-play .card.number0 .card-object { }
 .cards-in-play .card.number1 .card-object { }
 .cards-in-play .card.number2 .card-object { }
 
-.players { float:left; margin-left: 22px; margin-top: 12px; }
-.players .player:first-of-type { -webkit-border-top-left-radius: 5px; -webkit-border-top-right-radius: 5px; }
-.players .player:last-of-type { -webkit-border-bottom-left-radius: 5px; -webkit-border-bottom-right-radius: 5px; }
-.players .player { border-bottom:1px dotted #C8C8C8; display:block; padding:2px 12px;
-    background: -webkit-linear-gradient(top, #fcfff4 0%,#dfe5d7 40%,#b3bead 100%); }
-.players .player .field-name { font-family:Arial; font-size:0.75em; }
-.players .player .field-value {}
-.players .player .name { display:inline-block; font-size:1.1em; margin-right:22px; width:140px; }
-.players .player .score,
-.players .player .num-sets,
-.players .player .num-false-sets { background:#e8e8e8; display:inline-block; font-family:Arial; font-size:1em; height:17px; margin:0 5px; padding:5px; text-align:right; width:30px; }
+.players { position: absolute; left: 0; top: 75px; width: 250px;
+    .player{ background: #BFEAF4; border-radius: 18px; font-family: Arial; float: left; margin: 6px; padding: 12px; position: relative;
+        &:nth-of-type(2n) { top: 4px; }
+        &:nth-of-type(3n) { top: -4px; }
+        .background { background: url(/images/balloons.png); background-size: 75px 48px; display: inline-block; height: 16px; margin-right: 6px; width: 15px; }
+        &[color="0"] { .background { background-position: 0px 0; } }
+        &[color="1"] { .background { background-position: -15px 0; } }
+        &[color="2"] { .background { background-position: -30px 0; } }
+        &[color="3"] { .background { background-position: -45px 0; } }
+        &[color="4"] { .background { background-position: -60px 0; } }
+        &[color="5"] { .background { background-position: 0px -16px; } }
+        &[color="6"] { .background { background-position: -15x -16px; } }
+        &[color="7"] { .background { background-position: -30px -16px; } }
+        &[color="8"] { .background { background-position: -45px -16px; } }
+        &[color="9"] { .background { background-position: -60px -16px; } }
+        &[color="10"] { .background { background-position: 0px -32px; } }
+        &[color="11"] { .background { background-position: -15px -32px; } }
+        &[color="12"] { .background { background-position: -30px -32px; } }
+        &[color="13"] { .background { background-position: -45px -32px; } }
+        &[color="14"] { .background { background-position: -60px -32px; } }
+    }
+}
+
+.balloons { height: 500px; position: absolute; right: 12px; top: 12px; width: 220px;
+    .balloon {
+        bottom: 0; position: absolute;
+        -moz-transition: bottom 1s ease-in-out; -webkit-transition: bottom 1s ease-in-out;
+        .background { background: url(/images/balloons.png); height: 59px; margin: 0 auto; width: 53px; }
+        .name { background: rgba(232, 247, 255, 0.8); border: solid 2px #73858C; font-family: Arial; font-size: 14px; padding: 2px 4px; position: relative; text-align: center; top: -2px; }
+        &[color="0"] { left: 0; .background { background-position: -1px 0; } }
+        &[color="1"] { left: 55px; .background { background-position: -55px 0; } }
+        &[color="2"] { left: 110px; .background { background-position: -109px 0; } }
+        &[color="3"] { left: 11px; .background { background-position: -163px 0; } }
+        &[color="4"] { left: 66px; .background { background-position: -217px 0; } }
+        &[color="5"] { left: 121px; .background { background-position: -1px -61px; } }
+        &[color="6"] { left: 22px;.background { background-position: -55px -61px; } }
+        &[color="7"] { left: 77px;.background { background-position: -109px -61px; } }
+        &[color="8"] { left: 132px;.background { background-position: -163px -61px; } }
+        &[color="9"] { left: 33px;.background { background-position: -217px -61px; } }
+        &[color="10"] { left: 88px;.background { background-position: -1px -122px; } }
+        &[color="11"] { left: 143px;.background { background-position: -55px -122px; } }
+        &[color="12"] { left: 44px;.background { background-position: -109px -122px; } }
+        &[color="13"] { left: 99px;.background { background-position: -163px -122px; } }
+        &[color="14"] { left: 154px;.background { background-position: -217px -122px; } }
+    }
+}
 
 .game-end-overlay-container { height: 0; left: 0; position: fixed; top: 0; text-align: center; width: 100%; }
 .game-end-overlay { background: #fcfff4; font-family: Verdana; margin: 48px auto 0; padding: 22px 38px; width: 500px;
@@ -106,25 +191,35 @@ button { background: #e2e2e2; border: none; border-radius: 5px; cursor: pointer;
 .game-end-overlay .runner-up.second { }
 .game-end-overlay .close { margin-top: 22px; }
 
-#name-change-form { float: left; margin-left: 22px; }
-#name-field { padding: 4px; width: 178px; }
+.name-form-overlay-container { background: rgba(100, 100, 100, 0.7); height: 100%; left: 0; position: fixed; top: 0; width: 100%;
+    .name-form-overlay { background: #E3F6FC; border: solid 12px white; border-radius: 12px; box-shadow: 0px 0px 26px #4F93B0; height: 250px; margin: 100px auto 0; padding: 24px; text-align: center; width: 400px;
+        h3 img { width: 300px; }
+        h4 { color: #666; font-size: 18px; margin: 12px auto 0; width: 330px; }
+        #name-change-form { margin-top: 24px;
+            label { font-size: 22px; }
+            #name-field { border: solid 3px #BFEAF4; font-size: 22px; margin-left: 12px; padding: 4px; width: 300px; }
+            #change-name-btn { .high-impact-button-gradient(); color: #E3F6FC; font-size: 24px; margin-top: 12px; padding: 6px 24px; }
+        }
+    }
+}
 
-.game-controls { background:#000000; background: -webkit-linear-gradient(top, #000000 0%,#45484d 100%); }
+
+.game-controls {  }
 
 #chat {
-    background: #ebebeb; border: solid 2px #383838; border-radius: 12px; clear:both; margin:10px 0 0; padding: 12px 12px;
+    font-family: arial; margin:0 auto; padding: 12px 24px ; width: 600px;
     .chat-form {
-        .msg { padding: 4px; width:350px; }
+        label { font-weight: bold; }
+        .msg { background: transparent; border: 0; font-size: 16px; padding: 4px; width:350px; }
     }
     .chat-msgs {
-        height:450px; overflow:scroll;
+        height: 250px;
         .chat-msg {
             margin:5px 0 0;
-            .sender { background:#DADBEB; border-radius:5px; display:inline-block; margin:0 7px 0 0; padding:4px 5px; }
-            .msg {
-                display:inline-block;
-                .cards {
-                    display:inline-block;
+            .sender { background:#E1F3F7; border-radius:3px; display:inline-block; margin:0 7px 0 0; padding:4px 5px; }
+            .msg { display:inline-block;
+                .cards { display:inline-block;
+                    .card { border: solid 3px; }
                     &.set { .card { border-color:#d2ff52 #4FED44 #4FED44 #d2ff52; } }
                     &.false-set { .card { border-color:#FFA435 #e73827 #e73827 #FFA435; } }
                 }
@@ -133,3 +228,26 @@ button { background: #e2e2e2; border: none; border-radius: 5px; cursor: pointer;
     }
 }
 #chat .chat-msgs .chat-msg .msg .cards .card { display:inline-block; .card(64px); }
+
+footer { border-top: solid 1px #666; color: #666; font-weight: bold; padding: 12px; text-align: center;
+    a { color: #2987E6; }
+}
+
+@import url(/css/animations.css);
+.sky { .sky-gradient(); height: 500px; left: 0; position: absolute; top: 0; width: 100%; z-index: -1; }
+.moon { background: url(/images/moon.png) repeat-x 0 0; background-size: 100% 100%; top: 50px; height: 70px; right: 180px; position: absolute; width: 70px; z-index: -1; }
+.cloud-1 {
+    background: url(/images/cloud-1.png) repeat-x 0 0; top: 287px; height: 430px; left: 0; position: absolute; width: 100%; z-index: -1;
+    -webkit-animation: cloud1 280s infinite normal;
+    -webkit-animation-timing-function: linear;
+}
+.cloud-2 {
+    background: url(/images/cloud-2.png) repeat-x 0 0; top: 336px; height: 381px; left: 0; position: absolute; width: 100%; z-index: -1;
+    -webkit-animation: cloud2 240s infinite normal;
+    -webkit-animation-timing-function: linear;
+}
+.cloud-3 {
+    background: url(/images/cloud-3.png) repeat-x 0 0; top: 382px; height: 335px; left: 0; position: absolute; width: 100%; z-index: -1;
+    -webkit-animation: cloud3 200s infinite normal;
+    -webkit-animation-timing-function: linear;
+}

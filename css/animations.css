@@ -1,0 +1,12 @@
+@-webkit-keyframes cloud1 {
+    0% { background-position-x: 0px; }
+    100% { background-position-x: 1488px; }
+}
+@-webkit-keyframes cloud2 {
+    0% { background-position-x: 0px; }
+    100% { background-position-x: 1584px; }
+}
+@-webkit-keyframes cloud3 {
+    0% { background-position-x: 0px; }
+    100% { background-position-x: 1680px; }
+}

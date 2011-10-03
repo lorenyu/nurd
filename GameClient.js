@@ -9,7 +9,7 @@ this.GameClient = function() {
     var _secret;
         
     function init() {
-        
+
         EventEngine.observe('server:playerRegistered', proxy(function(event) {
             this.onPlayerRegistered(event.data.registerId, event.data.encPlayerId, event.data.playerPublicId, event.data.name);
             this.stayIntervalId = setInterval(proxy(this.stay, this), Math.floor(event.data.playerTimeout / 2));
@@ -29,23 +29,22 @@ this.GameClient = function() {
             this.changeName($('#name-field').val());
             return false;
         }, this));
+        $('#name-change-form #name-field').focus();
     }
 
     function onEvent(event) {
-        switch(event.name) {
         
-        default: break;
-        }
     }
 
-    this.register = function() {
+    this.register = function(name) {
         _registerId = Crypto.getRandomKey();
         _secret = Crypto.getRandomKey();
         EventEngine.fire('client:registerPlayer', {
+            name: name,
             registerId: _registerId,
             secret: _secret
         });
-    }
+    };
 
     this.onPlayerRegistered = function(registerId, encPlayerId, playerPublicId, name) {
         if (registerId === _registerId) {
@@ -66,7 +65,7 @@ this.GameClient = function() {
             $(window).unload(leave);
             $(window).onbeforeunload = leave;
         }
-    }
+    };
 
     this.requestMoreCards = function() {
         //log('requesting more cards');
@@ -82,7 +81,7 @@ this.GameClient = function() {
                 playerId: this.id
             });
         }
-    }
+    };
 
     this.requestGameRestart = function() {
         //log('requesting game restart');
@@ -98,7 +97,7 @@ this.GameClient = function() {
                 playerId: this.id
             });
         }
-    }
+    };
     
     this.requestEndGame = function() {
         //log('requesting game end');
@@ -114,13 +113,13 @@ this.GameClient = function() {
                 playerId: this.id
             });
         }
-    }
+    };
 
     this.stay = function() {
         EventEngine.fire('client:stay', {
             playerId: this.id
         });
-    }
+    };
 
     this.changeName = function(name) {
         // TODO: do some client-side validation
@@ -128,7 +127,7 @@ this.GameClient = function() {
             playerId: this.id,
             name: name
         });
-    }
+    };
 
     /*
         this.joinGame = function(game) {
@@ -145,27 +144,26 @@ this.GameClient = function() {
             playerId: this.id,
             cards: cards
         });
-    }
+    };
 
     init.apply(this, arguments);
 };
 
 this.Game = function() {
 
-    var TEMPLATE;
-    var CARDS_IN_PLAY_TEMPLATE;
-    var PLAYERS_TEMPLATE;
-    var _numSelectedCards = [];
-
-    this.client = new GameClient();
+    var _numSelectedCards = [],
+        jade = require('jade'),
+        client = this.client = new GameClient();
 
     function init() {
-        TEMPLATE = $('#game-container').html();
-        CARDS_IN_PLAY_TEMPLATE = $('.cards-in-play').html();
-        PLAYERS_TEMPLATE = $('.players').html();
-
-
-        var client = this.client;
+        var cardsRenderer = jade.compile($('#cards-view').text());
+        var playersRenderer = jade.compile($('#players-view').text());
+        var balloonRenderer = jade.compile($('#balloon-view').text());
+        
+        EventEngine.observe('server:playerNameChanged', function(event) {
+            var playerId = event.data.playerId;
+            $('.balloons .balloon[playerid=' + playerId + '] .name').text(event.data.name);
+        });
 
         EventEngine.observe('server:gameUpdated', function(event) {
             if (!client.id) { return; } // if player hasn't registered yet, there's no need updating the game state
@@ -184,19 +182,23 @@ this.Game = function() {
                 }
             }
 
-/*
-            $('#game-container').html(TEMPLATE).render({
-                cards:cards,
-                players:players
-            }, PureDirectives.GAME);*/
-
-            $('.players').html(PLAYERS_TEMPLATE).render({
-                players:players
-            }, PureDirectives.PLAYERS);
-
-            $('.cards-in-play').html(CARDS_IN_PLAY_TEMPLATE).render({
-                cards:cards
-            }, PureDirectives.CARDS_IN_PLAY);
+            var playerIds = _.pluck(players, 'publicId');
+            var currentPlayerIds = $('.players-container .player').map(function(index, player) {
+                return parseInt($(player).attr('playerid'), 10);
+            });
+            var newPlayerIds = _.difference(playerIds, currentPlayerIds);
+            var removedPlayerIds = _.difference(currentPlayerIds, playerIds);
+            
+            _.each(removedPlayerIds, function(playerId) {
+                $('.balloons .balloon[playerid=' + playerId + ']').remove();
+            });
+            _.each(newPlayerIds, function(playerId) {
+                var player = _.detect(players, function(player) { return player.publicId == playerId; });
+                $('.balloons').append(balloonRenderer.call(player));
+            });
+            
+            $('.players-container').html(playersRenderer.call({ players: players }));
+            $('.cards-in-play').html(cardsRenderer.call({ cards: cards }));
 
             if (deckSize > 0) {
                 $('#draw-cards-btn').show();
@@ -222,7 +224,14 @@ this.Game = function() {
                 $('#end-game-btn').removeClass('selected');
             }
             
-            $('#draw-cards-btn .num-requests').text(event.data.numMoreCardsRequests);
+            var numMoreCardsRequests = event.data.numMoreCardsRequests;
+            $('#draw-cards-btn .num-requests').text(numMoreCardsRequests).attr('value', numMoreCardsRequests).attr('max', Math.ceil(players.length * 2/3));
+            if (numMoreCardsRequests > 0) {
+                $('#draw-cards-btn .num-requests').css({ visibility : 'visible' });
+            } else {
+                $('#draw-cards-btn .num-requests').css({ visibility : 'hidden' });
+            }
+            
             $('#restart-game-btn .num-requests').text(event.data.numRestartGameRequests);
             $('#end-game-btn .num-requests').text(event.data.numEndGameRequests);
 
@@ -265,21 +274,19 @@ this.Game = function() {
         });
         
         EventEngine.observe('server:playerScored', function(event) {
-            var $tmp = $('#tmp');
-            $tmp.html('<ul class="cards set">' + CARDS_IN_PLAY_TEMPLATE + '</ul>');
-            $tmp.find('.cards').render({
-                cards: event.data.cards
-            }, PureDirectives.CARDS_IN_PLAY);
-            $('#chat').chat( 'addMessage', event.data.player.name, $tmp.html() );
+            var player = event.data.player,
+                balloon = $('.balloon[playerid=' + player.publicId + ']');
+                
+            balloon.css('bottom', (player.score * 17.64) + 'px');
+            $('#chat').chat( 'addMessage', player.name, cardsRenderer.call({ 'class' : 'set', cards : event.data.cards }) );
         });
         
         EventEngine.observe('server:playerFailedSet', function(event) {
-            var $tmp = $('#tmp');
-            $tmp.html('<ul class="cards false-set">' + CARDS_IN_PLAY_TEMPLATE + '</ul>');
-            $tmp.find('.cards').render({
-                cards: event.data.cards
-            }, PureDirectives.CARDS_IN_PLAY);
-            $('#chat').chat( 'addMessage', event.data.player.name, $tmp.html() );
+            var player = event.data.player,
+                balloon = $('.balloon[playerid=' + player.publicId + ']');
+                
+            balloon.css('bottom', (player.score * 17.64) + 'px');
+            $('#chat').chat( 'addMessage', player.name, cardsRenderer.call({ 'class' : 'set', cards : event.data.cards }) );
         });
         
         $('.game-end-overlay .close').click(function(event) {
@@ -287,8 +294,12 @@ this.Game = function() {
         });
 
         $('#chat').chat();
-
-        this.client.register();
+        
+        EventEngine.observe('client:changeName', function(event) {
+            client.register(event.data.name);
+            $('.name-form-overlay-container').hide();
+        });
+        
         //EventEngine.observe('client:endGame', proxy(this.endGame, this));
     }
 

@@ -86,7 +86,7 @@ this.Game = function() {
 
         switch (event.name) {
         case 'client:registerPlayer':
-            this.registerPlayer(event.data.registerId, event.data.secret);
+            this.registerPlayer(event.data.registerId, event.data.secret, event.data.name);
             break;
         case 'client:selectCards':
             player = this.getPlayer(event.data.playerId);
@@ -181,7 +181,14 @@ this.Game = function() {
                 if (!regex.test(name)) {
                     break;
                 }
+                var prevName = player.name;
                 player.name = name;
+                
+                EventEngine.fire('server:playerNameChanged', {
+                    playerId : player.publicId,
+                    prevName : prevName,
+                    name : name
+                });
                 EventEngine.fire('server:gameUpdated', this.gameState());
             }
             break;
@@ -295,11 +302,12 @@ this.Game = function() {
         };
     };
 
-    this.registerPlayer = function(registerId, secret) {
+    this.registerPlayer = function(registerId, secret, name) {
         log('Game:registerPlayer: registerId=' + registerId + ', secret=' + secret);
         var player = new Player();
         player.lastSeen = (new Date()).getTime();
         player.joinGame(this);
+        player.name = name || player.name;
 
         var encPlayerId = secret + player.getId();
         EventEngine.fire('server:playerRegistered', {
