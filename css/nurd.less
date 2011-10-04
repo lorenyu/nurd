@@ -62,9 +62,14 @@ button { background: #e2e2e2; border: none; border-radius: 5px; cursor: pointer;
     .deck { background: #606D73; height: 80px; border-radius: 5px; display: block;
         .top-card { .button-gradient(); border-radius: 5px; display: block; height: 64px; width: 128px;
             .logo { background: transparent url(/images/logo.png) no-repeat center center; background-size: 110px; display: block; height: 64px; width: 128px; }
+            .help-text { color: #394747; display: none; font-size: 24px; height: 64px; padding-top: 20px; width: 128px; }
         }
     }
     &.selected .deck .top-card { .blue-highlight(); }
+    &:hover .deck .top-card {
+        .logo { display: none; }
+        .help-text { display: block; }
+    }
     progress { margin-bottom: 4px; width: 128px; }
 }
 #end-game-btn.selected { .blue-highlight(); }
