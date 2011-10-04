@@ -48,8 +48,16 @@ blockquote, q { quotes: "" ""; }
 body { background: rgb(191,234,244); font-family: arial;}
 .background-container { }
 .outer-container { margin: 0 auto; position: relative; width: 1024px; }
+
+header { }
+nav { }
+article { position: relative; }
+footer { border-top: solid 1px #666; color: #666; font-weight: bold; padding: 12px; text-align: center;
+    a { color: #2987E6; }
+}
+
 h1 { margin: 12px 0; text-align: center; }
-#game-container { background: transparent url(/images/board.png) no-repeat top center; background-size: 516px 461px; min-height: 520px; overflow:auto; position: relative; }
+#game-container { background: transparent url(/images/board.png) no-repeat center 79px; background-size: 516px 461px; min-height: 520px; overflow:auto; position: relative; }
 
 #tmp { display: none; }
 
@@ -57,8 +65,19 @@ h1 { margin: 12px 0; text-align: center; }
 .game-controls { margin-top: 10px; text-align: center; }
 button { background: #e2e2e2; border: none; border-radius: 5px; cursor: pointer; padding: 4px 12px;
     .button-gradient(); }
-#restart-game-btn.selected { .blue-highlight(); }
-#draw-cards-btn { background: transparent; padding: 0;
+#restart-game-btn { background: transparent; bottom: -49px; display: inline-block; padding: 0; position: absolute; width: 100%;
+    .button { .button-gradient(); display: block;  height: 32px;
+        .icon { background: transparent url(/images/restart-icon.png) no-repeat center center; background-size: 18px; display: block; height: 100%; }
+        .help-text { color: #394747; display: none; font-size: 18px; height: 100%; padding-top: 6px; }
+    }
+    &:hover .button {
+        .icon { display: none; }
+        .help-text { display: block; }
+    }
+    &.selected .button { .blue-highlight(); }
+    progress { margin-bottom: 4px; width: 100%; }
+}
+#draw-cards-btn { background: transparent; display: inline-block; padding: 0;
     .deck { background: #606D73; height: 80px; border-radius: 5px; display: block;
         .top-card { .button-gradient(); border-radius: 5px; display: block; height: 64px; width: 128px;
             .logo { background: transparent url(/images/logo.png) no-repeat center center; background-size: 110px; display: block; height: 64px; width: 128px; }
@@ -233,10 +252,6 @@ button { background: #e2e2e2; border: none; border-radius: 5px; cursor: pointer;
     }
 }
 #chat .chat-msgs .chat-msg .msg .cards .card { display:inline-block; .card(64px); }
-
-footer { border-top: solid 1px #666; color: #666; font-weight: bold; padding: 12px; text-align: center;
-    a { color: #2987E6; }
-}
 
 @import url(/css/animations.css);
 .sky { .sky-gradient(); height: 500px; left: 0; position: absolute; top: 0; width: 100%; z-index: -1; }

@@ -232,7 +232,13 @@ this.Game = function() {
                 $('#draw-cards-btn .num-requests').css({ visibility : 'hidden' });
             }
             
-            $('#restart-game-btn .num-requests').text(event.data.numRestartGameRequests);
+            var numRestartGameRequests = event.data.numRestartGameRequests;
+            $('#restart-game-btn .num-requests').text(numRestartGameRequests).attr('value', numRestartGameRequests).attr('max', Math.ceil(players.length * 2/3));
+            if (numRestartGameRequests > 0) {
+                $('#restart-game-btn .num-requests').css({ visibility : 'visible' });
+            } else {
+                $('#restart-game-btn .num-requests').css({ visibility : 'hidden' });
+            }
             $('#end-game-btn .num-requests').text(event.data.numEndGameRequests);
 
             $('.cards-in-play .card').bind('mousedown', function() {

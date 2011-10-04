@@ -132,30 +132,38 @@ ul.players
         <div class="cloud-2"></div>
         <div class="cloud-3"></div>
         <div class="outer-container">
-            <div class="balloons"></div>
             <header>
                 <h1><img src="/images/logo.png" alt="Tttrio - A fast real-time multiplayer pattern-matching game to hone your logical skills" ></h1>
             </header>
-            <div id="game-container">
-                <div class="game-controls">
-                    <button id="restart-game-btn">Restart Game (<span class="num-requests">0</span>)</button>
-                    <button id="draw-cards-btn">
+            <nav>
+            </nav>
+            <article>
+                <div class="balloons">
+                    <button id="restart-game-btn">
                         <progress class="num-requests" max="" value="0">0</progress>
-                        <span class="deck"><span class="top-card"><span class="logo"></span><span class="help-text">Draw Card</span></span></span>
+                        <span class="button"><span class="icon"></span><span class="help-text">RESTART</span></span>
                     </button>
                     <button id="end-game-btn" style="display:none">End Game (<span class="num-requests">0</span>)</button>
                 </div>
-                <div class="cards-in-play"></div>
-                <div class="players-container"></div>
-            </div>
-            <div id="chat">
-                <form class="chat-form">
-                    <input type="hidden" class="sender" />
-                    <label>Chat: </label>
-                    <input type="text" class="msg" placeholder="Start typing here..." />
-                </form>
-                <ul class="chat-msgs"></ul>
-            </div>
+                <div id="game-container">
+                    <div class="game-controls">
+                        <button id="draw-cards-btn">
+                            <progress class="num-requests" max="" value="0">0</progress>
+                            <span class="deck"><span class="top-card"><span class="logo"></span><span class="help-text">DRAW</span></span></span>
+                        </button>
+                    </div>
+                    <div class="cards-in-play"></div>
+                    <div class="players-container"></div>
+                </div>
+                <div id="chat">
+                    <form class="chat-form">
+                        <input type="hidden" class="sender" />
+                        <label>Chat: </label>
+                        <input type="text" class="msg" placeholder="Start typing here..." />
+                    </form>
+                    <ul class="chat-msgs"></ul>
+                </div>
+            </article>
         </div>
         <footer>
             Made by <a href="http://www.lorenyu.com">Loren Yu</a>
