@@ -20,6 +20,8 @@
       var jade = require('jade');
       var pageRenderer = jade.compile($('#page-view').text());
       
+      $('.instructions-overlay-container').html(jade.compile($('#instructions-view').text()).call());
+      
     new EventEngineHttpClient({
       onInitialized: function() {
         var game = new Game();
@@ -109,6 +111,227 @@ ul.players
     .name= this.name
 </script>
 
+<script id="instructions-view" class="jade" type="text/jade">
+.instructions
+    ul.menu
+        li.menu-item
+            a Rules
+        li.menu-item
+            a Game Controls
+    section.rules
+        h2 Rules
+        h3 Color
+        .trio
+            .card.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+            .card.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+            .card.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+        .trio
+            .card.card-object.shape0.color1.shading2
+                span.card-object.shape0.color1.shading2
+            .card.card-object.shape0.color1.shading2
+                span.card-object.shape0.color1.shading2
+            .card.card-object.shape0.color1.shading2
+                span.card-object.shape0.color1.shading2
+        .trio
+            .card.card-object.shape0.color2.shading2
+                span.card-object.shape0.color2.shading2
+            .card.card-object.shape0.color2.shading2
+                span.card-object.shape0.color2.shading2
+            .card.card-object.shape0.color2.shading2
+                span.card-object.shape0.color2.shading2
+        .trio
+            .card.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+            .card.card-object.shape0.color1.shading2
+                span.card-object.shape0.color1.shading2
+            .card.card-object.shape0.color2.shading2
+                span.card-object.shape0.color2.shading2
+        .trio.false
+            .card.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+            .card.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+            .card.card-object.shape0.color1.shading2
+                span.card-object.shape0.color1.shading2
+        h3 Shape
+        .trio
+            .card.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+            .card.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+            .card.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+        .trio
+            .card.card-object.shape1.color0.shading2
+                span.card-object.shape1.color0.shading2
+            .card.card-object.shape1.color0.shading2
+                span.card-object.shape1.color0.shading2
+            .card.card-object.shape1.color0.shading2
+                span.card-object.shape1.color0.shading2
+        .trio
+            .card.card-object.shape2.color0.shading2
+                span.card-object.shape2.color0.shading2
+            .card.card-object.shape2.color0.shading2
+                span.card-object.shape2.color0.shading2
+            .card.card-object.shape2.color0.shading2
+                span.card-object.shape2.color0.shading2
+        .trio
+            .card.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+            .card.card-object.shape1.color0.shading2
+                span.card-object.shape1.color0.shading2
+            .card.card-object.shape2.color0.shading2
+                span.card-object.shape2.color0.shading2
+        .trio.false
+            .card.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+            .card.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+            .card.card-object.shape2.color0.shading2
+                span.card-object.shape2.color0.shading2
+        h3 Number
+        .trio
+            .card.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+            .card.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+            .card.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+        .trio
+            .card.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+            .card.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+            .card.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+        .trio
+            .card.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+            .card.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+            .card.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+        .trio
+            .card.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+            .card.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+            .card.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+        .trio.false
+            .card.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+            .card.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+            .card.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+        h3 Shade
+        .trio
+            .card.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+            .card.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+            .card.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+        .trio
+            .card.card-object.shape0.color0.shading0
+                span.card-object.shape0.color0.shading0
+            .card.card-object.shape0.color0.shading0
+                span.card-object.shape0.color0.shading0
+            .card.card-object.shape0.color0.shading0
+                span.card-object.shape0.color0.shading0
+        .trio
+            .card.card-object.shape0.color0.shading1
+                span.card-object.shape0.color0.shading1
+            .card.card-object.shape0.color0.shading1
+                span.card-object.shape0.color0.shading1
+            .card.card-object.shape0.color0.shading1
+                span.card-object.shape0.color0.shading1
+        .trio
+            .card.card-object.shape0.color0.shading2
+                span.card-object.shape0.color0.shading2
+            .card.card-object.shape0.color0.shading0
+                span.card-object.shape0.color0.shading0
+            .card.card-object.shape0.color0.shading1
+                span.card-object.shape0.color0.shading1
+        .trio.false
+            .card.card-object.shape0.color0.shading0
+                span.card-object.shape0.color0.shading0
+            .card.card-object.shape0.color0.shading0
+                span.card-object.shape0.color0.shading0
+            .card.card-object.shape0.color0.shading1
+                span.card-object.shape0.color0.shading1
+        h3 Other Cominbations
+        .trio
+            .card.card-object.shape0.color2.shading2
+                span.card-object.shape0.color2.shading2
+            .card.card-object.shape1.color0.shading1
+                span.card-object.shape1.color0.shading1
+                span.card-object.shape1.color0.shading1
+                span.card-object.shape1.color0.shading1
+            .card.card-object.shape2.color1.shading0
+                span.card-object.shape2.color1.shading0
+                span.card-object.shape2.color1.shading0
+        .trio
+            .card.card-object.shape2.color2.shading1
+                span.card-object.shape2.color2.shading1
+                span.card-object.shape2.color2.shading1
+            .card.card-object.shape0.color2.shading1
+                span.card-object.shape0.color2.shading1
+                span.card-object.shape0.color2.shading1
+            .card.card-object.shape1.color2.shading1
+                span.card-object.shape1.color2.shading1
+                span.card-object.shape1.color2.shading1
+        .trio
+            .card.card-object.shape0.color1.shading2
+                span.card-object.shape0.color1.shading2
+            .card.card-object.shape2.color0.shading0
+                span.card-object.shape2.color0.shading0
+            .card.card-object.shape1.color2.shading1
+                span.card-object.shape1.color2.shading1
+        .trio
+            .card.card-object.shape1.color1.shading0
+                span.card-object.shape1.color1.shading0
+            .card.card-object.shape1.color1.shading1
+                span.card-object.shape1.color1.shading1
+                span.card-object.shape1.color1.shading1
+            .card.card-object.shape1.color1.shading2
+                span.card-object.shape1.color1.shading2
+                span.card-object.shape1.color1.shading2
+                span.card-object.shape1.color1.shading2
+        .trio.false
+            .card.card-object.shape0.color2.shading1
+                span.card-object.shape0.color2.shading1
+            .card.card-object.shape2.color0.shading1
+                span.card-object.shape2.color0.shading1
+                span.card-object.shape2.color0.shading1
+            .card.card-object.shape1.color1.shading2
+                span.card-object.shape1.color1.shading2
+                span.card-object.shape1.color1.shading2
+                span.card-object.shape1.color1.shading2
+    section.game-controls
+        h3 Selecting Cards
+        h3 Drawing More Cards
+        h3 Starting a New Game
+</script>
+
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -136,6 +359,7 @@ ul.players
                 <h1><img src="/images/logo.png" alt="Tttrio - A fast real-time multiplayer pattern-matching game to hone your logical skills" ></h1>
             </header>
             <nav>
+                <button class="how-to-play-btn">How to Play</button>
             </nav>
             <article>
                 <div class="balloons">
@@ -187,6 +411,8 @@ ul.players
                     <button type="submit" id="change-name-btn" >Enter</button>
                 </form>
             </div>
+        </div>
+        <div class="instructions-overlay-container">
         </div>
     </div>
 </body>
