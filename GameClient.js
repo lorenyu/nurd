@@ -241,7 +241,8 @@ this.Game = function() {
             }
             $('#end-game-btn .num-requests').text(event.data.numEndGameRequests);
 
-            $('.cards-in-play .card').bind('mousedown', function() {
+            var clickEventType = Modernizr.touch ? 'touchstart' : 'mousedown';
+            $('.cards-in-play .card').bind(clickEventType, function() {
                 var card = $(this);
                 card.toggleClass('selected');
                 var selectedCards = $('.cards-in-play .card.selected');
@@ -252,6 +253,7 @@ this.Game = function() {
                     });
                     client.selectCards(selectedCards);
                 }
+                return false; // Prevents iPhone's double-tap zoom functionality
             });
 
         });
