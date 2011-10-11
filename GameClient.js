@@ -21,9 +21,15 @@ this.GameClient = function() {
             $('#chat .chat-form .sender').val(event.data.name);
         });
 
-        $('#restart-game-btn').click(proxy(this.requestGameRestart, this));
-        $('#draw-cards-btn').click(proxy(this.requestMoreCards, this));
-        $('#end-game-btn').click(proxy(this.requestEndGame, this));
+        if (Modernizr.touch) {
+            $('#restart-game-btn').bind('touchstart', proxy(this.requestGameRestart, this));
+            $('#draw-cards-btn').bind('touchstart', proxy(this.requestMoreCards, this));
+            $('#end-game-btn').bind('touchstart', proxy(this.requestEndGame, this));
+        } else {
+            $('#restart-game-btn').click(proxy(this.requestGameRestart, this));
+            $('#draw-cards-btn').click(proxy(this.requestMoreCards, this));
+            $('#end-game-btn').click(proxy(this.requestEndGame, this));
+        }
 
         $('#name-change-form').submit(proxy(function() {
             this.changeName($('#name-field').val());
