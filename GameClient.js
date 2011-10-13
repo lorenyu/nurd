@@ -21,9 +21,15 @@ this.GameClient = function() {
             $('#chat .chat-form .sender').val(event.data.name);
         });
 
-        $('#restart-game-btn').click(proxy(this.requestGameRestart, this));
-        $('#draw-cards-btn').click(proxy(this.requestMoreCards, this));
-        $('#end-game-btn').click(proxy(this.requestEndGame, this));
+        if (Modernizr.touch) {
+            $('#restart-game-btn').bind('touchstart', proxy(this.requestGameRestart, this));
+            $('#draw-cards-btn').bind('touchstart', proxy(this.requestMoreCards, this));
+            $('#end-game-btn').bind('touchstart', proxy(this.requestEndGame, this));
+        } else {
+            $('#restart-game-btn').click(proxy(this.requestGameRestart, this));
+            $('#draw-cards-btn').click(proxy(this.requestMoreCards, this));
+            $('#end-game-btn').click(proxy(this.requestEndGame, this));
+        }
 
         $('#name-change-form').submit(proxy(function() {
             this.changeName($('#name-field').val());
@@ -241,7 +247,8 @@ this.Game = function() {
             }
             $('#end-game-btn .num-requests').text(event.data.numEndGameRequests);
 
-            $('.cards-in-play .card').bind('mousedown', function() {
+            var clickEventType = Modernizr.touch ? 'touchstart' : 'mousedown';
+            $('.cards-in-play .card').bind(clickEventType, function() {
                 var card = $(this);
                 card.toggleClass('selected');
                 var selectedCards = $('.cards-in-play .card.selected');
@@ -252,6 +259,7 @@ this.Game = function() {
                     });
                     client.selectCards(selectedCards);
                 }
+                return false; // Prevents iPhone's double-tap zoom functionality
             });
 
         });
