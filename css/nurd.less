@@ -268,17 +268,23 @@ h1 { text-align: center; }
 
 .instructions-overlay-container {
     h2 { font-size: 1.7em; }
-    h3 { font-size: 1.2em;}
+    h3 { font-size: 1.2em; padding-left: 12px;
+        &.ui-state-default:before { content: "\25B8  " }
+        &.ui-state-active:before { content: "\25BE  " }
+    }
+    p { line-height: 1.4em; margin-bottom: 12px; }
     .menu {
         .menu-item {
         }
     }
-    .trio { display: inline-block; height: 210px; width: 130px;
+    .trio { display: inline-block; height: 210px; margin: 16px; width: 130px;
         .card {
             .card-object { }
         }
         &.false { }
     }
+    .correct { background: url(/images/check-green.png) no-repeat center center; background-size: 16px; height: 16px; margin-bottom: 12px; }
+    .incorrect { background: url(/images/red-x.png) no-repeat center center; background-size: 16px; height: 16px; margin-bottom: 12px; }
 }
 
 
