@@ -157,7 +157,8 @@ this.Game = function() {
         self = this,
         cardsRenderer = jade.compile($('#cards-view').text()),
         playersRenderer = jade.compile($('#players-view').text()),
-        balloonRenderer = jade.compile($('#balloon-view').text());
+        balloonRenderer = jade.compile($('#balloon-view').text()),
+        firstUpdate = true;
         
     function init() {
         
@@ -231,7 +232,6 @@ this.Game = function() {
     }
     
     this.onGameUpdated = function(event) {
-        console.log('hello');
         if (!client.id) { return; } // if player hasn't registered yet, there's no need updating the game state
         
         //log('server:gameUpdated');
@@ -319,7 +319,14 @@ this.Game = function() {
                 client.selectCards(selectedCards);
             }
         });
-
+        
+        if (firstUpdate) {
+            // move balloons to right place on first update
+            $.each(players, function(i, player) {
+                $('.balloon[playerid=' + player.publicId + ']').css('bottom', (player.score * 17.64) + 'px');
+            });
+            firstUpdate = false;
+        }
     };
 
     init.apply(this, arguments);
