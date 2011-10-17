@@ -21,15 +21,9 @@ this.GameClient = function() {
             $('#chat .chat-form .sender').val(event.data.name);
         });
 
-        if (Modernizr.touch) {
-            $('#restart-game-btn').bind('touchstart', proxy(this.requestGameRestart, this));
-            $('#draw-cards-btn').bind('touchstart', proxy(this.requestMoreCards, this));
-            $('#end-game-btn').bind('touchstart', proxy(this.requestEndGame, this));
-        } else {
-            $('#restart-game-btn').click(proxy(this.requestGameRestart, this));
-            $('#draw-cards-btn').click(proxy(this.requestMoreCards, this));
-            $('#end-game-btn').click(proxy(this.requestEndGame, this));
-        }
+        $('#restart-game-btn').click(proxy(this.requestGameRestart, this));
+        $('#draw-cards-btn').click(proxy(this.requestMoreCards, this));
+        $('#end-game-btn').click(proxy(this.requestEndGame, this));
 
         $('#name-change-form').submit(proxy(function() {
             this.changeName($('#name-field').val());
@@ -159,110 +153,29 @@ this.Game = function() {
 
     var _numSelectedCards = [],
         jade = require('jade'),
-        client = this.client = new GameClient();
-
+        client = this.client = new GameClient(),
+        self = this,
+        cardsRenderer = jade.compile($('#cards-view').text()),
+        playersRenderer = jade.compile($('#players-view').text()),
+        balloonRenderer = jade.compile($('#balloon-view').text());
+        
     function init() {
-        var cardsRenderer = jade.compile($('#cards-view').text());
-        var playersRenderer = jade.compile($('#players-view').text());
-        var balloonRenderer = jade.compile($('#balloon-view').text());
+        
         
         EventEngine.observe('server:playerNameChanged', function(event) {
             var playerId = event.data.playerId;
             $('.balloons .balloon[playerid=' + playerId + '] .name').text(event.data.name);
         });
-
-        EventEngine.observe('server:gameUpdated', function(event) {
-            if (!client.id) { return; } // if player hasn't registered yet, there's no need updating the game state
+        
+        EventEngine.observe('server:gameStarted', function(event) {
+            $('.balloon').css('bottom', '0px');
+            $('#chat').chat( 'addMessage', 'TTTRIO', 'Game restarted' );
             
-            //log('server:gameUpdated');
-            var cards = event.data.cardsInPlay,
-                me, player, players = event.data.players,
-                deckSize = event.data.deckSize,
-                i, numPlayers;
-
-            for (i = 0, numPlayers = players.length; i < numPlayers; i++) {
-                player = players[i];
-                if (player.publicId === client.publicId) {
-                    client.player = me = player;
-                    player.isMe = true;
-                }
-            }
-
-            var playerIds = _.pluck(players, 'publicId');
-            var currentPlayerIds = $('.players-container .player').map(function(index, player) {
-                return parseInt($(player).attr('playerid'), 10);
-            });
-            var newPlayerIds = _.difference(playerIds, currentPlayerIds);
-            var removedPlayerIds = _.difference(currentPlayerIds, playerIds);
-            
-            _.each(removedPlayerIds, function(playerId) {
-                $('.balloons .balloon[playerid=' + playerId + ']').remove();
-            });
-            _.each(newPlayerIds, function(playerId) {
-                var player = _.detect(players, function(player) { return player.publicId == playerId; });
-                $('.balloons').append(balloonRenderer.call(player));
-            });
-            
-            $('.players-container').html(playersRenderer.call({ players: players }));
-            $('.cards-in-play').html(cardsRenderer.call({ cards: cards }));
-
-            if (deckSize > 0) {
-                $('#draw-cards-btn').show();
-                $('#end-game-btn').hide();
-            } else {
-                $('#draw-cards-btn').hide();
-                $('#end-game-btn').show();
-            }
-            
-            if (me.isRequestingMoreCards) {
-                $('#draw-cards-btn').addClass('selected');
-            } else {
-                $('#draw-cards-btn').removeClass('selected');
-            }
-            if (me.isRequestingGameRestart) {
-                $('#restart-game-btn').addClass('selected');
-            } else {
-                $('#restart-game-btn').removeClass('selected');
-            }
-            if (me.isRequestingGameEnd) {
-                $('#end-game-btn').addClass('selected');
-            } else {
-                $('#end-game-btn').removeClass('selected');
-            }
-            
-            var numMoreCardsRequests = event.data.numMoreCardsRequests;
-            $('#draw-cards-btn .num-requests').text(numMoreCardsRequests).attr('value', numMoreCardsRequests).attr('max', Math.ceil(players.length * 2/3));
-            if (numMoreCardsRequests > 0) {
-                $('#draw-cards-btn .num-requests').css({ visibility : 'visible' });
-            } else {
-                $('#draw-cards-btn .num-requests').css({ visibility : 'hidden' });
-            }
-            
-            var numRestartGameRequests = event.data.numRestartGameRequests;
-            $('#restart-game-btn .num-requests').text(numRestartGameRequests).attr('value', numRestartGameRequests).attr('max', Math.ceil(players.length * 2/3));
-            if (numRestartGameRequests > 0) {
-                $('#restart-game-btn .num-requests').css({ visibility : 'visible' });
-            } else {
-                $('#restart-game-btn .num-requests').css({ visibility : 'hidden' });
-            }
-            $('#end-game-btn .num-requests').text(event.data.numEndGameRequests);
-
-            var clickEventType = Modernizr.touch ? 'touchstart' : 'mousedown';
-            $('.cards-in-play .card').bind(clickEventType, function() {
-                var card = $(this);
-                card.toggleClass('selected');
-                var selectedCards = $('.cards-in-play .card.selected');
-                if (selectedCards.length == 3) {
-                    selectedCards = $.map(selectedCards, function(card) {
-                        //log($(card).attr('json'));
-                        return JSON.parse($(card).attr('json'));
-                    });
-                    client.selectCards(selectedCards);
-                }
-                return false; // Prevents iPhone's double-tap zoom functionality
-            });
-
+            self.onGameUpdated(event);
         });
+        
+
+        EventEngine.observe('server:gameUpdated', this.onGameUpdated);
         
         EventEngine.observe('server:gameEnded', function(event) {
             var overlay = $('.game-end-overlay'),
@@ -300,7 +213,7 @@ this.Game = function() {
                 balloon = $('.balloon[playerid=' + player.publicId + ']');
                 
             balloon.css('bottom', (player.score * 17.64) + 'px');
-            $('#chat').chat( 'addMessage', player.name, cardsRenderer.call({ 'class' : 'set', cards : event.data.cards }) );
+            $('#chat').chat( 'addMessage', player.name, cardsRenderer.call({ 'class' : 'false-set', cards : event.data.cards }) );
         });
         
         $('.game-end-overlay .close').click(function(event) {
@@ -316,6 +229,98 @@ this.Game = function() {
         
         //EventEngine.observe('client:endGame', proxy(this.endGame, this));
     }
+    
+    this.onGameUpdated = function(event) {
+        console.log('hello');
+        if (!client.id) { return; } // if player hasn't registered yet, there's no need updating the game state
+        
+        //log('server:gameUpdated');
+        var cards = event.data.cardsInPlay,
+            me, player, players = event.data.players,
+            deckSize = event.data.deckSize,
+            i, numPlayers;
+
+        for (i = 0, numPlayers = players.length; i < numPlayers; i++) {
+            player = players[i];
+            if (player.publicId === client.publicId) {
+                client.player = me = player;
+                player.isMe = true;
+            }
+        }
+
+        var playerIds = _.pluck(players, 'publicId');
+        var currentPlayerIds = $('.players-container .player').map(function(index, player) {
+            return parseInt($(player).attr('playerid'), 10);
+        });
+        var newPlayerIds = _.difference(playerIds, currentPlayerIds);
+        var removedPlayerIds = _.difference(currentPlayerIds, playerIds);
+        
+        _.each(removedPlayerIds, function(playerId) {
+            $('.balloons .balloon[playerid=' + playerId + ']').remove();
+        });
+        _.each(newPlayerIds, function(playerId) {
+            var player = _.detect(players, function(player) { return player.publicId == playerId; });
+            $('.balloons').append(balloonRenderer.call(player));
+        });
+        
+        $('.players-container').html(playersRenderer.call({ players: players }));
+        $('.cards-in-play').html(cardsRenderer.call({ cards: cards }));
+
+        if (deckSize > 0) {
+            $('#draw-cards-btn').show();
+            $('#end-game-btn').hide();
+        } else {
+            $('#draw-cards-btn').hide();
+            $('#end-game-btn').show();
+        }
+        
+        if (me.isRequestingMoreCards) {
+            $('#draw-cards-btn').addClass('selected');
+        } else {
+            $('#draw-cards-btn').removeClass('selected');
+        }
+        if (me.isRequestingGameRestart) {
+            $('#restart-game-btn').addClass('selected');
+        } else {
+            $('#restart-game-btn').removeClass('selected');
+        }
+        if (me.isRequestingGameEnd) {
+            $('#end-game-btn').addClass('selected');
+        } else {
+            $('#end-game-btn').removeClass('selected');
+        }
+        
+        var numMoreCardsRequests = event.data.numMoreCardsRequests;
+        $('#draw-cards-btn .num-requests').text(numMoreCardsRequests).attr('value', numMoreCardsRequests).attr('max', Math.ceil(players.length * 2/3));
+        if (numMoreCardsRequests > 0) {
+            $('#draw-cards-btn .num-requests').css({ visibility : 'visible' });
+        } else {
+            $('#draw-cards-btn .num-requests').css({ visibility : 'hidden' });
+        }
+        
+        var numRestartGameRequests = event.data.numRestartGameRequests;
+        $('#restart-game-btn .num-requests').text(numRestartGameRequests).attr('value', numRestartGameRequests).attr('max', Math.ceil(players.length * 2/3));
+        if (numRestartGameRequests > 0) {
+            $('#restart-game-btn .num-requests').css({ visibility : 'visible' });
+        } else {
+            $('#restart-game-btn .num-requests').css({ visibility : 'hidden' });
+        }
+        $('#end-game-btn .num-requests').text(event.data.numEndGameRequests);
+
+        $('.cards-in-play .card').bind('mousedown', function() {
+            var card = $(this);
+            card.toggleClass('selected');
+            var selectedCards = $('.cards-in-play .card.selected');
+            if (selectedCards.length == 3) {
+                selectedCards = $.map(selectedCards, function(card) {
+                    //log($(card).attr('json'));
+                    return JSON.parse($(card).attr('json'));
+                });
+                client.selectCards(selectedCards);
+            }
+        });
+
+    };
 
     init.apply(this, arguments);
 };

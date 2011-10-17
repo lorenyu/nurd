@@ -380,7 +380,7 @@ this.Game = function() {
             player.isRequestingGameEnd = false;
             player.isRequestingGameRestart = false;
         }
-        EventEngine.fire('server:gameUpdated', this.gameState());
+        EventEngine.fire('server:gameStarted', this.gameState());
     };
 
     this.dealMoreCards = function() {
