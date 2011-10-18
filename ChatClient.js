@@ -1,4 +1,13 @@
 (function($) {
+    var jade = require('jade'),
+        msgRenderer = jade.compile('' + 
+            'li.chat-msg\n' +
+            '    span.sender= this.sender\n' +
+            '    - if (this.sanitize)\n' +
+            '        span.msg= this.msg\n' +
+            '    - else\n' +
+            '        span.msg!= this.msg\n');
+    
     /* Turns a form into a chat client */
     $.fn.chat = function(method) {
         
@@ -9,6 +18,7 @@
                     $this = $(this);
                     self.chat( 'sendMessage', $this.find('.sender').val(), $this.find('.msg').val() );
                     $this.find('.msg').val(''); // clear the input box
+                    
                     return false;
                 });
                 EventEngine.observe('server:chat:sendMsg', function(event) {
@@ -22,15 +32,20 @@
                 });
             },
             addMessage : function( sender, msg, options ) {
-                var chatMsgs = this.find('.chat-msgs');
-                var sortChronological = options && options.sortChronological;
+                options = $.extend({
+                    sortChronological : false,
+                    sanitize : true
+                }, options || {});
+                var chatMsgs = this.find('.chat-msgs'),
+                    sortChronological = options.sortChronological;
                 if (options && typeof(options.renderMsg) === 'function') {
                     var msgHtml = options.renderMsg(sender, msg);
                 } else {
-                    var msgHtml = '<li class="chat-msg">'+
-                                    '<span class="sender">'+sender+'</span>'+
-                                    '<span class="msg">'+msg+'</span>'+
-                                    '</li>';
+                    var msgHtml = msgRenderer.call({
+                            sender: sender,
+                            msg: msg,
+                            sanitize: options.sanitize
+                        });
                 }
                 if (sortChronological) {
                     chatMsgs.append(msgHtml);
@@ -49,5 +64,5 @@
         }
         
         
-    }
+    };
 })(jQuery);

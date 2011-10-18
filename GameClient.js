@@ -206,7 +206,7 @@ this.Game = function() {
                 balloon = $('.balloon[playerid=' + player.publicId + ']');
                 
             balloon.css('bottom', (player.score * 17.64) + 'px');
-            $('#chat').chat( 'addMessage', player.name, cardsRenderer.call({ 'class' : 'set', cards : event.data.cards }) );
+            $('#chat').chat( 'addMessage', player.name, cardsRenderer.call({ 'class' : 'set', cards : event.data.cards }), { sanitize: false } );
         });
         
         EventEngine.observe('server:playerFailedSet', function(event) {
@@ -214,7 +214,7 @@ this.Game = function() {
                 balloon = $('.balloon[playerid=' + player.publicId + ']');
                 
             balloon.css('bottom', (player.score * 17.64) + 'px');
-            $('#chat').chat( 'addMessage', player.name, cardsRenderer.call({ 'class' : 'false-set', cards : event.data.cards }) );
+            $('#chat').chat( 'addMessage', player.name, cardsRenderer.call({ 'class' : 'false-set', cards : event.data.cards }), { sanitize: false } );
         });
         
         $('.game-end-overlay .close').click(function(event) {
