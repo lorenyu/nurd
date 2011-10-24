@@ -23,7 +23,6 @@ this.GameClient = function() {
 
         $('#restart-game-btn').click(proxy(this.requestGameRestart, this));
         $('#draw-cards-btn').click(proxy(this.requestMoreCards, this));
-        $('#end-game-btn').click(proxy(this.requestEndGame, this));
 
         $('#name-change-form').submit(proxy(function() {
             this.changeName($('#name-field').val());
@@ -94,22 +93,6 @@ this.GameClient = function() {
         } else {
             btn.addClass('selected');
             EventEngine.fire('client:startGame', {
-                playerId: this.id
-            });
-        }
-    };
-    
-    this.requestEndGame = function() {
-        //log('requesting game end');
-        var btn = $('#end-game-btn');
-        if (btn.hasClass('selected')) {
-            btn.removeClass('selected');
-            EventEngine.fire('client:cancelEndGameRequest', {
-                playerId: this.id
-            });
-        } else {
-            btn.addClass('selected');
-            EventEngine.fire('client:endGame', {
                 playerId: this.id
             });
         }
@@ -268,10 +251,8 @@ this.Game = function() {
 
         if (deckSize > 0) {
             $('#draw-cards-btn').show();
-            $('#end-game-btn').hide();
         } else {
             $('#draw-cards-btn').hide();
-            $('#end-game-btn').show();
         }
         
         if (me.isRequestingMoreCards) {
@@ -283,11 +264,6 @@ this.Game = function() {
             $('#restart-game-btn').addClass('selected');
         } else {
             $('#restart-game-btn').removeClass('selected');
-        }
-        if (me.isRequestingGameEnd) {
-            $('#end-game-btn').addClass('selected');
-        } else {
-            $('#end-game-btn').removeClass('selected');
         }
         
         var numMoreCardsRequests = event.data.numMoreCardsRequests;
@@ -305,7 +281,6 @@ this.Game = function() {
         } else {
             $('#restart-game-btn .num-requests').css({ visibility : 'hidden' });
         }
-        $('#end-game-btn .num-requests').text(event.data.numEndGameRequests);
 
         $('.cards-in-play .card').bind('mousedown', function() {
             var card = $(this);

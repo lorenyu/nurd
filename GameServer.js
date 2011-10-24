@@ -20,7 +20,8 @@ this.Game = function() {
     var playerTimeout = 20*1000, // shorter timeout (useful for testing/debugging)
         moreCardsRequestThreshold = 2/3, // minimum percentage of card requests required to deal more cards
         restartGameRequestThreshold = 2/3, // minimum percentage of restart game requests required to restart game
-        endGameRequestThreshold = 2/3; // minimum percentage of end game requests required to end game
+        endGameRequestThreshold = 2/3, // minimum percentage of end game requests required to end game
+        goalScore = 10;
 
     log('creating chat server');
     var chatServer = new ChatServer();
@@ -95,6 +96,9 @@ this.Game = function() {
                 this._sortPlayersByScore();
                 if (success) {
                     EventEngine.fire('server:playerScored', { player: player, cards: event.data.cards });
+                    if (player.score > goalScore) {
+                        this.endGame();
+                    }
                 } else {
                     EventEngine.fire('server:playerFailedSet', { player: player, cards: event.data.cards });
                 }
@@ -358,6 +362,7 @@ this.Game = function() {
                     break;
                 }
             }
+            deck.addCard(card);
         }
         return true;
     };

@@ -24,19 +24,29 @@ this.Deck = function() {
             this.cards[i] = this.cards[j];
             this.cards[j] = temp;
         }
-    }
+    };
 
     this.drawCard = function() {
-        return this.cards.pop();
-    }
+        var numCards = this.cards.length,
+            i;
+        if (numCards > 0) {
+            i = Math.floor(Math.random() * numCards);
+            return this.cards.splice(i,1)[0];
+        }
+        return null;
+    };
 
     this.isEmpty = function() {
         return this.cards.length === 0;
-    }
+    };
     
     this.numCards = function() {
         return this.cards.length;
-    }
+    };
+    
+    this.addCard = function(card) {
+        this.cards.unshift(card);
+    };
 
     init.apply(this, arguments);
 };

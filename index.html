@@ -74,9 +74,6 @@
             button#draw-cards-btn Restart Game (
                 span.num-requests 0
                 | )
-            button#end-game-btn Restart Game (
-                span.num-requests 0
-                | )
     .cards-in-play-container
     form#name-change-form(action="")
         input#name-field(type="text", name="name", value="")
@@ -434,7 +431,6 @@ ul.players
                         <progress class="num-requests" max="" value="0">0</progress>
                         <span class="button"><span class="icon"></span><span class="help-text">RESTART</span></span>
                     </button>
-                    <button id="end-game-btn" style="display:none">End Game (<span class="num-requests">0</span>)</button>
                 </div>
                 <div id="game-container">
                     <div class="game-controls">
