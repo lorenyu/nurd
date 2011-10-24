@@ -96,7 +96,7 @@ this.Game = function() {
                 this._sortPlayersByScore();
                 if (success) {
                     EventEngine.fire('server:playerScored', { player: player, cards: event.data.cards });
-                    if (player.score > goalScore) {
+                    if (player.score >= goalScore) {
                         this.endGame();
                     }
                 } else {
