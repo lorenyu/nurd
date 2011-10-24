@@ -188,7 +188,7 @@ this.Game = function() {
             var player = event.data.player,
                 balloon = $('.balloon[playerid=' + player.publicId + ']');
                 
-            balloon.css('bottom', (player.score * 17.64) + 'px');
+            balloon.css('bottom', (player.score * 34) + 'px'); // 34px = (400px - 60px) / 10 = (height of balloons area - height of balloon) / (number of points)
             $('#chat').chat( 'addMessage', player.name, cardsRenderer.call({ 'class' : 'set', cards : event.data.cards }), { sanitize: false } );
         });
         
@@ -196,7 +196,7 @@ this.Game = function() {
             var player = event.data.player,
                 balloon = $('.balloon[playerid=' + player.publicId + ']');
                 
-            balloon.css('bottom', (player.score * 17.64) + 'px');
+            balloon.css('bottom', (player.score * 34) + 'px'); // 34px = (400px - 60px) / 10 = (height of balloons area - height of balloon) / (number of points)
             $('#chat').chat( 'addMessage', player.name, cardsRenderer.call({ 'class' : 'false-set', cards : event.data.cards }), { sanitize: false } );
         });
         
