@@ -85,8 +85,15 @@ footer { border-top: solid 1px #666; color: #666; font-weight: bold; padding: 12
     a { color: #2987E6; }
 }
 
+article {
+    .share-widgets { position: absolute; top: 386px;
+        .share-widget { margin-top: 8px; }
+        .share-widget.twitter-share-button-container { margin-top: 15px; }
+    }
+}
+
 h1 { text-align: center; }
-#game-container { background: transparent url(/images/board.png) no-repeat center 79px; background-size: 516px 461px; min-height: 520px; overflow:auto; position: relative; }
+#game-container { background: transparent url(/images/board.png) no-repeat center 69px; background-size: 516px 461px; min-height: 520px; overflow:auto; position: relative; }
 
 #tmp { display: none; }
 
@@ -175,7 +182,7 @@ h1 { text-align: center; }
     .card(@card-width);
 }
 
-.cards-in-play { height: 398px; margin: 20px auto 0; overflow:hidden; padding:6px 43px 6px 53px; width:420px; }
+.cards-in-play { height: 398px; margin: 10px auto 0; overflow:hidden; padding:6px 43px 6px 53px; width:420px; }
 .cards-in-play .card { float:left; margin:2px; overflow:hidden; }
 .cards-in-play .card:hover { /*background: -webkit-linear-gradient(top, #fcf2b8 0%,#fce24e 50%,#f9d400 51%,#f7ed91 100%);*/ }
 .cards-in-play .card.selected { .blue-highlight(); }
@@ -290,7 +297,7 @@ h1 { text-align: center; }
 .game-controls {  }
 
 #chat {
-    font-family: arial; margin:0 auto; padding: 12px 24px ; width: 600px;
+    font-family: arial; margin:0 auto 0; padding: 12px 24px ; width: 600px;
     .chat-form {
         label { font-weight: bold; }
         .msg { background: transparent; border: 0; font-size: 16px; padding: 4px; width:350px; }
