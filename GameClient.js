@@ -274,14 +274,6 @@ this.Game = function() {
             $('#draw-cards-btn .num-requests').css({ visibility : 'hidden' });
         }
         
-        var numRestartGameRequests = event.data.numRestartGameRequests;
-        $('#restart-game-btn .num-requests').text(numRestartGameRequests).attr('value', numRestartGameRequests).attr('max', Math.ceil(players.length * 2/3));
-        if (numRestartGameRequests > 0) {
-            $('#restart-game-btn .num-requests').css({ visibility : 'visible' });
-        } else {
-            $('#restart-game-btn .num-requests').css({ visibility : 'hidden' });
-        }
-
         $('.cards-in-play .card').bind('mousedown', function() {
             var card = $(this);
             card.toggleClass('selected');

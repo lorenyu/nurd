@@ -64,6 +64,10 @@ nav { background: #2987E6;
     .how-to-play-btn { color: #394747; cursor: pointer; font-size: 1.2em; padding: 4px 8px;
         &:hover { color: #222; }
     }
+    #restart-game-btn { color: #394747; cursor: pointer; font-size: 1.2em; padding: 4px 8px;
+        &:hover { color: #222; }
+        &.selected { .blue-highlight(); }
+    }
 }
 
 @media screen and (min-device-width: 1024px) {
@@ -85,14 +89,6 @@ h1 { text-align: center; }
 
 /* game controls */
 .game-controls { margin-top: 10px; text-align: center; }
-#restart-game-btn { background: transparent; bottom: -49px; display: inline-block; padding: 0; position: absolute; width: 100%;
-    .button { .button-gradient(); display: block;  height: 32px;
-        .icon { background: transparent url(/images/restart-icon.png) no-repeat center center; background-size: 18px; display: block; height: 100%; }
-        .help-text { color: #394747; display: none; font-size: 18px; height: 100%; padding-top: 6px; }
-    }
-    &.selected .button { .blue-highlight(); }
-    progress { margin-bottom: 4px; width: 100%; }
-}
 
 @media screen and (min-device-width: 481px) {
     #restart-game-btn:hover .button {
