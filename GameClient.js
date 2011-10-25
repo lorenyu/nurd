@@ -21,8 +21,10 @@ this.GameClient = function() {
             $('#chat .chat-form .sender').val(event.data.name);
         });
 
-        $('#restart-game-btn').click(proxy(this.requestGameRestart, this));
-        $('#draw-cards-btn').click(proxy(this.requestMoreCards, this));
+
+        var clickEventType = (Modernizr.touch) ? 'touchstart' : 'click';
+        $('#restart-game-btn').bind(clickEventType, proxy(this.requestGameRestart, this));
+        $('#draw-cards-btn').bind(clickEventType, proxy(this.requestMoreCards, this));
 
         $('#name-change-form').submit(proxy(function() {
             this.changeName($('#name-field').val());
@@ -142,9 +144,8 @@ this.Game = function() {
         playersRenderer = jade.compile($('#players-view').text()),
         balloonRenderer = jade.compile($('#balloon-view').text()),
         firstUpdate = true;
-        
+
     function init() {
-        
         
         EventEngine.observe('server:playerNameChanged', function(event) {
             var playerId = event.data.playerId;
@@ -277,7 +278,9 @@ this.Game = function() {
         var numRestartGameRequests = event.data.numRestartGameRequests;
         $('#restart-game-btn .players-left').text(Math.ceil(players.length * 2/3) - numRestartGameRequests);
         
-        $('.cards-in-play .card').bind('mousedown', function() {
+        
+        var clickEventType = Modernizr.touch ? 'touchstart' : 'mousedown';
+        $('.cards-in-play .card').bind(clickEventType, function() {
             var card = $(this);
             card.toggleClass('selected');
             var selectedCards = $('.cards-in-play .card.selected');
@@ -288,6 +291,7 @@ this.Game = function() {
                 });
                 client.selectCards(selectedCards);
             }
+            return false; // Prevents iPhone's double-tap zoom functionality
         });
         
         if (firstUpdate) {
