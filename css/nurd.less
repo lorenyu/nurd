@@ -64,9 +64,12 @@ nav { background: #2987E6;
     .how-to-play-btn { color: #394747; cursor: pointer; font-size: 1.2em; padding: 4px 8px;
         &:hover { color: #222; }
     }
-    #restart-game-btn { color: #394747; cursor: pointer; font-size: 1.2em; padding: 4px 8px;
+    #restart-game-btn { color: #394747; cursor: pointer; font-size: 1.2em; padding: 4px 8px; position: relative;
+        .waiting { color: #BFEAF4; display: none; font-size: 0.8em; left: -60px; padding: 3px 10px; position: absolute; top: 32px; width: 200%; }
         &:hover { color: #222; }
-        &.selected { .blue-highlight(); }
+        &.selected { .blue-highlight();
+            .waiting { display: block; }
+        }
     }
 }
 

@@ -274,6 +274,9 @@ this.Game = function() {
             $('#draw-cards-btn .num-requests').css({ visibility : 'hidden' });
         }
         
+        var numRestartGameRequests = event.data.numRestartGameRequests;
+        $('#restart-game-btn .players-left').text(Math.ceil(players.length * 2/3) - numRestartGameRequests);
+        
         $('.cards-in-play .card').bind('mousedown', function() {
             var card = $(this);
             card.toggleClass('selected');
