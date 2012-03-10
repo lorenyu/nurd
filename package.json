@@ -10,6 +10,9 @@
 		}
 	],
 	"scripts": {
+		"start": "./scripts/start-server.sh",
+		"stop": "./scripts/stop-server.sh",
+		"restart": "./scripts/restart-server.sh",
 		"test": "echo \"We need a testing framework!!!\""
 	},
 	"repository": {
