@@ -1,0 +1,28 @@
+{
+	"name": "nurd",
+	"version": "0.1.0",
+	"author": "Loren Yu <yuloren@gmail.com>",
+	"description": "Online real-time multiplayer pattern-matching game using Node.js.",
+	"contributors": [
+		{
+			"name": "Loren Yu",
+			"email": "yuloren@gmail.com"
+		}
+	],
+	"scripts": {
+		"test": "echo \"We need a testing framework!!!\""
+	},
+	"repository": {
+		"type": "git",
+		"url": "git@github.com:lorenyu/nurd.git"
+	},
+	"dependencies": {
+		"less": "1.x.x",
+		"socket.io": "0.6.x"
+	},
+	"bundleDependencies": [
+	],
+	"engine": {
+		"node": "0.6.x"
+	}
+}
