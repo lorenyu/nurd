@@ -51,10 +51,10 @@ body { background: rgb(191,234,244); font-family: arial;}
 .background-container { }
 .outer-container { margin: 0 auto; position: relative; }
 
-@media screen and (min-device-width: 1024px) {
+@media screen and (min-width: 1024px) {
     .outer-container { width: 1024px; }
 }
-@media screen and (max-device-width: 1024px) {
+@media screen and (max-width: 1024px) {
     .outer-container { width: 100%; }
 }
 
@@ -73,10 +73,10 @@ nav { background: #2987E6;
     }
 }
 
-@media screen and (min-device-width: 1024px) {
+@media screen and (min-width: 1024px) {
     nav div { width: 1024px; }
 }
-@media screen and (max-device-width: 1024px) {
+@media screen and (max-width: 1024px) {
     nav div { width: 100%; }
 }
 
@@ -91,7 +91,7 @@ article {
         .share-widget.twitter-share-button-container { margin-top: 15px; }
     }
 }
-@media screen and (min-device-width: 481px) {
+@media screen and (min-width: 481px) {
     article {
         .share-widgets { border-radius: 0 5px 5px 0; position: fixed; left: 0; top: 20px; }
     }
@@ -105,7 +105,7 @@ h1 { text-align: center; }
 /* game controls */
 .game-controls { margin-top: 10px; text-align: center; }
 
-@media screen and (min-device-width: 481px) {
+@media screen and (min-width: 481px) {
     #restart-game-btn:hover .button {
         .icon { display: none; }
         .help-text { display: block; }
@@ -124,7 +124,7 @@ h1 { text-align: center; }
     progress { margin-bottom: 4px; width: 128px; }
 }
 
-@media screen and (min-device-width: 481px) {
+@media screen and (min-width: 481px) {
     #draw-cards-btn:hover .deck .top-card {
         .logo { display: none; }
         .help-text { display: block; }
@@ -195,7 +195,7 @@ h1 { text-align: center; }
 .cards-in-play .card.number1 .card-object { }
 .cards-in-play .card.number2 .card-object { }
 
-@media screen and (min-device-width: 481px) {
+@media screen and (min-width: 481px) {
     .players { position: absolute; left: 0; top: 75px; width: 250px;
         .player{ background: #BFEAF4; border-radius: 18px; font-family: Arial; float: left; margin: 6px; padding: 12px; position: relative;
             &:nth-of-type(2n) { top: 4px; }
@@ -219,11 +219,16 @@ h1 { text-align: center; }
         }
     }
 }
-@media screen and (max-device-width: 480px) {
+
+@media screen and (max-width: 480px) {
+    h1 img { width: 300px; }
+}
+
+@media screen and (max-width: 480px) {
     .players { display: none; }
 }
 
-@media screen and (min-device-width: 481px) {
+@media screen and (min-width: 481px) {
     .balloons { height: 400px; position: absolute; right: 12px; top: 12px; width: 220px;
         .balloon {
             bottom: 0; position: absolute;
@@ -248,7 +253,7 @@ h1 { text-align: center; }
         }
     }
 }
-@media screen and (max-device-width: 480px) {
+@media screen and (max-width: 480px) {
     .balloons { display: none; }
 }
 
@@ -265,17 +270,29 @@ h1 { text-align: center; }
 .game-end-overlay .runner-up.second { }
 .game-end-overlay .close { margin-top: 22px; }
 
-.name-form-overlay-container { background: rgba(100, 100, 100, 0.7); height: 100%; left: 0; position: fixed; top: 0; width: 100%;
-    .name-form-overlay { background: #E3F6FC; border: solid 12px white; border-radius: 12px; box-shadow: 0px 0px 26px #4F93B0; height: 250px; margin: 100px auto 0; padding: 24px; text-align: center; width: 400px;
+.name-form-overlay-container { height: 100%; left: 0; position: absolute; top: 0; width: 100%;
+    .name-form-overlay { background: #E3F6FC; border: solid 12px white; border-radius: 12px; box-shadow: 0px 0px 26px #4F93B0; height: 250px; margin: 100px auto 0; max-width: 400px; padding: 24px 12px; text-align: center;
         h3 img { width: 300px; }
         h4 { color: #666; font-size: 18px; margin: 12px auto 0; width: 330px; }
         #name-change-form { margin-top: 24px;
             label { font-size: 22px; }
-            #name-field { border: solid 3px #BFEAF4; font-size: 22px; margin-left: 12px; padding: 4px; width: 300px; }
+            #name-field { border: solid 3px #BFEAF4; font-size: 22px; margin-left: 12px; padding: 4px; width: 200px; }
             #change-name-btn { .high-impact-button-gradient(); color: #E3F6FC; font-size: 24px; margin-top: 12px; padding: 6px 24px; }
         }
     }
 }
+
+@media screen and (max-width: 480px) {
+    .name-form-overlay-container {
+        h3 img { width: 200px; }
+        h4 { font-size: 16px; margin-top: 6px }
+        .name-form-overlay {
+            margin-top: 0;
+        }
+    }
+}
+
+
 
 .instructions-overlay-container {
     h2 { font-size: 1.7em; }
@@ -323,11 +340,15 @@ h1 { text-align: center; }
 }
 #chat .chat-msgs .chat-msg .msg .cards .card { display:inline-block; .card(64px); }
 
+@media screen and (max-width: 480px) {
+    #chat { width: 300px; }
+}
+
 .background-container { position: relative; }
 
 @import url(/css/animations.css);
 .sky { .sky-gradient(); height: 500px; left: 0; position: absolute; top: 0; width: 100%; z-index: -1; }
-@media screen and (min-device-width: 481px) {
+@media screen and (min-width: 481px) {
     .moon { background: url(/images/moon.png) repeat-x 0 0; background-size: 100% 100%; top: 50px; height: 70px; right: 180px; position: absolute; width: 70px; z-index: -1; }
     .cloud-1 {
         background: url(/images/cloud-1.png) repeat-x 0 0; top: 287px; height: 430px; left: 0; position: absolute; width: 100%; z-index: -1;
