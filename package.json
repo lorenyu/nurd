@@ -21,7 +21,8 @@
 	},
 	"dependencies": {
 		"less": "1.x.x",
-		"socket.io": "0.6.x"
+		"socket.io": "0.6.x",
+		"underscore": "1.4.4"
 	},
 	"bundleDependencies": [
 	],
