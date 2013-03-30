@@ -18,8 +18,16 @@ this.Deck = function() {
         this.shuffle();
     }
 
-    this.shuffle = function() {
-        this.cards = _.shuffle(this.cards);
+    this.isEmpty = function() {
+        return this.cards.length === 0;
+    };
+    
+    this.numCards = function() {
+        return this.cards.length;
+    };
+    
+    this.addCard = function(card) {
+        this.cards.push(card);
     };
 
     this.drawCard = function() {
@@ -41,16 +49,8 @@ this.Deck = function() {
         return null;
     }
 
-    this.isEmpty = function() {
-        return this.cards.length === 0;
-    };
-    
-    this.numCards = function() {
-        return this.cards.length;
-    };
-    
-    this.addCard = function(card) {
-        this.cards.push(card);
+    this.shuffle = function() {
+        this.cards = _.shuffle(this.cards);
     };
 
     init.apply(this, arguments);
