@@ -246,6 +246,12 @@ this.Game = function() {
             log('need 3 cards');
             return false;
         }
+        // if any of the cards are null
+        for (i = 0; i < 3; i += 1) {
+            if (!cards[i]) {
+                return false;
+            }
+        }
         if (cards[0] == cards[1]) { // if all three cards are the same (if the first two are the same and the last one is not then the later checks will fail anyways)
             return false;
         }
