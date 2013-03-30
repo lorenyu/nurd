@@ -7,6 +7,7 @@ var Player = require('./Player.js').Player;
 var Card = require('./Card.js').Card;
 var Deck = require('./Deck.js').Deck;
 var ChatServer = require('./ChatServer.js').ChatServer;
+var _ = require('underscore');
 
 var log = util.puts;
 
@@ -411,6 +412,61 @@ this.Game = function() {
             player.isRequestingMoreCards = false;
         }
         EventEngine.fire('server:gameUpdated', this.gameState());
+    };
+
+    this.hasSet = function() {
+        var n = this.cardsInPlay.length;
+        for (var i = 0; i < n; i += 1) {
+            var cardI = this.cardsInPlay[i];
+            for (var j = i+1; j < n; j += 1) {
+                var cardJ = this.cardsInPlay[j];
+                for (var k = j+1; k < n; k += 1) {
+                    var cardK = this.cardsInPlay[k];
+                    if (this._isValidSet([cardI, cardJ, cardK])) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    };
+
+    this.getNRandomCardsInPlay = function(n) {
+        if (typeof n !== 'number') {
+            throw 'n must be a number';
+        }
+        n = Math.floor(n);
+        var cards = _.compact(this.cardsInPlay);
+
+        var randomCards = [];
+        while (randomCards.length < n) {
+            var i = Math.floor(Math.random() * cards.length);
+            randomCards.push(cards.splice(i, 1)[0]);
+        }
+        return randomCards;
+    };
+
+    this.getCardNeededToCompleteSet = function(twoCards) {
+        if (twoCards.length != 2) {
+            throw 'twoCards needs to contain two cards';
+        }
+        // if any of the cards are null
+        for (i = 0; i < 2; i += 1) {
+            if (!twoCards[i]) {
+                throw 'cards in twoCards must not be null';
+            }
+        }
+        var resultCard = new Card(0,0,0,0),
+            cardA = twoCards[0],
+            cardB = twoCards[1];
+        for (i = 0; i < 4; i += 1) {
+            if (cardA.attributes[i] == cardB.attributes[i]) {
+                resultCard.attributes[i] = cardA.attributes[i];
+            } else {
+                resultCard.attributes[i] = 0 + 1 + 2 - cardA.attributes[i] - cardB.attributes[i];
+            }
+        }
+        return resultCard;
     };
     
     this.endGame = function() {
