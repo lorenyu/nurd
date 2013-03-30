@@ -348,7 +348,7 @@ this.Game = function() {
             this.addCard(deck.drawCard());
         } else {
             var randomTwoCards = this.getNRandomCardsInPlay(2);
-            var cardNeededForSet = this.getCardNeededToCompleteSet(randomTwoCards);
+            var cardNeededForSet = SetCalculator.getCardNeededToCompleteSet(randomTwoCards);
             this.addCard(deck.drawSpecificCard(cardNeededForSet));
         }
 
@@ -370,7 +370,7 @@ this.Game = function() {
             this.addCard(deck.drawCard());
         } else {
             var randomTwoCards = this.getNRandomCardsInPlay(2);
-            var cardNeededForSet = this.getCardNeededToCompleteSet(randomTwoCards);
+            var cardNeededForSet = SetCalculator.getCardNeededToCompleteSet(randomTwoCards);
             this.addCard(deck.drawSpecificCard(cardNeededForSet));
         }
 
@@ -441,29 +441,6 @@ this.Game = function() {
             randomCards.push(cards.splice(i, 1)[0]);
         }
         return randomCards;
-    };
-
-    this.getCardNeededToCompleteSet = function(twoCards) {
-        if (twoCards.length != 2) {
-            throw 'twoCards needs to contain two cards';
-        }
-        // if any of the cards are null
-        for (i = 0; i < 2; i += 1) {
-            if (!twoCards[i]) {
-                throw 'cards in twoCards must not be null';
-            }
-        }
-        var resultCard = new Card(0,0,0,0),
-            cardA = twoCards[0],
-            cardB = twoCards[1];
-        for (i = 0; i < 4; i += 1) {
-            if (cardA.attributes[i] == cardB.attributes[i]) {
-                resultCard.attributes[i] = cardA.attributes[i];
-            } else {
-                resultCard.attributes[i] = 0 + 1 + 2 - cardA.attributes[i] - cardB.attributes[i];
-            }
-        }
-        return resultCard;
     };
     
     this.endGame = function() {
