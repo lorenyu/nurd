@@ -36,6 +36,15 @@ this.Deck = function() {
         return null;
     };
 
+    this.drawSpecificCard = function(card) {
+        for (var i = 0, n = this.cards.length; i < n; i += 1) {
+            if (Card.equals(this.cards[i], card)) {
+                return this.cards.splice(i,1)[0];
+            }
+        }
+        return null;
+    }
+
     this.isEmpty = function() {
         return this.cards.length === 0;
     };
