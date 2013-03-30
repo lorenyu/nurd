@@ -263,7 +263,6 @@ this.Game = function() {
                 total += card.attributes[i];
             }
             if (total % 3 !== 0) {
-                log('total not multiple of three');
                 return false;
             }
         }
