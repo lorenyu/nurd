@@ -1,4 +1,4 @@
-this.Card = function(shape, color, shading, number) {
+var Card = this.Card = function(shape, color, shading, number) {
     if (shape < 0 || shape >= 3) {
         throw new Error('shape must be 0, 1, or 2');
     }
@@ -13,7 +13,10 @@ this.Card = function(shape, color, shading, number) {
     }
     this.attributes = [shape, color, shading, number];
 };
-this.Card.equals = function(cardA, cardB) {
+Card.createFromJSON = function(cardData) {
+    return new Card(cardData.attributes[0], cardData.attributes[1], cardData.attributes[2], cardData.attributes[3]);
+};
+Card.equals = function(cardA, cardB) {
     if (!cardA && !cardB) {
         return true;
     }

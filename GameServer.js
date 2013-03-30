@@ -2,11 +2,12 @@ var util = require('util');
 var EventEngine = require('./EventEngine.js').EventEngine;
 var proxy = require('./jsutil.js').proxy;
 
-var Player = require('./Player.js').Player;
-var Card = require('./Card.js').Card;
-var Deck = require('./Deck.js').Deck;
-var ChatServer = require('./ChatServer.js').ChatServer;
-var _ = require('underscore');
+var Player = require('./Player.js').Player,
+    Card = require('./Card.js').Card,
+    Deck = require('./Deck.js').Deck,
+    ChatServer = require('./ChatServer.js').ChatServer,
+    SetCalculator = require('./SetCalculator.js'),
+    _ = require('underscore');
 
 var log = util.puts;
 
@@ -92,7 +93,8 @@ this.Game = function() {
         case 'client:selectCards':
             player = this.getPlayer(event.data.playerId);
             if (player) {
-                success = player.selectCards(event.data.cards);
+                var cards = _.map(event.data.cards, Card.createFromJSON);
+                success = player.selectCards(cards);
                 this._sortPlayersByScore();
                 if (success) {
                     EventEngine.fire('server:playerScored', { player: player, cards: event.data.cards });
@@ -240,38 +242,8 @@ this.Game = function() {
     };
     
     this._isValidSet = function(cards) {
-        var i, j, card, total;
-        if (cards.length != 3) {
-            log('need 3 cards');
-            return false;
-        }
-        // if any of the cards are null
-        for (i = 0; i < 3; i += 1) {
-            if (!cards[i]) {
-                return false;
-            }
-        }
-        if (cards[0] == cards[1]) { // if all three cards are the same (if the first two are the same and the last one is not then the later checks will fail anyways)
-            return false;
-        }
-        for (i = 0; i < 3; i += 1) {
-            card = cards[i];
-            if (!this._isCardInPlay(card)) {
-                log('card not in play');
-                return false;
-            }
-        }
-        for (i = 0; i < 4; i += 1) {
-            total = 0;
-            for (j = 0; j < 3; j += 1) {
-                card = cards[j];
-                total += card.attributes[i];
-            }
-            if (total % 3 !== 0) {
-                return false;
-            }
-        }
-        return true;
+        var isInPlay = _.bind(this._isCardInPlay, this);
+        return SetCalculator.isValidSet(cards) && _.every(cards, isInPlay);
     };
 
     this._isCardInPlay = function(card) {
