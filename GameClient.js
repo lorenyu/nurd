@@ -24,7 +24,6 @@ this.GameClient = function() {
 
         var clickEventType = (Modernizr.touch) ? 'touchstart' : 'click';
         $('#restart-game-btn').bind(clickEventType, proxy(this.requestGameRestart, this));
-        $('#draw-cards-btn').bind(clickEventType, proxy(this.requestMoreCards, this));
 
         $('#name-change-form').submit(proxy(function() {
             this.changeName($('#name-field').val());
@@ -65,22 +64,6 @@ this.GameClient = function() {
             }, this);
             $(window).unload(leave);
             $(window).onbeforeunload = leave;
-        }
-    };
-
-    this.requestMoreCards = function() {
-        //log('requesting more cards');
-        var btn = $('#draw-cards-btn');
-        if (btn.hasClass('selected')) {
-            btn.removeClass('selected');
-            EventEngine.fire('client:cancelMoreCardsRequest', {
-                playerId: this.id
-            });
-        } else {
-            btn.addClass('selected');
-            EventEngine.fire('client:dealMoreCards', {
-                playerId: this.id
-            });
         }
     };
 
@@ -256,23 +239,10 @@ this.Game = function() {
             $('#draw-cards-btn').hide();
         }
         
-        if (me.isRequestingMoreCards) {
-            $('#draw-cards-btn').addClass('selected');
-        } else {
-            $('#draw-cards-btn').removeClass('selected');
-        }
         if (me.isRequestingGameRestart) {
             $('#restart-game-btn').addClass('selected');
         } else {
             $('#restart-game-btn').removeClass('selected');
-        }
-        
-        var numMoreCardsRequests = event.data.numMoreCardsRequests;
-        $('#draw-cards-btn .num-requests').text(numMoreCardsRequests).attr('value', numMoreCardsRequests).attr('max', Math.ceil(players.length * 2/3));
-        if (numMoreCardsRequests > 0) {
-            $('#draw-cards-btn .num-requests').css({ visibility : 'visible' });
-        } else {
-            $('#draw-cards-btn .num-requests').css({ visibility : 'hidden' });
         }
         
         var numRestartGameRequests = event.data.numRestartGameRequests;
