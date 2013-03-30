@@ -1,4 +1,5 @@
-var Card = require('./Card.js').Card;
+var Card = require('./Card.js').Card,
+    _ = require('underscore');
 
 this.Deck = function() {
 
@@ -18,12 +19,7 @@ this.Deck = function() {
     }
 
     this.shuffle = function() {
-        for (var i = 0, n = this.cards.length; i < n; i += 1) {
-            var j = i + Math.floor(Math.random() * (n - i));
-            var temp = this.cards[i];
-            this.cards[i] = this.cards[j];
-            this.cards[j] = temp;
-        }
+        this.cards = _.shuffle(this.cards);
     };
 
     this.drawCard = function() {
