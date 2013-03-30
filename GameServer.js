@@ -388,11 +388,22 @@ this.Game = function() {
         EventEngine.fire('server:gameStarted', this.gameState());
     };
 
+    this.addCard = function(card) {
+        for (var i = 0, n = this.cardsInPlay.length; i < n; i += 1) {
+            if (!this.cardsInPlay[i]) {
+                this.cardsInPlay[i] = card;
+                return this;
+            }
+        }
+        this.cardsInPlay.push(deck.drawCard());
+        return this;
+    };
+
     this.dealMoreCards = function() {
         var i, player, n;
         for (i = 0; i < 3; i += 1) {
             if (!deck.isEmpty()) {
-                this.cardsInPlay.push(deck.drawCard());
+                this.addCard(deck.drawCard());
             }
         }
         for (i = 0, n = this.players.length; i < n; i++) {
