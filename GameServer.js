@@ -1,5 +1,4 @@
 var util = require('util');
-var http = require('http');
 var EventEngine = require('./EventEngine.js').EventEngine;
 var proxy = require('./jsutil.js').proxy;
 
