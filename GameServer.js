@@ -356,15 +356,26 @@ this.Game = function() {
             for (var j = 0, m = this.cardsInPlay.length; j < m; j += 1) {
                 if (Card.equals(this.cardsInPlay[j], card)) {
                     if (this.cardsInPlay.length <= 12 && !deck.isEmpty()) { // replace the card if there are fewer than 12 cards and deck is not empty
-                        this.cardsInPlay[j] = deck.drawCard();
-                    } else { // if there are more than 12 cards in play or no cards left just remove the card
-                        this.cardsInPlay.splice(j, 1);
-                    }
+                        this.cardsInPlay[j] = null;
+                    }// else { // if there are more than 12 cards in play or no cards left just remove the card
+                    //     this.cardsInPlay.splice(j, 1);
+                    // }
+                    deck.addCard(card); // put the card back into the deck
                     break;
                 }
             }
-            deck.addCard(card);
         }
+
+        this.addCard(deck.drawCard());
+        this.addCard(deck.drawCard());
+        if (this.hasSet()) {
+            this.addCard(deck.drawCard());
+        } else {
+            var randomTwoCards = this.getNRandomCardsInPlay(2);
+            var cardNeededForSet = this.getCardNeededToCompleteSet(randomTwoCards);
+            this.addCard(deck.drawSpecificCard(cardNeededForSet));
+        }
+
         return true;
     };
 
@@ -374,9 +385,19 @@ this.Game = function() {
         
         var i;
 
-        for (i = 0; i < 12; i += 1) {
+        // deal 11 cards first, and if there isn't a set within the first 11 cards,
+        // make sure the last card completes a set
+        for (i = 0; i < 11; i += 1) {
             this.cardsInPlay.push(deck.drawCard());
         }
+        if (this.hasSet()) {
+            this.addCard(deck.drawCard());
+        } else {
+            var randomTwoCards = this.getNRandomCardsInPlay(2);
+            var cardNeededForSet = this.getCardNeededToCompleteSet(randomTwoCards);
+            this.addCard(deck.drawSpecificCard(cardNeededForSet));
+        }
+
         for (i = 0, n = this.players.length; i < n; i += 1) {
             var player = this.players[i];
             player.score = 0;
