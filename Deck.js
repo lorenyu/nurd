@@ -54,7 +54,7 @@ this.Deck = function() {
     };
     
     this.addCard = function(card) {
-        this.cards.unshift(card);
+        this.cards.push(card);
     };
 
     init.apply(this, arguments);
