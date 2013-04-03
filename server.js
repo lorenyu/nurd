@@ -10,11 +10,6 @@ var express = require('express')
 
 var log = util.puts;
 
-var EventEngine = require('./EventEngine.js').EventEngine;
-EventEngine.observeAll(function(event) {
-    //log('server.js:received event:' + JSON.stringify(event));
-});
-
 var server = new EventEngineHttpServer();
 var game = new Game();
 
