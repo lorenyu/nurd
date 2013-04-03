@@ -5,7 +5,6 @@ var proxy = require('./jsutil.js').proxy;
 var Player = require('./Player.js').Player,
     Card = require('./Card.js').Card,
     Deck = require('./Deck.js').Deck,
-    ChatServer = require('./ChatServer.js').ChatServer,
     SetCalculator = require('./SetCalculator.js'),
     _ = require('underscore');
 
@@ -23,9 +22,6 @@ this.Game = function() {
         restartGameRequestThreshold = 2/3, // minimum percentage of restart game requests required to restart game
         endGameRequestThreshold = 2/3, // minimum percentage of end game requests required to end game
         goalScore = 10;
-
-    log('creating chat server');
-    var chatServer = new ChatServer();
 
     function init() {
 
