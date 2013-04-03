@@ -10,8 +10,35 @@ var express = require('express')
 
 var log = util.puts;
 
-var server = new EventEngineHttpServer();
-var game = new Game();
+var app = express()
+  , eventServer = new EventEngineHttpServer()
+  , game = new Game()
+  , server = http.createServer(app);
 
-server.listen(8125, '127.0.0.1');
-util.puts('Server running at http://localhost:8125/');
+app.configure(function(){
+  app.set('port', process.env.PORT || 8125);
+  app.set('views', __dirname + '/views');
+  app.set('view engine', 'jade');
+  app.use(express.favicon());
+  app.use(express.logger('dev'));
+  // app.use(express.cookieParser());
+  app.use(express.bodyParser());
+  app.use(express.methodOverride());
+  app.use(app.router);
+  app.use(require('less-middleware')({ src: __dirname + '/public' }));
+  app.use(express.static(path.join(__dirname, 'public')));
+});
+
+app.configure('development', function(){
+  app.use(express.errorHandler());
+});
+
+app.get('/', routes.index);
+app.get('/jsutil.js', routes.js.jsutil);
+app.get('/EventEngine.js', routes.js.EventEngine);
+
+eventServer.listen(app);
+
+server.listen(app.get('port'), function() {
+  console.log('Server running at http://localhost:' + app.get('port'));
+});

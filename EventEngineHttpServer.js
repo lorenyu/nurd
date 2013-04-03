@@ -25,7 +25,7 @@ var Client = function() {
     }
 }();
 
-var EventEngineHttpServer = function(config) {
+var EventEngineHttpServer = function(app) {
     
     // Private properties and methods
 
@@ -160,55 +160,27 @@ var EventEngineHttpServer = function(config) {
         return result;
     }
 
-    var app = express();
-
-    app.configure(function(){
-      app.set('port', process.env.PORT || 8125);
-      app.set('views', __dirname + '/views');
-      app.set('view engine', 'jade');
-      app.use(express.favicon());
-      app.use(express.logger('dev'));
-      // app.use(express.cookieParser());
-      app.use(express.bodyParser());
-      app.use(express.methodOverride());
-      app.use(app.router);
-      app.use(require('less-middleware')({ src: __dirname + '/public' }));
-      app.use(express.static(path.join(__dirname, 'public')));
-    });
-
-    app.configure('development', function(){
-      app.use(express.errorHandler());
-    });
-
-    app.get('/', routes.index);
-    app.get('/jsutil.js', routes.js.jsutil);
-    app.get('/EventEngine.js', routes.js.EventEngine);
-    app.post('/ajax/send', function(req, res) {
-      var eventName = req.body.en
-        , eventData = JSON.parse(req.body.dt);
-      res.json({success:true});
-      EventEngine.fire(eventName, eventData);
-    });
-    app.get('/ajax/recv', function(req, res) {
-      var clientId = req.query.id;
-      if (clientId && clientsById.hasOwnProperty(clientId)) {
-          var client = clientsById[clientId];
-      } else {
-          var client = new Client();
-          numClients += 1;
-          clientsById[client.id] = client;
-      }
-      client.response = res;
-      notifyClientsAsync();
-    });
-
-    var server = http.createServer(app);
-
-
     // Public Properties and Methods
     this.close = function(errno) { server.close(errno); };
-    this.listen = function(port, hostname, callback) {
-      server.listen(port, hostname, callback);
+    this.listen = function(app) {
+      app.post('/ajax/send', function(req, res) {
+        var eventName = req.body.en
+          , eventData = JSON.parse(req.body.dt);
+        res.json({success:true});
+        EventEngine.fire(eventName, eventData);
+      });
+      app.get('/ajax/recv', function(req, res) {
+        var clientId = req.query.id;
+        if (clientId && clientsById.hasOwnProperty(clientId)) {
+            var client = clientsById[clientId];
+        } else {
+            var client = new Client();
+            numClients += 1;
+            clientsById[client.id] = client;
+        }
+        client.response = res;
+        notifyClientsAsync();
+      });
     };
 
     // Constructor
