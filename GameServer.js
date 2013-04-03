@@ -31,48 +31,6 @@ this.Game = function() {
 
         EventEngine.observeAll(proxy(this.onEvent, this));
 
-/*
-        EventEngine.observe('client:registerPlayer', proxy(function(event) {
-            this.registerPlayer(event.data.registerId, event.data.secret);
-        }, this));
-        //EventEngine.observe('client:endGame', proxy(this.endGame, this));
-
-        EventEngine.observe('client:selectCards', proxy(function(event) {
-            var player = this.getPlayer(event.data.playerId);
-            if (player) {
-                player.selectCards(event.data.cards);
-                EventEngine.fire('server:gameUpdated', this);
-            }
-        }, this));
-        EventEngine.observe('client:startGame', proxy(function(event) {
-            var player = this.getPlayer(event.data.playerId);
-            if (player) {
-                this.startGame();
-            }
-        }, this));
-        EventEngine.observe('client:dealMoreCards', proxy(function(event) {
-            var player = this.getPlayer(event.data.playerId);
-            log('dealMoreCards');
-            if (player) {
-                this.dealMoreCards();
-            }
-        }, this));
-        EventEngine.observe('client:leave', proxy(function(event) {
-            this.removePlayer(event.data.playerId);
-            EventEngine.fire('server:gameUpdated', this);
-        }, this));
-        EventEngine.observe('client:stay', proxy(function(event) {
-            var player = this.getPlayer(event.data.playerId);
-            if (player) {
-                var now = (new Date()).getTime();
-                player.lastSeen = now;
-            }
-        }, this));
-        EventEngine.observe('client:changeName', proxy(function(event) {
-            
-        }, this));
-*/
-
 
         this.startGame();
         setInterval(proxy(this._cleanupPlayers, this), Math.floor(playerTimeout / 2)); // TODO: cleanup players
