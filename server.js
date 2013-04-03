@@ -1,22 +1,44 @@
-var util = require('util'),
-    http = require('http'),
-    path = require('path'),
-    EventEngineHttpServer = require('./EventEngineHttpServer').EventEngineHttpServer;
-var Game = require('./GameServer.js').Game;
+var express = require('express')
+  , util = require('util')
+  , _ = require('underscore')
+  , routes = require('./routes')
+  , http = require('http')
+  , path = require('path')
+  , EventEngineHttpServer = require('./EventEngineHttpServer').EventEngineHttpServer
+  , Game = require('./GameServer.js').Game
+  , EventEngine = require('./EventEngine.js').EventEngine;
 
 var log = util.puts;
 
-// change directory to location of server.js (i.e. this file)
-var serverDir = path.dirname(process.argv[1]);
-process.chdir(serverDir);
+var app = express()
+  , eventServer = new EventEngineHttpServer()
+  , game = new Game()
+  , server = http.createServer(app);
 
-var EventEngine = require('./EventEngine.js').EventEngine;
-EventEngine.observeAll(function(event) {
-    //log('server.js:received event:' + JSON.stringify(event));
+app.configure(function(){
+  app.set('port', process.env.PORT || 8125);
+  app.set('views', __dirname + '/views');
+  app.set('view engine', 'jade');
+  app.use(express.favicon());
+  app.use(express.logger('dev'));
+  // app.use(express.cookieParser());
+  app.use(express.bodyParser());
+  app.use(express.methodOverride());
+  app.use(app.router);
+  app.use(require('less-middleware')({ src: __dirname + '/public' }));
+  app.use(express.static(path.join(__dirname, 'public')));
 });
 
-var server = new EventEngineHttpServer();
-var game = new Game();
+app.configure('development', function(){
+  app.use(express.errorHandler());
+});
 
-server.listen(8125, '127.0.0.1');
-util.puts('Server running at http://localhost:8125/');
+app.get('/', routes.index);
+app.get('/jsutil.js', routes.js.jsutil);
+app.get('/EventEngine.js', routes.js.EventEngine);
+
+eventServer.listen(app);
+
+server.listen(app.get('port'), function() {
+  console.log('Server running at http://localhost:' + app.get('port'));
+});
