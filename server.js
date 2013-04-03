@@ -37,6 +37,7 @@ app.configure('development', function(){
 });
 
 app.get('/', routes.index);
+app.get('/game', routes.game);
 app.get('/jsutil.js', routes.js.jsutil);
 app.get('/EventEngine.js', routes.js.EventEngine);
 
