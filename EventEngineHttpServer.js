@@ -1,12 +1,14 @@
 // import libraries
-var fs = require('fs');
-var http = require('http');
-var url = require('url');
-var util = require('util');
-var querystring = require('querystring');
-var EventEngine = require('./EventEngine.js').EventEngine,
-    less = require('less'),
-    path = require('path');
+var fs = require('fs')
+  , express = require('express')
+  , http = require('http')
+  , url = require('url')
+  , util = require('util')
+  , querystring = require('querystring')
+  , routes = require('./routes')
+  , EventEngine = require('./EventEngine.js').EventEngine
+  , less = require('less')
+  , path = require('path');
 
 var log = console.log;
 
@@ -425,61 +427,43 @@ var EventEngineHttpServer = function(config) {
         }
     }
 
-    var server = http.createServer(function(request, response) {
-        var urlInfo = url.parse(request.url, true);
-        var pathname = urlInfo.pathname;
-        var queryParams = urlInfo.query;
+    var app = express();
 
-        if (pathname === '/') { // TODO: Make this a configuration option
-            pathname = '/index.html';
-        }
-
-        log(pathname);
-        var filename = '.' + pathname;
-        if (request.method == 'POST') {
-            getPostData(request, function(queryParams) {
-                request.queryParams = queryParams;
-                defaultHandler(request, response);
-            });
-        } else {
-            fs.stat(filename, function(err, stats) { // TODO: Don't blindly open any file. Just open ones within application root directory
-                if (stats) {
-                    staticHandler(filename)(request, response);
-                } else if (path.extname(filename) === '.css') { // if filename has extension ".less"
-                    var lessFilename = path.join(path.dirname(filename), path.basename(filename, '.css') + '.less');
-                    path.exists(lessFilename, function(exists) {
-                        if (exists) {
-                            fs.readFile(lessFilename, 'utf-8', function (err, data) {
-                                log('reading LESS file');
-                                if (err) {
-                                    log("staticHandler:loadResponseData:Error loading " + filename);
-                                } else {
-                                    less.render(data, function(e, css) {
-                                        headers = {
-                                            'Cache-Control': 'public',
-                                            'Content-Type': 'text/css',
-                                            'Content-Length': css.length
-                                        };
-                                        response.writeHead(200, headers);
-                                        response.end(request.method === "HEAD" ? "" : css);
-                                    });
-                                }
-                            });
-                        } else {
-                            defaultHandler(request, response);
-                        }
-                    });
-                } else {
-                    defaultHandler(request, response);
-                }
-            });
-        }
+    app.configure(function(){
+      app.set('port', process.env.PORT || 8125);
+      app.set('views', __dirname + '/views');
+      app.set('view engine', 'jade');
+      app.use(express.favicon());
+      app.use(express.logger('dev'));
+      // app.use(express.cookieParser());
+      app.use(express.bodyParser());
+      app.use(express.methodOverride());
+      app.use(app.router);
+      app.use(require('less-middleware')({ src: __dirname + '/public' }));
+      app.use(express.static(path.join(__dirname, 'public')));
     });
+
+    app.configure('development', function(){
+      app.use(express.errorHandler());
+    });
+
+    app.get('/', routes.index);
+    app.get('/jsutil.js', routes.js.jsutil);
+    app.get('/EventEngine.js', routes.js.EventEngine);
+    app.get('/EventEngineHttpClient.js', routes.js.EventEngineHttpClient);
+    app.get('/GameClient.js', routes.js.GameClient);
+    app.get('/ChatClient.js', routes.js.ChatClient);
+    app.post('/ajax/send', defaultHandler);
+    app.get('/ajax/recv', defaultHandler);
+
+    var server = http.createServer(app);
 
 
     // Public Properties and Methods
     this.close = function(errno) { server.close(errno); };
-    this.listen = function(port, hostname, callback) { server.listen(port, hostname, callback) };
+    this.listen = function(port, hostname, callback) {
+      server.listen(port, hostname, callback);
+    };
 
     // Constructor
     EventEngine.observeAll(onEvent);
