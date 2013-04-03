@@ -389,37 +389,6 @@ var EventEngineHttpServer = function(config) {
         });
     }
 
-
-    function defaultHandler(request, response) {
-        var urlInfo = url.parse(request.url, true);
-        var pathname = urlInfo.pathname;
-
-        switch (pathname) {
-        case '/ajax/send':
-            var eventName = request.body.en;
-            var eventData = JSON.parse(request.body.dt);
-            log('defaultHandler:ajax/send:' + JSON.stringify(request.body));
-            response.json({success:true});
-            EventEngine.fire(eventName, eventData);
-            break;
-        case '/ajax/recv':
-            var clientId = request.query.id;
-            if (clientId && clientsById.hasOwnProperty(clientId)) {
-                var client = clientsById[clientId];
-            } else {
-                var client = new Client();
-                numClients += 1;
-                clientsById[client.id] = client;
-            }
-            
-            client.response = response;
-            notifyClientsAsync();
-            break;
-        default:
-            textResponse(response, 'Invalid command: ' + pathname);
-        }
-    }
-
     var app = express();
 
     app.configure(function(){
@@ -446,8 +415,24 @@ var EventEngineHttpServer = function(config) {
     app.get('/EventEngineHttpClient.js', routes.js.EventEngineHttpClient);
     app.get('/GameClient.js', routes.js.GameClient);
     app.get('/ChatClient.js', routes.js.ChatClient);
-    app.post('/ajax/send', defaultHandler);
-    app.get('/ajax/recv', defaultHandler);
+    app.post('/ajax/send', function(req, res) {
+      var eventName = req.body.en
+        , eventData = JSON.parse(req.body.dt);
+      res.json({success:true});
+      EventEngine.fire(eventName, eventData);
+    });
+    app.get('/ajax/recv', function(req, res) {
+      var clientId = req.query.id;
+      if (clientId && clientsById.hasOwnProperty(clientId)) {
+          var client = clientsById[clientId];
+      } else {
+          var client = new Client();
+          numClients += 1;
+          clientsById[client.id] = client;
+      }
+      client.response = res;
+      notifyClientsAsync();
+    });
 
     var server = http.createServer(app);
 
