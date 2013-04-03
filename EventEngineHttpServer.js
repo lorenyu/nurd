@@ -183,9 +183,6 @@ var EventEngineHttpServer = function(config) {
     app.get('/', routes.index);
     app.get('/jsutil.js', routes.js.jsutil);
     app.get('/EventEngine.js', routes.js.EventEngine);
-    app.get('/EventEngineHttpClient.js', routes.js.EventEngineHttpClient);
-    app.get('/GameClient.js', routes.js.GameClient);
-    app.get('/ChatClient.js', routes.js.ChatClient);
     app.post('/ajax/send', function(req, res) {
       var eventName = req.body.en
         , eventData = JSON.parse(req.body.dt);
