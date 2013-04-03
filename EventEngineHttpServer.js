@@ -393,24 +393,17 @@ var EventEngineHttpServer = function(config) {
     function defaultHandler(request, response) {
         var urlInfo = url.parse(request.url, true);
         var pathname = urlInfo.pathname;
-        var queryParams;
-        if (request.method == 'GET') {
-            queryParams = urlInfo.query;
-        } else if (request.method == 'POST') {
-            queryParams = request.queryParams; // TODO: clean this up. Shouldn't have to set queryParams property on the request object
-        }
-        queryParams = queryParams || {};
 
         switch (pathname) {
         case '/ajax/send':
-            var eventName = queryParams.en; // use short query params so URL remains short
-            var eventData = JSON.parse(queryParams.dt);
-            log('defaultHandler:ajax/send:' + JSON.stringify(queryParams));
-            jsonResponse(response, {success:true});
+            var eventName = request.body.en;
+            var eventData = JSON.parse(request.body.dt);
+            log('defaultHandler:ajax/send:' + JSON.stringify(request.body));
+            response.json({success:true});
             EventEngine.fire(eventName, eventData);
             break;
         case '/ajax/recv':
-            var clientId = queryParams.id;
+            var clientId = request.query.id;
             if (clientId && clientsById.hasOwnProperty(clientId)) {
                 var client = clientsById[clientId];
             } else {
