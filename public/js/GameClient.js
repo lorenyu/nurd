@@ -1,4 +1,5 @@
-this.GameClient = function(eventEngine) {
+this.GameClient = function(eventEngine, gameId) {
+    this.gameId = gameId;
     this.id = 0;
     this.publicId = 0;
     this.player = null;
@@ -10,13 +11,13 @@ this.GameClient = function(eventEngine) {
         
     function init() {
 
-        eventEngine.observe('server:game:1:playerRegistered', proxy(function(event) {
+        eventEngine.observe('server:game:' + this.gameId + ':playerRegistered', proxy(function(event) {
             this.onPlayerRegistered(event.data.registerId, event.data.encPlayerId, event.data.playerPublicId, event.data.name);
             this.stayIntervalId = setInterval(proxy(this.stay, this), Math.floor(event.data.playerTimeout / 2));
             //log('stayIntervalId = ' + this.stayIntervalId);
         }, this));
 
-        eventEngine.observe('client:game:1:changeName', function(event) {
+        eventEngine.observe('client:game:' + this.gameId + ':changeName', function(event) {
             $('#name-field').val(event.data.name);
             $('#chat .chat-form .sender').val(event.data.name);
         });
@@ -39,7 +40,7 @@ this.GameClient = function(eventEngine) {
     this.register = function(name) {
         _registerId = Crypto.getRandomKey();
         _secret = Crypto.getRandomKey();
-        eventEngine.fire('client:game:1:registerPlayer', {
+        eventEngine.fire('client:game:' + this.gameId + ':registerPlayer', {
             name: name,
             registerId: _registerId,
             secret: _secret
@@ -57,7 +58,7 @@ this.GameClient = function(eventEngine) {
 
             var leave = proxy(function() {
                 if (this.id) {
-                    eventEngine.fire('client:game:1:leave', {
+                    eventEngine.fire('client:game:' + this.gameId + ':leave', {
                         playerId: this.id
                     });
                 }
@@ -72,26 +73,26 @@ this.GameClient = function(eventEngine) {
         var btn = $('#restart-game-btn');
         if (btn.hasClass('selected')) {
             btn.removeClass('selected');
-            eventEngine.fire('client:game:1:cancelRestartGameRequest', {
+            eventEngine.fire('client:game:' + this.gameId + ':cancelRestartGameRequest', {
                 playerId: this.id
             });
         } else {
             btn.addClass('selected');
-            eventEngine.fire('client:game:1:startGame', {
+            eventEngine.fire('client:game:' + this.gameId + ':startGame', {
                 playerId: this.id
             });
         }
     };
 
     this.stay = function() {
-        eventEngine.fire('client:game:1:stay', {
+        eventEngine.fire('client:game:' + this.gameId + ':stay', {
             playerId: this.id
         });
     };
 
     this.changeName = function(name) {
         // TODO: do some client-side validation
-        eventEngine.fire('client:game:1:changeName', {
+        eventEngine.fire('client:game:' + this.gameId + ':changeName', {
             playerId: this.id,
             name: name
         });
@@ -108,7 +109,7 @@ this.GameClient = function(eventEngine) {
 */
 
     this.selectCards = function(cards) {
-        eventEngine.fire('client:game:1:selectCards', {
+        eventEngine.fire('client:game:' + this.gameId + ':selectCards', {
             playerId: this.id,
             cards: cards
         });
@@ -117,22 +118,24 @@ this.GameClient = function(eventEngine) {
     init.apply(this, arguments);
 };
 
-this.Game = function(eventEngine) {
+this.Game = function(eventEngine, id) {
 
     var _numSelectedCards = [],
         jade = require('jade'),
-        client = this.client = new GameClient(eventEngine),
+        client = this.client = new GameClient(eventEngine, id),
         self = this,
         firstUpdate = true;
 
+    this.id = id;
+
     function init() {
         
-        eventEngine.observe('server:game:1:playerNameChanged', function(event) {
+        eventEngine.observe('server:game:' + this.id + ':playerNameChanged', function(event) {
             var playerId = event.data.playerId;
             $('.balloons .balloon[playerid=' + playerId + '] .name').text(event.data.name);
         });
         
-        eventEngine.observe('server:game:1:gameStarted', function(event) {
+        eventEngine.observe('server:game:' + this.id + ':gameStarted', function(event) {
             $('.balloon').css('bottom', '0px');
             $('#chat').chat( 'addMessage', 'TTTRIO', 'Game restarted' );
             
@@ -140,9 +143,9 @@ this.Game = function(eventEngine) {
         });
         
 
-        eventEngine.observe('server:game:1:gameUpdated', this.onGameUpdated);
+        eventEngine.observe('server:game:' + this.id + ':gameUpdated', this.onGameUpdated);
         
-        eventEngine.observe('server:game:1:gameEnded', function(event) {
+        eventEngine.observe('server:game:' + this.id + ':gameEnded', function(event) {
             var overlay = $('.game-end-overlay'),
                 players = event.data.players,
                 numPlayers = players.length;
@@ -165,7 +168,7 @@ this.Game = function(eventEngine) {
             overlay.show();
         });
         
-        eventEngine.observe('server:game:1:playerScored', function(event) {
+        eventEngine.observe('server:game:' + this.id + ':playerScored', function(event) {
             var player = event.data.player,
                 balloon = $('.balloon[playerid=' + player.publicId + ']');
                 
@@ -173,7 +176,7 @@ this.Game = function(eventEngine) {
             $('#chat').chat( 'addMessage', player.name, jadeTemplates.render('cards', { 'className' : 'set', cards : event.data.cards }), { sanitize: false } );
         });
         
-        eventEngine.observe('server:game:1:playerFailedSet', function(event) {
+        eventEngine.observe('server:game:' + this.id + ':playerFailedSet', function(event) {
             var player = event.data.player,
                 balloon = $('.balloon[playerid=' + player.publicId + ']');
                 
@@ -185,12 +188,12 @@ this.Game = function(eventEngine) {
             $(this).parents('.game-end-overlay').hide();
         });
         
-        eventEngine.observe('client:game:1:changeName', function(event) {
+        eventEngine.observe('client:game:' + this.id + ':changeName', function(event) {
             client.register(event.data.name);
             $('.name-form-overlay-container').hide();
         });
         
-        //eventEngine.observe('client:game:1:endGame', proxy(this.endGame, this));
+        //eventEngine.observe('client:game:' + this.id + ':endGame', proxy(this.endGame, this));
     }
     
     this.onGameUpdated = function(event) {

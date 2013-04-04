@@ -28,13 +28,13 @@ var Game = this.Game = function(eventEngine, id) {
 
     function init() {
 
-        this.eventEngine.observe('client:game:1:registerPlayer', _.bind(this.onRegisterPlayer, this));
-        this.eventEngine.observe('client:game:1:selectCards', _.bind(this.onSelectCards, this));
-        this.eventEngine.observe('client:game:1:startGame', _.bind(this.onStartGame, this));
-        this.eventEngine.observe('client:game:1:cancelRestartGameRequest', _.bind(this.onCancelRestartGameRequest, this));
-        this.eventEngine.observe('client:game:1:leave', _.bind(this.onLeave, this));
-        this.eventEngine.observe('client:game:1:stay', _.bind(this.onStay, this));
-        this.eventEngine.observe('client:game:1:changeName', _.bind(this.onChangeName, this));
+        this.eventEngine.observe('client:game:' + this.id + ':registerPlayer', _.bind(this.onRegisterPlayer, this));
+        this.eventEngine.observe('client:game:' + this.id + ':selectCards', _.bind(this.onSelectCards, this));
+        this.eventEngine.observe('client:game:' + this.id + ':startGame', _.bind(this.onStartGame, this));
+        this.eventEngine.observe('client:game:' + this.id + ':cancelRestartGameRequest', _.bind(this.onCancelRestartGameRequest, this));
+        this.eventEngine.observe('client:game:' + this.id + ':leave', _.bind(this.onLeave, this));
+        this.eventEngine.observe('client:game:' + this.id + ':stay', _.bind(this.onStay, this));
+        this.eventEngine.observe('client:game:' + this.id + ':changeName', _.bind(this.onChangeName, this));
 
         this.startGame();
         setInterval(proxy(this._cleanupPlayers, this), Math.floor(playerTimeout / 2)); // TODO: cleanup players
@@ -104,7 +104,7 @@ var Game = this.Game = function(eventEngine, id) {
             }
         }
         if (numPlayers !== this.players.length) { // if a player left players, then notify other players
-            this.eventEngine.fire('server:game:1:gameUpdated', this.gameState());
+            this.eventEngine.fire('server:game:' + this.id + ':gameUpdated', this.gameState());
         }
     };
     
@@ -127,14 +127,14 @@ var Game = this.Game = function(eventEngine, id) {
         player.name = name || player.name;
 
         var encPlayerId = secret + player.getId();
-        this.eventEngine.fire('server:game:1:playerRegistered', {
+        this.eventEngine.fire('server:game:' + this.id + ':playerRegistered', {
             registerId: registerId,
             encPlayerId: encPlayerId,
             playerPublicId: player.publicId,
             playerTimeout: playerTimeout,
             name: player.name
         });
-        this.eventEngine.fire('server:game:1:gameUpdated', this.gameState());
+        this.eventEngine.fire('server:game:' + this.id + ':gameUpdated', this.gameState());
     };
 
     this.addPlayer = function(player) {
@@ -219,7 +219,7 @@ var Game = this.Game = function(eventEngine, id) {
             player.isRequestingGameEnd = false;
             player.isRequestingGameRestart = false;
         }
-        this.eventEngine.fire('server:game:1:gameStarted', this.gameState());
+        this.eventEngine.fire('server:game:' + this.id + ':gameStarted', this.gameState());
     };
 
     this.addCard = function(card) {
@@ -244,7 +244,7 @@ var Game = this.Game = function(eventEngine, id) {
             player = this.players[i];
             player.isRequestingMoreCards = false;
         }
-        this.eventEngine.fire('server:game:1:gameUpdated', this.gameState());
+        this.eventEngine.fire('server:game:' + this.id + ':gameUpdated', this.gameState());
     };
 
     this.hasSet = function() {
@@ -281,13 +281,13 @@ var Game = this.Game = function(eventEngine, id) {
     
     this.endGame = function() {
         this._sortPlayersByScore();
-        this.eventEngine.fire('server:game:1:gameEnded', {
+        this.eventEngine.fire('server:game:' + this.id + ':gameEnded', {
             players: this.players
         });
     };
     
     this.broadcastGameState = function() {
-        this.eventEngine.fire('server:game:1:gameUpdated', this.gameState());
+        this.eventEngine.fire('server:game:' + this.id + ':gameUpdated', this.gameState());
     };
 
     init.apply(this, arguments);
@@ -304,14 +304,14 @@ Game.prototype.onSelectCards = function(event) {
         var success = player.selectCards(cards);
         this._sortPlayersByScore();
         if (success) {
-            this.eventEngine.fire('server:game:1:playerScored', { player: player, cards: event.data.cards });
+            this.eventEngine.fire('server:game:' + this.id + ':playerScored', { player: player, cards: event.data.cards });
             if (player.score >= this.goalScore) {
                 this.endGame();
             }
         } else {
-            this.eventEngine.fire('server:game:1:playerFailedSet', { player: player, cards: event.data.cards });
+            this.eventEngine.fire('server:game:' + this.id + ':playerFailedSet', { player: player, cards: event.data.cards });
         }
-        this.eventEngine.fire('server:game:1:gameUpdated', this.gameState());
+        this.eventEngine.fire('server:game:' + this.id + ':gameUpdated', this.gameState());
     }
 };
 
@@ -337,7 +337,7 @@ Game.prototype.onCancelRestartGameRequest = function(event) {
 
 Game.prototype.onLeave = function(event) {
     this.removePlayer(event.data.playerId);
-    this.eventEngine.fire('server:game:1:gameUpdated', this.gameState());
+    this.eventEngine.fire('server:game:' + this.id + ':gameUpdated', this.gameState());
 };
 
 Game.prototype.onStay = function(event) {
@@ -366,12 +366,12 @@ Game.prototype.onChangeName = function(event) {
         var prevName = player.name;
         player.name = name;
         
-        this.eventEngine.fire('server:game:1:playerNameChanged', {
+        this.eventEngine.fire('server:game:' + this.id + ':playerNameChanged', {
             playerId : player.publicId,
             prevName : prevName,
             name : name
         });
-        this.eventEngine.fire('server:game:1:gameUpdated', this.gameState());
+        this.eventEngine.fire('server:game:' + this.id + ':gameUpdated', this.gameState());
     }
 };
 

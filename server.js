@@ -18,6 +18,9 @@ var app = express()
   , server = http.createServer(app);
 
 Game.create(eventEngine);
+eventEngine.observe('client:game:new', function() {
+  Game.create(eventEngine);
+});
 
 var chatServer = new ChatServer(eventEngine);
 

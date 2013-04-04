@@ -103,7 +103,7 @@ block content
       $('#chat').chat(eventEngine);
       new EventEngineHttpClient(eventEngine, {
         onInitialized: function() {
-          var game = new Game(eventEngine);
+          var game = new Game(eventEngine, gameId);
         }
       });
 
