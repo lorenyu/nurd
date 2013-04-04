@@ -333,22 +333,6 @@ Game.prototype.onCancelRestartGameRequest = function(event) {
     }
 };
 
-Game.prototype.onDealMoreCards = function(event) {
-
-};
-
-Game.prototype.onCancelMoreCardsRequest = function(event) {
-
-};
-
-Game.prototype.onEndGame = function(event) {
-
-};
-
-Game.prototype.onCancelEndGameRequest = function(event) {
-
-};
-
 Game.prototype.onLeave = function(event) {
     this.removePlayer(event.data.playerId);
     EventEngine.fire('server:gameUpdated', this.gameState());
