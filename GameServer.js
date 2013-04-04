@@ -26,58 +26,17 @@ var Game = this.Game = function() {
 
     function init() {
 
-        EventEngine.observeAll(proxy(this.onEvent, this));
         EventEngine.observe('client:registerPlayer', _.bind(this.onRegisterPlayer, this));
         EventEngine.observe('client:selectCards', _.bind(this.onSelectCards, this));
         EventEngine.observe('client:startGame', _.bind(this.onStartGame, this));
         EventEngine.observe('client:cancelRestartGameRequest', _.bind(this.onCancelRestartGameRequest, this));
         EventEngine.observe('client:leave', _.bind(this.onLeave, this));
         EventEngine.observe('client:stay', _.bind(this.onStay, this));
+        EventEngine.observe('client:changeName', _.bind(this.onChangeName, this));
 
         this.startGame();
         setInterval(proxy(this._cleanupPlayers, this), Math.floor(playerTimeout / 2)); // TODO: cleanup players
     }
-
-    this.onEvent = function(event) {
-        if (event.name.indexOf('client:') !== 0) {
-            return;
-        }
-        
-        var player,
-            success;
-
-        switch (event.name) {
-        case 'client:changeName':
-            player = this.getPlayer(event.data.playerId);
-            if (player) {
-                var name = event.data.name;
-                var regex = /^[\w. ]+$/i; // matches any string of alphanumeric or underscore characters
-
-                if (typeof(name) !== 'string') {
-                    break;
-                }
-                if (!name) {
-                    break;
-                }
-                if (!regex.test(name)) {
-                    break;
-                }
-                var prevName = player.name;
-                player.name = name;
-                
-                EventEngine.fire('server:playerNameChanged', {
-                    playerId : player.publicId,
-                    prevName : prevName,
-                    name : name
-                });
-                EventEngine.fire('server:gameUpdated', this.gameState());
-            }
-            break;
-        default:
-            log('unknown command: ' + event.name);
-            break;
-        }
-    };
 
     this.getPlayer = function(playerId) {
         for (var i = 0, n = this.players.length; i < n; i += 1) {
@@ -404,5 +363,28 @@ Game.prototype.onStay = function(event) {
 };
 
 Game.prototype.onChangeName = function(event) {
+    var player = this.getPlayer(event.data.playerId);
+    if (player) {
+        var name = event.data.name;
+        var regex = /^[\w. ]+$/i; // matches any string of alphanumeric or underscore characters
 
+        if (typeof(name) !== 'string') {
+            return;
+        }
+        if (!name) {
+            return;
+        }
+        if (!regex.test(name)) {
+            return;
+        }
+        var prevName = player.name;
+        player.name = name;
+        
+        EventEngine.fire('server:playerNameChanged', {
+            playerId : player.publicId,
+            prevName : prevName,
+            name : name
+        });
+        EventEngine.fire('server:gameUpdated', this.gameState());
+    }
 };
