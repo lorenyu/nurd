@@ -16,7 +16,7 @@ this.GameClient = function() {
             //log('stayIntervalId = ' + this.stayIntervalId);
         }, this));
 
-        EventEngine.observe('client:changeName', function(event) {
+        EventEngine.observe('client:game:1:changeName', function(event) {
             $('#name-field').val(event.data.name);
             $('#chat .chat-form .sender').val(event.data.name);
         });
@@ -39,7 +39,7 @@ this.GameClient = function() {
     this.register = function(name) {
         _registerId = Crypto.getRandomKey();
         _secret = Crypto.getRandomKey();
-        EventEngine.fire('client:registerPlayer', {
+        EventEngine.fire('client:game:1:registerPlayer', {
             name: name,
             registerId: _registerId,
             secret: _secret
@@ -57,7 +57,7 @@ this.GameClient = function() {
 
             var leave = proxy(function() {
                 if (this.id) {
-                    EventEngine.fire('client:leave', {
+                    EventEngine.fire('client:game:1:leave', {
                         playerId: this.id
                     });
                 }
@@ -72,26 +72,26 @@ this.GameClient = function() {
         var btn = $('#restart-game-btn');
         if (btn.hasClass('selected')) {
             btn.removeClass('selected');
-            EventEngine.fire('client:cancelRestartGameRequest', {
+            EventEngine.fire('client:game:1:cancelRestartGameRequest', {
                 playerId: this.id
             });
         } else {
             btn.addClass('selected');
-            EventEngine.fire('client:startGame', {
+            EventEngine.fire('client:game:1:startGame', {
                 playerId: this.id
             });
         }
     };
 
     this.stay = function() {
-        EventEngine.fire('client:stay', {
+        EventEngine.fire('client:game:1:stay', {
             playerId: this.id
         });
     };
 
     this.changeName = function(name) {
         // TODO: do some client-side validation
-        EventEngine.fire('client:changeName', {
+        EventEngine.fire('client:game:1:changeName', {
             playerId: this.id,
             name: name
         });
@@ -108,7 +108,7 @@ this.GameClient = function() {
 */
 
     this.selectCards = function(cards) {
-        EventEngine.fire('client:selectCards', {
+        EventEngine.fire('client:game:1:selectCards', {
             playerId: this.id,
             cards: cards
         });
@@ -190,12 +190,12 @@ this.Game = function() {
 
         $('#chat').chat();
         
-        EventEngine.observe('client:changeName', function(event) {
+        EventEngine.observe('client:game:1:changeName', function(event) {
             client.register(event.data.name);
             $('.name-form-overlay-container').hide();
         });
         
-        //EventEngine.observe('client:endGame', proxy(this.endGame, this));
+        //EventEngine.observe('client:game:1:endGame', proxy(this.endGame, this));
     }
     
     this.onGameUpdated = function(event) {

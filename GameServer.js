@@ -26,13 +26,13 @@ var Game = this.Game = function() {
 
     function init() {
 
-        EventEngine.observe('client:registerPlayer', _.bind(this.onRegisterPlayer, this));
-        EventEngine.observe('client:selectCards', _.bind(this.onSelectCards, this));
-        EventEngine.observe('client:startGame', _.bind(this.onStartGame, this));
-        EventEngine.observe('client:cancelRestartGameRequest', _.bind(this.onCancelRestartGameRequest, this));
-        EventEngine.observe('client:leave', _.bind(this.onLeave, this));
-        EventEngine.observe('client:stay', _.bind(this.onStay, this));
-        EventEngine.observe('client:changeName', _.bind(this.onChangeName, this));
+        EventEngine.observe('client:game:1:registerPlayer', _.bind(this.onRegisterPlayer, this));
+        EventEngine.observe('client:game:1:selectCards', _.bind(this.onSelectCards, this));
+        EventEngine.observe('client:game:1:startGame', _.bind(this.onStartGame, this));
+        EventEngine.observe('client:game:1:cancelRestartGameRequest', _.bind(this.onCancelRestartGameRequest, this));
+        EventEngine.observe('client:game:1:leave', _.bind(this.onLeave, this));
+        EventEngine.observe('client:game:1:stay', _.bind(this.onStay, this));
+        EventEngine.observe('client:game:1:changeName', _.bind(this.onChangeName, this));
 
         this.startGame();
         setInterval(proxy(this._cleanupPlayers, this), Math.floor(playerTimeout / 2)); // TODO: cleanup players
