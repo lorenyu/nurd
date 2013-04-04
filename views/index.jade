@@ -2,4 +2,15 @@ extends layout
 
 block content
   h1 Games
-  
+  button.js-create-game + New Game
+  script
+    $(document).ready(function() {
+      new EventEngineHttpClient({
+        onInitialized: function() {
+          $('.js-create-game').click(function(event) {
+            EventEngine.fire('client:game:new', {});
+          });
+        }
+      });
+    });
+    
