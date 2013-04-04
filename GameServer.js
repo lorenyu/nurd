@@ -31,6 +31,7 @@ var Game = this.Game = function() {
         EventEngine.observe('client:selectCards', _.bind(this.onSelectCards, this));
         EventEngine.observe('client:startGame', _.bind(this.onStartGame, this));
         EventEngine.observe('client:cancelRestartGameRequest', _.bind(this.onCancelRestartGameRequest, this));
+        EventEngine.observe('client:leave', _.bind(this.onLeave, this));
 
         this.startGame();
         setInterval(proxy(this._cleanupPlayers, this), Math.floor(playerTimeout / 2)); // TODO: cleanup players
@@ -45,10 +46,6 @@ var Game = this.Game = function() {
             success;
 
         switch (event.name) {
-        case 'client:leave':
-            this.removePlayer(event.data.playerId);
-            EventEngine.fire('server:gameUpdated', this.gameState());
-            break;
         case 'client:stay':
             player = this.getPlayer(event.data.playerId);
             if (player) {
@@ -400,7 +397,8 @@ Game.prototype.onCancelEndGameRequest = function(event) {
 };
 
 Game.prototype.onLeave = function(event) {
-
+    this.removePlayer(event.data.playerId);
+    EventEngine.fire('server:gameUpdated', this.gameState());
 };
 
 Game.prototype.onStay = function(event) {
