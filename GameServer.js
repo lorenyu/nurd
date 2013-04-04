@@ -110,6 +110,7 @@ var Game = this.Game = function(eventEngine, id) {
     
     this.gameState = function() {
         return {
+            id: this.id,
             cardsInPlay : this.cardsInPlay,
             players : this.players,
             deckSize : deck.numCards(),
@@ -380,7 +381,7 @@ var nextGameId = 1
 Game.create = function(eventEngine) {
     var game = games[nextGameId] = new Game(eventEngine, nextGameId);
     nextGameId++;
-    eventEngine.fire('server:game:new', {game: game});
+    eventEngine.fire('server:game:new', {game: game.gameState()});
     return game;
 };
 Game.get = function(id) {
