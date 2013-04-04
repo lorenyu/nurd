@@ -5,7 +5,7 @@ block content
   button.js-create-game + New Game
   ul.games
     - each game in games
-      a(href='/game/' + game.id) Game #{game.id}
+      include game-link
   script
     $(document).ready(function() {
       var eventEngine = new EventEngine();
@@ -15,7 +15,7 @@ block content
             eventEngine.fire('client:game:new', {});
           });
           eventEngine.observe('server:game:new', function(event) {
-            $('.games').append('<a href="/game/' + event.data.game.id + '">Game ' + event.data.game.id + '</a>')
+            $('.games').append(jadeTemplates.render('game-link', { game: event.data.game }));
           });
         }
       });
