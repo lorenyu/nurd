@@ -26,7 +26,7 @@ var Game = this.Game = function() {
     function init() {
 
         EventEngine.observeAll(proxy(this.onEvent, this));
-
+        EventEngine.observe('client:registerPlayer', _.bind(this.onRegisterPlayer, this));
 
         this.startGame();
         setInterval(proxy(this._cleanupPlayers, this), Math.floor(playerTimeout / 2)); // TODO: cleanup players
@@ -41,9 +41,6 @@ var Game = this.Game = function() {
             success;
 
         switch (event.name) {
-        case 'client:registerPlayer':
-            this.registerPlayer(event.data.registerId, event.data.secret, event.data.name);
-            break;
         case 'client:selectCards':
             player = this.getPlayer(event.data.playerId);
             if (player) {
@@ -412,7 +409,7 @@ var Game = this.Game = function() {
 };
 
 Game.prototype.onRegisterPlayer = function(event) {
-
+    this.registerPlayer(event.data.registerId, event.data.secret, event.data.name);
 };
 
 Game.prototype.onSelectCards = function(event) {
