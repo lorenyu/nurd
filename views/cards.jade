@@ -1,0 +1,10 @@
+ul.cards(class=this['class'] || '')
+  - each card in this.cards
+    - var shape = card.attributes[0];
+    - var color = card.attributes[1];
+    - var shading = card.attributes[2];
+    - var number = card.attributes[3];
+    - var cls = ['card-object', 'shape'+shape, 'color'+color, 'shading'+shading].join(' ')
+    li.card(class=cls, json=JSON.stringify(card))
+      - each i in _.range(number+1)
+        span(class=cls)

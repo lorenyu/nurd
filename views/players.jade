@@ -1,0 +1,5 @@
+ul.players
+  - each player in this.players
+    li.player(class=player.isMe ? 'me' : '', playerid=player.publicId, color=player.color)
+      .background
+      span.name= player.name

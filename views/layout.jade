@@ -1,6 +1,51 @@
-!!! 5
+doctype 5
 html
-   head
-      title Application
-    body
-      block content
+  head
+    title= title
+    meta(name='description', content='Play Tttrio free now. Face off against friends, family, and strangers in a skill-based game of quick perception and pattern matching. Find trios of cards to score points and win.')
+    meta(name='viewport', content='width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;')
+    meta(name='apple-mobile-web-app-capable', content='yes')
+    meta(names='apple-mobile-web-app-status-bar-style', content='black-translucent')
+
+    meta(property='fb:app_id', content='273726349334428')
+    meta(property='og:title', content='Tttrio - a fast real-time multiplayer pattern-matching game to hone your logical skills')
+    meta(property='og:type', content='game')
+    meta(property='og:url', content='http://tttrio.com')
+    meta(property='og:image', content='http://tttrio.com/images/logo.png')
+    meta(property='og:site_name', content='Tttrio')
+    meta(property='og:description', content='Play Tttrio free now. Face off against friends, family, and strangers in a skill-based game of quick perception and pattern matching. Find trios of cards to score points and win.')
+
+    link(rel='icon', href='/images/favicon.png', sizes='64x64')
+    link(rel='apple-touch-icon', href='/images/favicon.png')
+    link(type='text/css', href='/css/jquery-ui-themes/jquery-ui-1.8.16.custom.css', rel='stylesheet')
+    link(type='text/css', rel='stylesheet', href='/css/nurd.css', media='screen, handheld')
+    script(data-main='js/main', src='/js/require.js')
+    script(src='/js/lib/jquery-1.4.3.js')
+    script(src='/js/lib/jquery-ui-1.8.16.custom.min.js')
+    script(src='/js/lib/underscore.js')
+    script(src='/js/lib/backbone.js')
+    script(src='/js/lib/jade.min.js')
+    script(src='/js/lib/modernizr-2.0.6.js')
+    script(src='/js/jsutil.js')
+    script(src='/js/EventEngine.js')
+    script(src='/js/EventEngineHttpClient.js')
+    script(src='/js/models/Game.js')
+    script(src='/js/api-controllers/GameClient.js')
+    script(src='/js/view-controllers/GameView.js')
+    script(src='/js/ChatClient.js')
+
+    script
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-13105739-3']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+  body
+    block content
+  
+  
