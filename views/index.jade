@@ -3,6 +3,9 @@ extends layout
 block content
   h1 Games
   button.js-create-game + New Game
+  ul.games
+    - each game in games
+      a(href='/game/' + game.id) Game #{game.id}
   script
     $(document).ready(function() {
       var eventEngine = new EventEngine();
@@ -10,6 +13,9 @@ block content
         onInitialized: function() {
           $('.js-create-game').click(function(event) {
             eventEngine.fire('client:game:new', {});
+          });
+          eventEngine.observe('server:game:new', function(event) {
+            $('.games').append('<a href="/game/' + event.data.game.id + '">Game ' + event.data.game.id + '</a>')
           });
         }
       });
