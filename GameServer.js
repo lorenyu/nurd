@@ -19,10 +19,11 @@ var Game = this.Game = function(eventEngine) {
     //var playerTimeout = 15*60*1000; // 15 minutes
     var playerTimeout = 20*1000, // shorter timeout (useful for testing/debugging)
         moreCardsRequestThreshold = 2/3, // minimum percentage of card requests required to deal more cards
-        endGameRequestThreshold = 2/3, // minimum percentage of end game requests required to end game
-        goalScore = 10;
+        endGameRequestThreshold = 2/3; // minimum percentage of end game requests required to end game
+        
 
     this.restartGameRequestThreshold = 2/3; // minimum percentage of restart game requests required to restart game
+    this.goalScore = 10;
 
     function init() {
 
@@ -303,7 +304,7 @@ Game.prototype.onSelectCards = function(event) {
         this._sortPlayersByScore();
         if (success) {
             this.eventEngine.fire('server:game:1:playerScored', { player: player, cards: event.data.cards });
-            if (player.score >= goalScore) {
+            if (player.score >= this.goalScore) {
                 this.endGame();
             }
         } else {
