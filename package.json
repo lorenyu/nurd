@@ -22,7 +22,8 @@
 	"dependencies": {
 		"less": "1.x.x",
 		"socket.io": "0.6.x",
-		"underscore": "1.4.x"
+		"underscore": "1.4.x",
+		"jade-browser": "0.0.x"
 	},
 	"devDependencies": {
 		"mocha": "1.8.x",

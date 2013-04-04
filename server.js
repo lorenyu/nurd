@@ -1,6 +1,7 @@
 var express = require('express')
   , util = require('util')
   , _ = require('underscore')
+  , jade_browser = require('jade-browser')
   , routes = require('./routes')
   , http = require('http')
   , path = require('path')
@@ -30,6 +31,10 @@ app.configure(function(){
   app.use(express.methodOverride());
   app.use(app.router);
   app.use(require('less-middleware')({ src: __dirname + '/public' }));
+  app.use(jade_browser('/js/jade-templates', '**', {
+    root: __dirname + '/views',
+    namespace: 'jadeTemplates'
+  }));
   app.use(express.static(path.join(__dirname, 'public')));
 });
 
