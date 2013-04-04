@@ -10,7 +10,7 @@ var Player = require('./Player.js').Player,
 
 var log = util.puts;
 
-this.Game = function() {
+var Game = this.Game = function() {
 
     var deck = new Deck();
     this.cardsInPlay = [];
@@ -409,4 +409,48 @@ this.Game = function() {
     };
 
     init.apply(this, arguments);
+};
+
+Game.prototype.onRegisterPlayer = function(event) {
+
+};
+
+Game.prototype.onSelectCards = function(event) {
+
+};
+
+Game.prototype.onStartGame = function(event) {
+
+};
+
+Game.prototype.onCancelRestartGameRequest = function(event) {
+
+};
+
+Game.prototype.onDealMoreCards = function(event) {
+
+};
+
+Game.prototype.onCancelMoreCardsRequest = function(event) {
+
+};
+
+Game.prototype.onEndGame = function(event) {
+
+};
+
+Game.prototype.onCancelEndGameRequest = function(event) {
+
+};
+
+Game.prototype.onLeave = function(event) {
+
+};
+
+Game.prototype.onStay = function(event) {
+
+};
+
+Game.prototype.onChangeName = function(event) {
+
 };
