@@ -76,7 +76,6 @@ block content
   script
     $(document).ready(function() {
       var jade = require('jade');
-      var pageRenderer = jade.compile($('#page-view').text());
       
       $('.instructions-overlay-container').html(jade.compile($('#instructions-view').text()).call());
       $('.instructions').tabs();
@@ -113,48 +112,3 @@ block content
       });
       
     });
-  script#page-view.jade(type="text/jade")
-    .outer-container
-      .sky
-      .moon
-      .cloud-1
-      .cloud-2
-      .cloud-3
-      #game-container
-        .game-controls
-          button#restart-game-btn Restart Game (
-            span.num-requests 0
-            | )
-          button#draw-cards-btn Restart Game (
-            span.num-requests 0
-            | )
-      .cards-in-play-container
-      form#name-change-form(action="")
-        input#name-field(type="text", name="name", value="")
-        button#change-name-btn(type="submit") Change Name
-      .players-container
-      #chat
-        form.chat-form
-          input.sender(type="hidden")
-          input.msg(type="text", placeholder="Chat Away...")
-        ul.chat-msgs
-      .game-end-overlay-container
-      .game-end-overlay(style="display:none;")
-        ol.winners
-          li.winner.champion
-            span.name
-            |  wins with 
-            span.score
-            |  points!
-          li.winner.runner-up.first
-            span.name
-            |  is runner up with
-            span.score
-            |  points!
-          li.winner.runner-up.second
-            span.name
-            |  is second runner up with 
-            span.score
-            |  points!
-        button.close Close
-      #tmp
