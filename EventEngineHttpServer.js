@@ -1,6 +1,4 @@
 // import libraries
-var EventEngine = require('./EventEngine.js').EventEngine;
-
 var log = console.log;
 
 var Client = function() {
@@ -16,7 +14,7 @@ var Client = function() {
     }
 }();
 
-var EventEngineHttpServer = function(app) {
+var EventEngineHttpServer = function(eventEngine) {
     
     // Private properties and methods
 
@@ -86,7 +84,7 @@ var EventEngineHttpServer = function(app) {
     function onEvent(event) {
         if (event.name.indexOf('http:') === 0) {
             var eventName = event.name.substring('http:'.length); // strip out "http:" prefix from event name
-            EventEngine.fire(eventName, event.data);
+            eventEngine.fire(eventName, event.data);
         } else if (event.name.indexOf('server:') === 0) {
             onServerEvent(event);
         }
@@ -158,7 +156,7 @@ var EventEngineHttpServer = function(app) {
         var eventName = req.body.en
           , eventData = JSON.parse(req.body.dt);
         res.json({success:true});
-        EventEngine.fire(eventName, eventData);
+        eventEngine.fire(eventName, eventData);
       });
       app.get('/ajax/recv', function(req, res) {
         var clientId = req.query.id;
@@ -175,7 +173,7 @@ var EventEngineHttpServer = function(app) {
     };
 
     // Constructor
-    EventEngine.observeAll(onEvent);
+    eventEngine.observeAll(onEvent);
     setInterval(cleanupClients, clientTimeout);
 };
 

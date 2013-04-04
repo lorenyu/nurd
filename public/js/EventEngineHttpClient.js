@@ -15,7 +15,7 @@ if (!this.log) {
   }
 
  */
-var EventEngineHttpClient = function(options) {
+var EventEngineHttpClient = function(eventEngine, options) {
 
     // Private properties and methods
 
@@ -55,7 +55,7 @@ var EventEngineHttpClient = function(options) {
         log(event);
         if (event.name.indexOf('http:') === 0) {
             var eventName = event.name.substring('http:'.length); // strip out "http:" prefix from event name
-            EventEngine.fire(eventName, event.data);
+            eventEngine.fire(eventName, event.data);
         } else if (event.name.indexOf('client:') === 0) {
             notify(event.name, event.data);
         }
@@ -73,7 +73,7 @@ var EventEngineHttpClient = function(options) {
         var events = data.events;
         for (var i = 0, n = events.length; i < n; i += 1) {
             var event = events[i];
-            EventEngine.fire(event.name, event.data);
+            eventEngine.fire(event.name, event.data);
         }
     }
 
@@ -95,7 +95,7 @@ var EventEngineHttpClient = function(options) {
         if (options) {
             onInitialized = options.onInitialized;
         }
-        EventEngine.observeAll(onEvent);
+        eventEngine.observeAll(onEvent);
         listen();
     }
 

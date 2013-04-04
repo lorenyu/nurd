@@ -12,11 +12,12 @@ var express = require('express')
 var log = util.puts;
 
 var app = express()
-  , eventServer = new EventEngineHttpServer()
-  , game = new Game()
+  , eventEngine = new EventEngine()
+  , eventServer = new EventEngineHttpServer(eventEngine)
+  , game = new Game(eventEngine)
   , server = http.createServer(app);
 
-var chatServer = new ChatServer();
+var chatServer = new ChatServer(eventEngine);
 
 app.configure(function(){
   app.set('port', process.env.PORT || 8125);

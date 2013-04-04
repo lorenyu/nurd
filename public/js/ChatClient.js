@@ -12,7 +12,7 @@
     $.fn.chat = function(method) {
         
         var methods = {
-            init : function( options ) {
+            init : function(eventEngine, options) {
                 var self = this;
                 this.find('.chat-form').submit(function() {
                     $this = $(this);
@@ -21,12 +21,12 @@
                     
                     return false;
                 });
-                EventEngine.observe('server:chat:sendMsg', function(event) {
+                eventEngine.observe('server:chat:sendMsg', function(event) {
                     self.chat( 'addMessage', event.data.sender, event.data.msg );
                 });
             },
             sendMessage : function( sender, msg, options ) { 
-                EventEngine.fire('client:chat:sendMsg', {
+                eventEngine.fire('client:chat:sendMsg', {
                     sender: sender,
                     msg: msg
                 });
