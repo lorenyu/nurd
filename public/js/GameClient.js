@@ -10,7 +10,7 @@ this.GameClient = function(eventEngine) {
         
     function init() {
 
-        eventEngine.observe('server:playerRegistered', proxy(function(event) {
+        eventEngine.observe('server:game:1:playerRegistered', proxy(function(event) {
             this.onPlayerRegistered(event.data.registerId, event.data.encPlayerId, event.data.playerPublicId, event.data.name);
             this.stayIntervalId = setInterval(proxy(this.stay, this), Math.floor(event.data.playerTimeout / 2));
             //log('stayIntervalId = ' + this.stayIntervalId);
@@ -130,12 +130,12 @@ this.Game = function(eventEngine) {
 
     function init() {
         
-        eventEngine.observe('server:playerNameChanged', function(event) {
+        eventEngine.observe('server:game:1:playerNameChanged', function(event) {
             var playerId = event.data.playerId;
             $('.balloons .balloon[playerid=' + playerId + '] .name').text(event.data.name);
         });
         
-        eventEngine.observe('server:gameStarted', function(event) {
+        eventEngine.observe('server:game:1:gameStarted', function(event) {
             $('.balloon').css('bottom', '0px');
             $('#chat').chat( 'addMessage', 'TTTRIO', 'Game restarted' );
             
@@ -143,9 +143,9 @@ this.Game = function(eventEngine) {
         });
         
 
-        eventEngine.observe('server:gameUpdated', this.onGameUpdated);
+        eventEngine.observe('server:game:1:gameUpdated', this.onGameUpdated);
         
-        eventEngine.observe('server:gameEnded', function(event) {
+        eventEngine.observe('server:game:1:gameEnded', function(event) {
             var overlay = $('.game-end-overlay'),
                 players = event.data.players,
                 numPlayers = players.length;
@@ -168,7 +168,7 @@ this.Game = function(eventEngine) {
             overlay.show();
         });
         
-        eventEngine.observe('server:playerScored', function(event) {
+        eventEngine.observe('server:game:1:playerScored', function(event) {
             var player = event.data.player,
                 balloon = $('.balloon[playerid=' + player.publicId + ']');
                 
@@ -176,7 +176,7 @@ this.Game = function(eventEngine) {
             $('#chat').chat( 'addMessage', player.name, cardsRenderer.call({ 'class' : 'set', cards : event.data.cards }), { sanitize: false } );
         });
         
-        eventEngine.observe('server:playerFailedSet', function(event) {
+        eventEngine.observe('server:game:1:playerFailedSet', function(event) {
             var player = event.data.player,
                 balloon = $('.balloon[playerid=' + player.publicId + ']');
                 
