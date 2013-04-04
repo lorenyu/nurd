@@ -27,6 +27,7 @@ var Game = this.Game = function() {
 
         EventEngine.observeAll(proxy(this.onEvent, this));
         EventEngine.observe('client:registerPlayer', _.bind(this.onRegisterPlayer, this));
+        EventEngine.observe('client:selectCards', _.bind(this.onSelectCards, this));
 
         this.startGame();
         setInterval(proxy(this._cleanupPlayers, this), Math.floor(playerTimeout / 2)); // TODO: cleanup players
@@ -41,23 +42,6 @@ var Game = this.Game = function() {
             success;
 
         switch (event.name) {
-        case 'client:selectCards':
-            player = this.getPlayer(event.data.playerId);
-            if (player) {
-                var cards = _.map(event.data.cards, Card.createFromJSON);
-                success = player.selectCards(cards);
-                this._sortPlayersByScore();
-                if (success) {
-                    EventEngine.fire('server:playerScored', { player: player, cards: event.data.cards });
-                    if (player.score >= goalScore) {
-                        this.endGame();
-                    }
-                } else {
-                    EventEngine.fire('server:playerFailedSet', { player: player, cards: event.data.cards });
-                }
-                EventEngine.fire('server:gameUpdated', this.gameState());
-            }
-            break;
         case 'client:startGame':
             player = this.getPlayer(event.data.playerId);
             if (player) {
@@ -413,7 +397,21 @@ Game.prototype.onRegisterPlayer = function(event) {
 };
 
 Game.prototype.onSelectCards = function(event) {
-
+    var player = this.getPlayer(event.data.playerId);
+    if (player) {
+        var cards = _.map(event.data.cards, Card.createFromJSON);
+        var success = player.selectCards(cards);
+        this._sortPlayersByScore();
+        if (success) {
+            EventEngine.fire('server:playerScored', { player: player, cards: event.data.cards });
+            if (player.score >= goalScore) {
+                this.endGame();
+            }
+        } else {
+            EventEngine.fire('server:playerFailedSet', { player: player, cards: event.data.cards });
+        }
+        EventEngine.fire('server:gameUpdated', this.gameState());
+    }
 };
 
 Game.prototype.onStartGame = function(event) {
