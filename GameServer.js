@@ -32,6 +32,7 @@ var Game = this.Game = function() {
         EventEngine.observe('client:startGame', _.bind(this.onStartGame, this));
         EventEngine.observe('client:cancelRestartGameRequest', _.bind(this.onCancelRestartGameRequest, this));
         EventEngine.observe('client:leave', _.bind(this.onLeave, this));
+        EventEngine.observe('client:stay', _.bind(this.onStay, this));
 
         this.startGame();
         setInterval(proxy(this._cleanupPlayers, this), Math.floor(playerTimeout / 2)); // TODO: cleanup players
@@ -46,13 +47,6 @@ var Game = this.Game = function() {
             success;
 
         switch (event.name) {
-        case 'client:stay':
-            player = this.getPlayer(event.data.playerId);
-            if (player) {
-                var now = (new Date()).getTime();
-                player.lastSeen = now;
-            }
-            break;
         case 'client:changeName':
             player = this.getPlayer(event.data.playerId);
             if (player) {
@@ -402,7 +396,11 @@ Game.prototype.onLeave = function(event) {
 };
 
 Game.prototype.onStay = function(event) {
-
+    var player = this.getPlayer(event.data.playerId);
+    if (player) {
+        var now = (new Date()).getTime();
+        player.lastSeen = now;
+    }
 };
 
 Game.prototype.onChangeName = function(event) {
