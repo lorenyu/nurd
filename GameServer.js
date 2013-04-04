@@ -45,42 +45,6 @@ var Game = this.Game = function() {
             success;
 
         switch (event.name) {
-        case 'client:dealMoreCards':
-            player = this.getPlayer(event.data.playerId);
-            if (player) {
-                player.isRequestingMoreCards = true;
-                if (this.numMoreCardsRequests() >= moreCardsRequestThreshold * this.players.length) {
-                    this.dealMoreCards();
-                } else {
-                    this.broadcastGameState();
-                }
-            }
-            break;
-        case 'client:cancelMoreCardsRequest':
-            player = this.getPlayer(event.data.playerId);
-            if (player) {
-                player.isRequestingMoreCards = false;
-                this.broadcastGameState();
-            }
-            break;
-        case 'client:endGame':
-            player = this.getPlayer(event.data.playerId);
-            if (player) {
-                player.isRequestingGameEnd = true;
-                if (this.numEndGameRequests() >= endGameRequestThreshold * this.players.length) {
-                    this.endGame();
-                } else {
-                    this.broadcastGameState();
-                }
-            }
-            break;
-        case 'client:cancelEndGameRequest':
-            player = this.getPlayer(event.data.playerId);
-            if (player) {
-                player.isRequestingGameEnd = false;
-                this.broadcastGameState();
-            }
-            break;
         case 'client:leave':
             this.removePlayer(event.data.playerId);
             EventEngine.fire('server:gameUpdated', this.gameState());
