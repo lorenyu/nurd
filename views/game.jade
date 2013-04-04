@@ -74,4 +74,87 @@ block content
         button#change-name-btn(type="submit") Enter
   .instructions-overlay-container(title="How to Play")
   script
-    alert('Hello');
+    $(document).ready(function() {
+      var jade = require('jade');
+      var pageRenderer = jade.compile($('#page-view').text());
+      
+      $('.instructions-overlay-container').html(jade.compile($('#instructions-view').text()).call());
+      $('.instructions').tabs();
+      $("#instructions-rules").accordion({ animated: false, header: "h3" });
+      $("#instructions-game-controls").accordion({ animated: false, autoHeight: false, header: "h3" });
+      $('.instructions-overlay-container').dialog({
+          autoOpen: false,
+          draggable: false,
+          resizable: false,
+          position: ['center', 'top'],
+          width: '100%',
+          buttons: {
+              'Close': function() {
+                  $(this).dialog('close');
+              }
+          }
+      });
+      $('.how-to-play-btn').click(function() {
+          $('.instructions-overlay-container').dialog('open');
+      });
+
+      var gameId = #{game.id};
+
+      var eventEngine = new EventEngine();
+      $('#chat').chat(eventEngine);
+      new EventEngineHttpClient(eventEngine, {
+        onInitialized: function() {
+          var game = new Game(eventEngine);
+        }
+      });
+
+      eventEngine.observeAll(function(event) {
+        log('received event:' + event.name + ', data=' + JSON.stringify(event.data));
+      });
+      
+    });
+  script#page-view.jade(type="text/jade")
+    .outer-container
+      .sky
+      .moon
+      .cloud-1
+      .cloud-2
+      .cloud-3
+      #game-container
+        .game-controls
+          button#restart-game-btn Restart Game (
+            span.num-requests 0
+            | )
+          button#draw-cards-btn Restart Game (
+            span.num-requests 0
+            | )
+      .cards-in-play-container
+      form#name-change-form(action="")
+        input#name-field(type="text", name="name", value="")
+        button#change-name-btn(type="submit") Change Name
+      .players-container
+      #chat
+        form.chat-form
+          input.sender(type="hidden")
+          input.msg(type="text", placeholder="Chat Away...")
+        ul.chat-msgs
+      .game-end-overlay-container
+      .game-end-overlay(style="display:none;")
+        ol.winners
+          li.winner.champion
+            span.name
+            |  wins with 
+            span.score
+            |  points!
+          li.winner.runner-up.first
+            span.name
+            |  is runner up with
+            span.score
+            |  points!
+          li.winner.runner-up.second
+            span.name
+            |  is second runner up with 
+            span.score
+            |  points!
+        button.close Close
+      #tmp

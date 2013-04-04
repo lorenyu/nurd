@@ -123,9 +123,6 @@ this.Game = function(eventEngine) {
         jade = require('jade'),
         client = this.client = new GameClient(eventEngine),
         self = this,
-        cardsRenderer = jade.compile($('#cards-view').text()),
-        playersRenderer = jade.compile($('#players-view').text()),
-        balloonRenderer = jade.compile($('#balloon-view').text()),
         firstUpdate = true;
 
     function init() {
@@ -173,7 +170,7 @@ this.Game = function(eventEngine) {
                 balloon = $('.balloon[playerid=' + player.publicId + ']');
                 
             balloon.css('bottom', (player.score * 34) + 'px'); // 34px = (400px - 60px) / 10 = (height of balloons area - height of balloon) / (number of points)
-            $('#chat').chat( 'addMessage', player.name, cardsRenderer.call({ 'class' : 'set', cards : event.data.cards }), { sanitize: false } );
+            $('#chat').chat( 'addMessage', player.name, jadeTemplates.render('cards', { 'className' : 'set', cards : event.data.cards }), { sanitize: false } );
         });
         
         eventEngine.observe('server:game:1:playerFailedSet', function(event) {
@@ -181,7 +178,7 @@ this.Game = function(eventEngine) {
                 balloon = $('.balloon[playerid=' + player.publicId + ']');
                 
             balloon.css('bottom', (player.score * 34) + 'px'); // 34px = (400px - 60px) / 10 = (height of balloons area - height of balloon) / (number of points)
-            $('#chat').chat( 'addMessage', player.name, cardsRenderer.call({ 'class' : 'false-set', cards : event.data.cards }), { sanitize: false } );
+            $('#chat').chat( 'addMessage', player.name, jadeTemplates.render('cards', { 'className' : 'false-set', cards : event.data.cards }), { sanitize: false } );
         });
         
         $('.game-end-overlay .close').click(function(event) {
@@ -225,11 +222,11 @@ this.Game = function(eventEngine) {
         });
         _.each(newPlayerIds, function(playerId) {
             var player = _.detect(players, function(player) { return player.publicId == playerId; });
-            $('.balloons').append(balloonRenderer.call(player));
+            $('.balloons').append(jadeTemplates.render('balloon', player));
         });
         
-        $('.players-container').html(playersRenderer.call({ players: players }));
-        $('.cards-in-play').html(cardsRenderer.call({ cards: cards }));
+        $('.players-container').html(jadeTemplates.render('players', { players: players }));
+        $('.cards-in-play').html(jadeTemplates.render('cards', { cards: cards }));
 
         if (deckSize > 0) {
             $('#draw-cards-btn').show();

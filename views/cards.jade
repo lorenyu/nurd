@@ -1,5 +1,6 @@
-ul.cards(class=this['class'] || '')
-  - each card in this.cards
+- var className = className || ''
+ul.cards(class=className)
+  - each card in cards
     - var shape = card.attributes[0];
     - var color = card.attributes[1];
     - var shading = card.attributes[2];

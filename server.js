@@ -15,8 +15,9 @@ var log = util.puts;
 var app = express()
   , eventEngine = new EventEngine()
   , eventServer = new EventEngineHttpServer(eventEngine)
-  , game = new Game(eventEngine)
   , server = http.createServer(app);
+
+Game.create(eventEngine);
 
 var chatServer = new ChatServer(eventEngine);
 
@@ -43,7 +44,8 @@ app.configure('development', function(){
 });
 
 app.get('/', routes.index);
-app.get('/game', routes.game);
+app.get('/game', routes.masterGame);
+app.get('/game/:gameId', routes.game);
 app.get('/jsutil.js', routes.js.jsutil);
 app.get('/EventEngine.js', routes.js.EventEngine);
 
