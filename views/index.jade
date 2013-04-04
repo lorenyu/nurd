@@ -5,10 +5,11 @@ block content
   button.js-create-game + New Game
   script
     $(document).ready(function() {
-      new EventEngineHttpClient({
+      var eventEngine = window.eventEngine = new EventEngine();
+      new EventEngineHttpClient(eventEngine, {
         onInitialized: function() {
           $('.js-create-game').click(function(event) {
-            EventEngine.fire('client:game:new', {});
+            eventEngine.fire('client:game:new', {});
           });
         }
       });
