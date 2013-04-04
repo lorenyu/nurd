@@ -55,16 +55,19 @@
       $('.how-to-play-btn').click(function() {
           $('.instructions-overlay-container').dialog('open');
       });
-      
-    new EventEngineHttpClient({
+
+    var eventEngine = new EventEngine();
+    $('#chat').chat(eventEngine);
+    new EventEngineHttpClient(eventEngine, {
       onInitialized: function() {
-        var game = new Game();
+        var game = new Game(eventEngine);
       }
     });
+
+    eventEngine.observeAll(function(event) {
+      log('received event:' + event.name + ', data=' + JSON.stringify(event.data));
+    });
     
-  });
-  EventEngine.observeAll(function(event) {
-    log('received event:' + event.name + ', data=' + JSON.stringify(event.data));
   });
   </script>
   

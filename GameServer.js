@@ -1,5 +1,4 @@
 var util = require('util');
-var EventEngine = require('./EventEngine.js').EventEngine;
 var proxy = require('./jsutil.js').proxy;
 
 var Player = require('./Player.js').Player,
@@ -10,11 +9,12 @@ var Player = require('./Player.js').Player,
 
 var log = util.puts;
 
-var Game = this.Game = function() {
+var Game = this.Game = function(eventEngine) {
 
     var deck = new Deck();
     this.cardsInPlay = [];
     this.players = [];
+    this.eventEngine = eventEngine;
 
     //var playerTimeout = 15*60*1000; // 15 minutes
     var playerTimeout = 20*1000, // shorter timeout (useful for testing/debugging)
@@ -26,13 +26,13 @@ var Game = this.Game = function() {
 
     function init() {
 
-        EventEngine.observe('client:game:1:registerPlayer', _.bind(this.onRegisterPlayer, this));
-        EventEngine.observe('client:game:1:selectCards', _.bind(this.onSelectCards, this));
-        EventEngine.observe('client:game:1:startGame', _.bind(this.onStartGame, this));
-        EventEngine.observe('client:game:1:cancelRestartGameRequest', _.bind(this.onCancelRestartGameRequest, this));
-        EventEngine.observe('client:game:1:leave', _.bind(this.onLeave, this));
-        EventEngine.observe('client:game:1:stay', _.bind(this.onStay, this));
-        EventEngine.observe('client:game:1:changeName', _.bind(this.onChangeName, this));
+        this.eventEngine.observe('client:game:1:registerPlayer', _.bind(this.onRegisterPlayer, this));
+        this.eventEngine.observe('client:game:1:selectCards', _.bind(this.onSelectCards, this));
+        this.eventEngine.observe('client:game:1:startGame', _.bind(this.onStartGame, this));
+        this.eventEngine.observe('client:game:1:cancelRestartGameRequest', _.bind(this.onCancelRestartGameRequest, this));
+        this.eventEngine.observe('client:game:1:leave', _.bind(this.onLeave, this));
+        this.eventEngine.observe('client:game:1:stay', _.bind(this.onStay, this));
+        this.eventEngine.observe('client:game:1:changeName', _.bind(this.onChangeName, this));
 
         this.startGame();
         setInterval(proxy(this._cleanupPlayers, this), Math.floor(playerTimeout / 2)); // TODO: cleanup players
@@ -102,7 +102,7 @@ var Game = this.Game = function() {
             }
         }
         if (numPlayers !== this.players.length) { // if a player left players, then notify other players
-            EventEngine.fire('server:gameUpdated', this.gameState());
+            this.eventEngine.fire('server:gameUpdated', this.gameState());
         }
     };
     
@@ -125,14 +125,14 @@ var Game = this.Game = function() {
         player.name = name || player.name;
 
         var encPlayerId = secret + player.getId();
-        EventEngine.fire('server:playerRegistered', {
+        this.eventEngine.fire('server:playerRegistered', {
             registerId: registerId,
             encPlayerId: encPlayerId,
             playerPublicId: player.publicId,
             playerTimeout: playerTimeout,
             name: player.name
         });
-        EventEngine.fire('server:gameUpdated', this.gameState());
+        this.eventEngine.fire('server:gameUpdated', this.gameState());
     };
 
     this.addPlayer = function(player) {
@@ -217,7 +217,7 @@ var Game = this.Game = function() {
             player.isRequestingGameEnd = false;
             player.isRequestingGameRestart = false;
         }
-        EventEngine.fire('server:gameStarted', this.gameState());
+        this.eventEngine.fire('server:gameStarted', this.gameState());
     };
 
     this.addCard = function(card) {
@@ -242,7 +242,7 @@ var Game = this.Game = function() {
             player = this.players[i];
             player.isRequestingMoreCards = false;
         }
-        EventEngine.fire('server:gameUpdated', this.gameState());
+        this.eventEngine.fire('server:gameUpdated', this.gameState());
     };
 
     this.hasSet = function() {
@@ -279,13 +279,13 @@ var Game = this.Game = function() {
     
     this.endGame = function() {
         this._sortPlayersByScore();
-        EventEngine.fire('server:gameEnded', {
+        this.eventEngine.fire('server:gameEnded', {
             players: this.players
         });
     };
     
     this.broadcastGameState = function() {
-        EventEngine.fire('server:gameUpdated', this.gameState());
+        this.eventEngine.fire('server:gameUpdated', this.gameState());
     };
 
     init.apply(this, arguments);
@@ -302,14 +302,14 @@ Game.prototype.onSelectCards = function(event) {
         var success = player.selectCards(cards);
         this._sortPlayersByScore();
         if (success) {
-            EventEngine.fire('server:playerScored', { player: player, cards: event.data.cards });
+            this.eventEngine.fire('server:playerScored', { player: player, cards: event.data.cards });
             if (player.score >= goalScore) {
                 this.endGame();
             }
         } else {
-            EventEngine.fire('server:playerFailedSet', { player: player, cards: event.data.cards });
+            this.eventEngine.fire('server:playerFailedSet', { player: player, cards: event.data.cards });
         }
-        EventEngine.fire('server:gameUpdated', this.gameState());
+        this.eventEngine.fire('server:gameUpdated', this.gameState());
     }
 };
 
@@ -335,7 +335,7 @@ Game.prototype.onCancelRestartGameRequest = function(event) {
 
 Game.prototype.onLeave = function(event) {
     this.removePlayer(event.data.playerId);
-    EventEngine.fire('server:gameUpdated', this.gameState());
+    this.eventEngine.fire('server:gameUpdated', this.gameState());
 };
 
 Game.prototype.onStay = function(event) {
@@ -364,11 +364,11 @@ Game.prototype.onChangeName = function(event) {
         var prevName = player.name;
         player.name = name;
         
-        EventEngine.fire('server:playerNameChanged', {
+        this.eventEngine.fire('server:playerNameChanged', {
             playerId : player.publicId,
             prevName : prevName,
             name : name
         });
-        EventEngine.fire('server:gameUpdated', this.gameState());
+        this.eventEngine.fire('server:gameUpdated', this.gameState());
     }
 };
