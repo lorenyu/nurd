@@ -9,9 +9,10 @@ var Player = require('./Player.js').Player,
 
 var log = util.puts;
 
-var Game = this.Game = function(eventEngine) {
+var Game = this.Game = function(eventEngine, id) {
 
     var deck = new Deck();
+    this.id = id;
     this.cardsInPlay = [];
     this.players = [];
     this.eventEngine = eventEngine;
@@ -372,4 +373,15 @@ Game.prototype.onChangeName = function(event) {
         });
         this.eventEngine.fire('server:game:1:gameUpdated', this.gameState());
     }
+};
+
+var nextGameId = 1
+  , games = {};
+Game.create = function(eventEngine) {
+    var game = games[nextGameId] = new Game(eventEngine, nextGameId);
+    nextGameId++;
+    return game;
+};
+Game.get = function(id) {
+    return games[id];
 };
