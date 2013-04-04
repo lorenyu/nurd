@@ -19,15 +19,18 @@ var Game = this.Game = function() {
     //var playerTimeout = 15*60*1000; // 15 minutes
     var playerTimeout = 20*1000, // shorter timeout (useful for testing/debugging)
         moreCardsRequestThreshold = 2/3, // minimum percentage of card requests required to deal more cards
-        restartGameRequestThreshold = 2/3, // minimum percentage of restart game requests required to restart game
         endGameRequestThreshold = 2/3, // minimum percentage of end game requests required to end game
         goalScore = 10;
+
+    this.restartGameRequestThreshold = 2/3; // minimum percentage of restart game requests required to restart game
 
     function init() {
 
         EventEngine.observeAll(proxy(this.onEvent, this));
         EventEngine.observe('client:registerPlayer', _.bind(this.onRegisterPlayer, this));
         EventEngine.observe('client:selectCards', _.bind(this.onSelectCards, this));
+        EventEngine.observe('client:startGame', _.bind(this.onStartGame, this));
+        EventEngine.observe('client:cancelRestartGameRequest', _.bind(this.onCancelRestartGameRequest, this));
 
         this.startGame();
         setInterval(proxy(this._cleanupPlayers, this), Math.floor(playerTimeout / 2)); // TODO: cleanup players
@@ -42,24 +45,6 @@ var Game = this.Game = function() {
             success;
 
         switch (event.name) {
-        case 'client:startGame':
-            player = this.getPlayer(event.data.playerId);
-            if (player) {
-                player.isRequestingGameRestart = true;
-                if (this.numRestartGameRequests() >= restartGameRequestThreshold * this.players.length) {
-                    this.startGame();
-                } else {
-                    this.broadcastGameState();
-                }
-            }
-            break;
-        case 'client:cancelRestartGameRequest':
-            player = this.getPlayer(event.data.playerId);
-            if (player) {
-                player.isRequestingGameRestart = false;
-                this.broadcastGameState();
-            }
-            break;
         case 'client:dealMoreCards':
             player = this.getPlayer(event.data.playerId);
             if (player) {
@@ -415,11 +400,23 @@ Game.prototype.onSelectCards = function(event) {
 };
 
 Game.prototype.onStartGame = function(event) {
-
+    var player = this.getPlayer(event.data.playerId);
+    if (player) {
+        player.isRequestingGameRestart = true;
+        if (this.numRestartGameRequests() >= this.restartGameRequestThreshold * this.players.length) {
+            this.startGame();
+        } else {
+            this.broadcastGameState();
+        }
+    }
 };
 
 Game.prototype.onCancelRestartGameRequest = function(event) {
-
+    var player = this.getPlayer(event.data.playerId);
+    if (player) {
+        player.isRequestingGameRestart = false;
+        this.broadcastGameState();
+    }
 };
 
 Game.prototype.onDealMoreCards = function(event) {
