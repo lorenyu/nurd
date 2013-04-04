@@ -1,0 +1,77 @@
+extends layout
+
+block content
+  #fb-root
+  script
+    // Googple Plus One
+    (function() { var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true; po.src = 'https://apis.google.com/js/plusone.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s); })();
+    // Facebook Like
+    (function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0]; if (d.getElementById(id)) {return;} js = d.createElement(s); js.id = id; js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=273726349334428"; fjs.parentNode.insertBefore(js, fjs); }(document, 'script', 'facebook-jssdk'));
+    // Twitter Share Button
+    (function() { var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = '//platform.twitter.com/widgets.js'; var s0 = document.getElementsByTagName('script')[0]; s0.parentNode.insertBefore(s, s0); })();
+  header
+    h1
+      img(src="/images/logo.png", alt="Tttrio - A fast real-time multiplayer pattern-matching game to hone your logical skills" )
+    h2 Game #{game.id}
+  nav
+    div
+      button(class="how-to-play-btn") How to Play
+  .background-container
+    .sky
+    .moon
+    .cloud-1
+    .cloud-2
+    .cloud-3
+    .outer-container
+      article
+        .balloons
+        #game-container
+          .cards-in-play
+          .players-container
+        #chat
+          form.chat-form
+            input.sender(type="hidden")
+            label Chat: 
+            input.msg(type="text", placeholder="Start typing here...")
+          ul.chat-msgs
+        .share-widgets
+          .share-widget.fb-like-container
+            .fb-like(data-send="true", data-width="300", data-show-faces="true")
+          .share-widget.g-plusone-container
+            .g-plusone(data-annotation="inline", data-width="300")
+          .share-widget.twitter-share-button-container
+            a(href="https://twitter.com/share", class="twitter-share-button", data-count="horizontal") Tweet
+        footer Made by
+          a(href="http://www.lorenyu.com", target="_blank") Loren Yu
+  .game-end-overlay-container
+    .game-end-overlay(style="display:none;" )
+      ol(class="winners")
+        li.winner.champion
+          span.name
+          | wins with
+          span.score
+          | points!
+        li.winner.runner-up.first
+          span.name
+          | is runner up with
+          span(class="score")
+          | points!
+        li.winner.runner-up.second
+          span(class="name")
+          | is second runner up with
+          span(class="score")
+          | points!
+      button(class="close") Close
+  .name-form-overlay-container
+    .name-form-overlay
+      h3
+        img(src="/images/logo.png", alt="Tttrio - A fast real-time multiplayer pattern-matching game to hone your logical skills")
+      h4 A fast real-time multiplayer pattern-matching game to hone your logical skills
+      form(id="name-change-form", action="" )
+        label(for="name-field") Name
+        input(type="text", id="name-field", name="name", value="", placeholder="Enter Name" )
+        br
+        button#change-name-btn(type="submit") Enter
+  .instructions-overlay-container(title="How to Play")
+  script
+    alert('Hello');

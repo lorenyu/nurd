@@ -6,6 +6,7 @@ var express = require('express')
   , path = require('path')
   , EventEngineHttpServer = require('./EventEngineHttpServer').EventEngineHttpServer
   , Game = require('./GameServer.js').Game
+  , ChatServer = require('./ChatServer.js').ChatServer
   , EventEngine = require('./EventEngine.js').EventEngine;
 
 var log = util.puts;
@@ -14,6 +15,8 @@ var app = express()
   , eventServer = new EventEngineHttpServer()
   , game = new Game()
   , server = http.createServer(app);
+
+var chatServer = new ChatServer();
 
 app.configure(function(){
   app.set('port', process.env.PORT || 8125);
@@ -34,6 +37,7 @@ app.configure('development', function(){
 });
 
 app.get('/', routes.index);
+app.get('/game', routes.game);
 app.get('/jsutil.js', routes.js.jsutil);
 app.get('/EventEngine.js', routes.js.EventEngine);
 

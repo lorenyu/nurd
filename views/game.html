@@ -1,0 +1,496 @@
+<html>
+<head>
+    <title>Tttrio - a fast real-time multiplayer pattern-matching game to hone your logical skills</title>
+    <meta name="description" content="Play Tttrio free now. Face off against friends, family, and strangers in a skill-based game of quick perception and pattern matching. Find trios of cards to score points and win.">
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta names="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    
+    <meta property="fb:app_id" content="273726349334428" />
+    <meta property="og:title" content="Tttrio - a fast real-time multiplayer pattern-matching game to hone your logical skills"/>
+    <meta property="og:type" content="game"/>
+    <meta property="og:url" content="http://tttrio.com"/>
+    <meta property="og:image" content="http://tttrio.com/images/logo.png"/>
+    <meta property="og:site_name" content="Tttrio"/>
+    <meta property="og:description" content="Play Tttrio free now. Face off against friends, family, and strangers in a skill-based game of quick perception and pattern matching. Find trios of cards to score points and win."/>
+    
+    <link rel="icon" href="/images/favicon.png" sizes="64x64">
+    <link rel="apple-touch-icon" href="/images/favicon.png"/>
+    <link type="text/css" href="/css/jquery-ui-themes/jquery-ui-1.8.16.custom.css" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="/css/animations.css" media="screen, handheld" >
+    <link type="text/css" rel="stylesheet" href="/css/nurd.css" media="screen, handheld" >
+    <!--link type="text/css" rel="stylesheet" href="/css/handheld.css" media="handheld" -->
+    <script type="text/javascript" src="/js/lib/jquery-1.4.3.js" ></script>
+    <script type="text/javascript" src="/js/lib/jquery-ui-1.8.16.custom.min.js"></script>
+  <script type="text/javascript" src="/js/lib/underscore.js" ></script>
+  <script type="text/javascript" src="/js/lib/jade.min.js" ></script>
+  <script type="text/javascript" src="/js/lib/modernizr-2.0.6.js"></script>
+  <script type="text/javascript" src="jsutil.js" ></script>
+  <script type="text/javascript" src="EventEngine.js" ></script>
+  <script type="text/javascript" src="/js/EventEngineHttpClient.js" ></script>
+  <script type="text/javascript" src="/js/GameClient.js" ></script>
+  <script type="text/javascript" src="/js/ChatClient.js" ></script>
+  <script type="text/javascript">
+
+  $(document).ready(function() {
+      var jade = require('jade');
+      var pageRenderer = jade.compile($('#page-view').text());
+      
+      $('.instructions-overlay-container').html(jade.compile($('#instructions-view').text()).call());
+      $('.instructions').tabs();
+      $("#instructions-rules").accordion({ animated: false, header: "h3" });
+      $("#instructions-game-controls").accordion({ animated: false, autoHeight: false, header: "h3" });
+      $('.instructions-overlay-container').dialog({
+          autoOpen: false,
+          draggable: false,
+          resizable: false,
+          position: ['center', 'top'],
+          width: '100%',
+          buttons: {
+              'Close': function() {
+                  $(this).dialog('close');
+              }
+          }
+      });
+      $('.how-to-play-btn').click(function() {
+          $('.instructions-overlay-container').dialog('open');
+      });
+      
+    new EventEngineHttpClient({
+      onInitialized: function() {
+        var game = new Game();
+      }
+    });
+    
+  });
+  EventEngine.observeAll(function(event) {
+    log('received event:' + event.name + ', data=' + JSON.stringify(event.data));
+  });
+  </script>
+  
+<script id="page-view" class="jade" type="text/jade">
+.outer-container
+    .sky
+    .moon
+    .cloud-1
+    .cloud-2
+    .cloud-3
+    #game-container
+        .game-controls
+            button#restart-game-btn Restart Game (
+                span.num-requests 0
+                | )
+            button#draw-cards-btn Restart Game (
+                span.num-requests 0
+                | )
+    .cards-in-play-container
+    form#name-change-form(action="")
+        input#name-field(type="text", name="name", value="")
+        button#change-name-btn(type="submit") Change Name
+    .players-container
+    #chat
+        form.chat-form
+            input.sender(type="hidden")
+            input.msg(type="text", placeholder="Chat Away...")
+        ul.chat-msgs
+    .game-end-overlay-container
+    .game-end-overlay(style="display:none;")
+        ol.winners
+            li.winner.champion
+                span.name
+                |  wins with 
+                span.score
+                |  points!
+            li.winner.runner-up.first
+                span.name
+                |  is runner up with
+                span.score
+                |  points!
+            li.winner.runner-up.second
+                span.name
+                |  is second runner up with 
+                span.score
+                |  points!
+        button.close Close
+    #tmp
+</script>
+
+<script id="cards-view" class="jade" type="text/jade">
+ul.cards(class=this['class'] || '')
+    - each card in this.cards
+        - var shape = card.attributes[0];
+        - var color = card.attributes[1];
+        - var shading = card.attributes[2];
+        - var number = card.attributes[3];
+        - var cls = ['card-object', 'shape'+shape, 'color'+color, 'shading'+shading].join(' ')
+        li.card(class=cls, json=JSON.stringify(card))
+            - each i in _.range(number+1)
+                span(class=cls)
+</script>
+
+<script id="players-view" class="jade" type="text/jade">
+ul.players
+    - each player in this.players
+        li.player(class=player.isMe ? 'me' : '', playerid=player.publicId, color=player.color)
+            .background
+            span.name= player.name
+</script>
+
+<script id="balloon-view" class="jade" type="text/jade">
+.balloon(playerid=this.publicId, score=this.score, color=this.color)
+    .background
+    .name= this.name
+</script>
+
+<script id="instructions-view" class="jade" type="text/jade">
+.instructions
+    ul.menu
+        li.menu-item
+            a(href="#instructions-rules") Rules
+        li.menu-item
+            a(href="#instructions-game-controls") Game Controls
+    section#instructions-rules.rules
+        h2 Rules
+        h3 Color
+        .color-rules
+            .trio
+                .correct
+                .card.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+                .card.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+                .card.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+            .trio
+                .correct
+                .card.card-object.shape0.color1.shading2
+                    span.card-object.shape0.color1.shading2
+                .card.card-object.shape0.color1.shading2
+                    span.card-object.shape0.color1.shading2
+                .card.card-object.shape0.color1.shading2
+                    span.card-object.shape0.color1.shading2
+            .trio
+                .correct
+                .card.card-object.shape0.color2.shading2
+                    span.card-object.shape0.color2.shading2
+                .card.card-object.shape0.color2.shading2
+                    span.card-object.shape0.color2.shading2
+                .card.card-object.shape0.color2.shading2
+                    span.card-object.shape0.color2.shading2
+            .trio
+                .correct
+                .card.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+                .card.card-object.shape0.color1.shading2
+                    span.card-object.shape0.color1.shading2
+                .card.card-object.shape0.color2.shading2
+                    span.card-object.shape0.color2.shading2
+            .trio.false
+                .incorrect
+                .card.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+                .card.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+                .card.card-object.shape0.color1.shading2
+                    span.card-object.shape0.color1.shading2
+        h3 Shape
+        .shape-rules
+            .trio
+                .correct
+                .card.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+                .card.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+                .card.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+            .trio
+                .correct
+                .card.card-object.shape1.color0.shading2
+                    span.card-object.shape1.color0.shading2
+                .card.card-object.shape1.color0.shading2
+                    span.card-object.shape1.color0.shading2
+                .card.card-object.shape1.color0.shading2
+                    span.card-object.shape1.color0.shading2
+            .trio
+                .correct
+                .card.card-object.shape2.color0.shading2
+                    span.card-object.shape2.color0.shading2
+                .card.card-object.shape2.color0.shading2
+                    span.card-object.shape2.color0.shading2
+                .card.card-object.shape2.color0.shading2
+                    span.card-object.shape2.color0.shading2
+            .trio
+                .correct
+                .card.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+                .card.card-object.shape1.color0.shading2
+                    span.card-object.shape1.color0.shading2
+                .card.card-object.shape2.color0.shading2
+                    span.card-object.shape2.color0.shading2
+            .trio.false
+                .incorrect
+                .card.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+                .card.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+                .card.card-object.shape2.color0.shading2
+                    span.card-object.shape2.color0.shading2
+        h3 Number
+        .number-rules
+            .trio
+                .correct
+                .card.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+                .card.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+                .card.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+            .trio
+                .correct
+                .card.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+                .card.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+                .card.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+            .trio
+                .correct
+                .card.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+                .card.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+                .card.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+            .trio
+                .correct
+                .card.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+                .card.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+                .card.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+            .trio.false
+                .incorrect
+                .card.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+                .card.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+                .card.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+        h3 Shade
+        .shade-rules
+            .trio
+                .correct
+                .card.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+                .card.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+                .card.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+            .trio
+                .correct
+                .card.card-object.shape0.color0.shading0
+                    span.card-object.shape0.color0.shading0
+                .card.card-object.shape0.color0.shading0
+                    span.card-object.shape0.color0.shading0
+                .card.card-object.shape0.color0.shading0
+                    span.card-object.shape0.color0.shading0
+            .trio
+                .correct
+                .card.card-object.shape0.color0.shading1
+                    span.card-object.shape0.color0.shading1
+                .card.card-object.shape0.color0.shading1
+                    span.card-object.shape0.color0.shading1
+                .card.card-object.shape0.color0.shading1
+                    span.card-object.shape0.color0.shading1
+            .trio
+                .correct
+                .card.card-object.shape0.color0.shading2
+                    span.card-object.shape0.color0.shading2
+                .card.card-object.shape0.color0.shading0
+                    span.card-object.shape0.color0.shading0
+                .card.card-object.shape0.color0.shading1
+                    span.card-object.shape0.color0.shading1
+            .trio.false
+                .incorrect
+                .card.card-object.shape0.color0.shading0
+                    span.card-object.shape0.color0.shading0
+                .card.card-object.shape0.color0.shading0
+                    span.card-object.shape0.color0.shading0
+                .card.card-object.shape0.color0.shading1
+                    span.card-object.shape0.color0.shading1
+        h3 Other Cominbations
+        .combination-rules
+            .trio
+                .correct
+                .card.card-object.shape0.color2.shading2
+                    span.card-object.shape0.color2.shading2
+                .card.card-object.shape1.color0.shading1
+                    span.card-object.shape1.color0.shading1
+                    span.card-object.shape1.color0.shading1
+                    span.card-object.shape1.color0.shading1
+                .card.card-object.shape2.color1.shading0
+                    span.card-object.shape2.color1.shading0
+                    span.card-object.shape2.color1.shading0
+            .trio
+                .correct
+                .card.card-object.shape2.color2.shading1
+                    span.card-object.shape2.color2.shading1
+                    span.card-object.shape2.color2.shading1
+                .card.card-object.shape0.color2.shading1
+                    span.card-object.shape0.color2.shading1
+                    span.card-object.shape0.color2.shading1
+                .card.card-object.shape1.color2.shading1
+                    span.card-object.shape1.color2.shading1
+                    span.card-object.shape1.color2.shading1
+            .trio
+                .correct
+                .card.card-object.shape0.color1.shading2
+                    span.card-object.shape0.color1.shading2
+                .card.card-object.shape2.color0.shading0
+                    span.card-object.shape2.color0.shading0
+                .card.card-object.shape1.color2.shading1
+                    span.card-object.shape1.color2.shading1
+            .trio
+                .correct
+                .card.card-object.shape1.color1.shading0
+                    span.card-object.shape1.color1.shading0
+                .card.card-object.shape1.color1.shading1
+                    span.card-object.shape1.color1.shading1
+                    span.card-object.shape1.color1.shading1
+                .card.card-object.shape1.color1.shading2
+                    span.card-object.shape1.color1.shading2
+                    span.card-object.shape1.color1.shading2
+                    span.card-object.shape1.color1.shading2
+            .trio.false
+                .incorrect
+                .card.card-object.shape0.color2.shading1
+                    span.card-object.shape0.color2.shading1
+                .card.card-object.shape2.color0.shading1
+                    span.card-object.shape2.color0.shading1
+                    span.card-object.shape2.color0.shading1
+                .card.card-object.shape1.color1.shading2
+                    span.card-object.shape1.color1.shading2
+                    span.card-object.shape1.color1.shading2
+                    span.card-object.shape1.color1.shading2
+    section#instructions-game-controls
+        h3 Selecting Cards
+        .selecting-cards
+            p Click on a card to select it.
+            p Click again to deselect the card.
+            p Select three cards to form a trio.
+        h3 Drawing More Cards
+        .drawing-cards
+            p Click on the Tttrio deck.
+            p To prevent card spamming, you need 2/3 majority of players to click on the deck to draw more cards.
+        h3 Starting a New Game
+        .starting-new-game
+            p Click on the reset button under the balloons.
+            p Note: On iPhone there is currently no way to start a new game.
+</script>
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-13105739-3']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+  
+</head>
+<body>
+    <div id="fb-root"></div>
+    <script>
+        // Googple Plus One
+        (function() { var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true; po.src = 'https://apis.google.com/js/plusone.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s); })();
+        // Facebook Like
+        (function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0]; if (d.getElementById(id)) {return;} js = d.createElement(s); js.id = id; js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=273726349334428"; fjs.parentNode.insertBefore(js, fjs); }(document, 'script', 'facebook-jssdk'));
+        // Twitter Share Button
+        (function() { var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = '//platform.twitter.com/widgets.js'; var s0 = document.getElementsByTagName('script')[0]; s0.parentNode.insertBefore(s, s0); })();
+    </script>
+    <header>
+        <h1><img src="/images/logo.png" alt="Tttrio - A fast real-time multiplayer pattern-matching game to hone your logical skills" ></h1>
+    </header>
+    <nav>
+        <div>
+            <button class="how-to-play-btn">How to Play</button>
+            <button id="restart-game-btn">New Game<span class="waiting">Waiting for <span class="players-left"></span> more player(s).</span></button>
+        </div>
+    </nav>
+    <div class="background-container">
+        <div class="sky"></div>
+        <div class="moon"></div>
+        <div class="cloud-1"></div>
+        <div class="cloud-2"></div>
+        <div class="cloud-3"></div>
+        <div class="outer-container">
+            <article>
+                <div class="balloons">
+                </div>
+                <div id="game-container">
+                    <div class="cards-in-play"></div>
+                    <div class="players-container"></div>
+                </div>
+                <div id="chat">
+                    <form class="chat-form">
+                        <input type="hidden" class="sender" />
+                        <label>Chat: </label>
+                        <input type="text" class="msg" placeholder="Start typing here..." />
+                    </form>
+                    <ul class="chat-msgs"></ul>
+                </div>
+                <div class="share-widgets">
+                    <div class="share-widget fb-like-container"><div class="fb-like" data-send="true" data-width="300" data-show-faces="true"></div></div>
+                    <div class="share-widget g-plusone-container"><div class="g-plusone" data-annotation="inline" data-width="300"></div></div>
+                    <div class="share-widget twitter-share-button-container"><a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal">Tweet</a></div>
+                </div>
+            </article>
+        </div>
+        <footer>
+            Made by <a href="http://www.lorenyu.com" target="_blank">Loren Yu</a>
+        </footer>
+    </div>
+    <div class="game-end-overlay-container">
+        <div class="game-end-overlay" style="display:none;" >
+            <ol class="winners">
+                <li class="winner champion"><span class="name"></span> wins with <span class="score"></span> points!</li>
+                <li class="winner runner-up first"><span class="name"></span> is runner up with <span class="score"></span> points!</li>
+                <li class="winner runner-up second"><span class="name"></span> is second runner up with <span class="score"></span> points!</li>
+            </ol>
+            <button class="close">Close</button>
+        </div>
+    </div>
+    <div class="name-form-overlay-container">
+        <div class="name-form-overlay">
+            <h3><img src="/images/logo.png" alt="Tttrio - A fast real-time multiplayer pattern-matching game to hone your logical skills"></h3>
+            <h4>A fast real-time multiplayer pattern-matching game to hone your logical skills</h4>
+            <form id="name-change-form" action="" >
+                <label for="name-field">Name</label><input type="text" id="name-field" name="name" value="" placeholder="Enter Name" ><br>
+                <button type="submit" id="change-name-btn" >Enter</button>
+            </form>
+        </div>
+    </div>
+    <div class="instructions-overlay-container" title="How to Play">
+    </div>
+</body>
+</html>
