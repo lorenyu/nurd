@@ -75,7 +75,9 @@ block content
       var gameId = #{game.id};
 
       var eventEngine = new EventEngine();
-      $('#chat').chat(eventEngine);
+      $('#chat').chat(eventEngine, {
+        channel: 'game' + gameId
+      });
       new EventEngineHttpClient(eventEngine, {
         onInitialized: function() {
           var game = new Game(eventEngine, gameId);
