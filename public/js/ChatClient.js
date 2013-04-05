@@ -14,7 +14,6 @@
         var methods = {
             init : function(eventEngine, options) {
                 var self = this;
-                debugger;
                 this.options = options || {};
                 this.eventEngine = eventEngine;
                 this.channel = this.options.channel || 'global';
