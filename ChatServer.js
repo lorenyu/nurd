@@ -1,6 +1,6 @@
 this.ChatServer = function() {
   var init = function(eventEngine) {
-    eventEngine.observe('client:chat:sendMsg', function(event) {
+    eventEngine.observeChannel('client:chat:', function(event) {
       var sender = event.data.sender;
       var msg = event.data.msg;
       if (msg) {
@@ -14,7 +14,7 @@ this.ChatServer = function() {
               allowedCharaceters, '');
         }
         console.log(sender);
-        eventEngine.fire('server:chat:sendMsg', {  
+        eventEngine.fire('server:chat:' + event.name.slice('client:chat:'.length), {  
           sender: sender,
           msg: msg
         });
