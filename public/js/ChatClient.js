@@ -14,19 +14,19 @@
         var methods = {
             init : function(eventEngine, options) {
                 var self = this;
+                this.eventEngine = eventEngine;
                 this.find('.chat-form').submit(function() {
                     $this = $(this);
                     self.chat( 'sendMessage', $this.find('.sender').val(), $this.find('.msg').val() );
                     $this.find('.msg').val(''); // clear the input box
-                    
                     return false;
                 });
-                eventEngine.observe('server:chat:sendMsg', function(event) {
+                this.eventEngine.observe('server:chat:sendMsg', function(event) {
                     self.chat( 'addMessage', event.data.sender, event.data.msg );
                 });
             },
             sendMessage : function( sender, msg, options ) { 
-                eventEngine.fire('client:chat:sendMsg', {
+                this.eventEngine.fire('client:chat:sendMsg', {
                     sender: sender,
                     msg: msg
                 });
