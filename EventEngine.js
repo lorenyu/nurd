@@ -2,6 +2,7 @@ this.EventEngine = function() {
     this._handlersByEventName = {};
     this._handlersByCallback = [];
     this._globalHandlers = [];
+    this._handlersByChannel = {};
     this._eventTree = {};
     this._nextEventId = 1;
 };
@@ -18,8 +19,13 @@ this.EventEngine.prototype.fire = function(eventName, eventData) {
             handlers[i](event);
         }
     }
-    //    eventName = this._eventTree[eventName];
-    //}
+    for (i = 0, n = this._handlersByCallback.length; i < n; i += 1) {
+        var callback = this._handlersByCallback[i][0],
+            handler = this._handlersByCallback[i][1];
+        if (callback(event.name)) {
+            handler(event);
+        }
+    }
     for (i = 0, n = this._globalHandlers.length; i < n; i += 1) {
         this._globalHandlers[i](event);
     }
@@ -38,6 +44,11 @@ this.EventEngine.prototype.observe = function(eventName, handler) {
 };
 this.EventEngine.prototype.observeAll = function(handler) {
     this._globalHandlers.push(handler);
+};
+this.EventEngine.prototype.observeChannel = function(channel, handler) {
+    this.observe(function(eventName) {
+        return eventName.indexOf(channel) === 0;
+    }, handler);
 };
 this.EventEngine.prototype.stopObserving = function(eventName, handler) {
     var handlers = this._handlersByEventName[eventName],
