@@ -44,34 +44,9 @@ block content
         footer Made by
           a(href="http://www.lorenyu.com", target="_blank") Loren Yu
   .game-end-overlay-container
-    .game-end-overlay(style="display:none;" )
-      ol(class="winners")
-        li.winner.champion
-          span.name
-          | wins with
-          span.score
-          | points!
-        li.winner.runner-up.first
-          span.name
-          | is runner up with
-          span(class="score")
-          | points!
-        li.winner.runner-up.second
-          span(class="name")
-          | is second runner up with
-          span(class="score")
-          | points!
-      button(class="close") Close
+    include game-end-overlay
   .name-form-overlay-container
-    .name-form-overlay
-      h3
-        img(src="/images/logo.png", alt="Tttrio - A fast real-time multiplayer pattern-matching game to hone your logical skills")
-      h4 A fast real-time multiplayer pattern-matching game to hone your logical skills
-      form(id="name-change-form", action="" )
-        label(for="name-field") Name
-        input(type="text", id="name-field", name="name", value="", placeholder="Enter Name" )
-        br
-        button#change-name-btn(type="submit") Enter
+    include name-form-overlay
   .instructions-overlay-container(title="How to Play")
   script
     $(document).ready(function() {
