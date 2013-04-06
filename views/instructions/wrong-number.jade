@@ -1,0 +1,21 @@
+.instruction-rule-text If two of the cards have the same number of symbols, but the third card has a different number of symbols, then it is not a valid set
+.trio.false
+  .incorrect
+  - var cards = [{ attributes: [1,1,0,0] }, { attributes: [1,1,1,2] }, { attributes: [1,1,2,2] }]
+  - each card in cards
+    include ../card
+.trio.false
+  .incorrect
+  - var cards = [{ attributes: [2,2,1,0] }, { attributes: [0,0,1,2] }, { attributes: [1,1,1,0] }]
+  - each card in cards
+    include ../card
+.trio.false
+  .incorrect
+  - var cards = [{ attributes: [2,1,2,2] }, { attributes: [0,1,1,0] }, { attributes: [1,1,0,2] }]
+  - each card in cards
+    include ../card
+.trio.false
+  .incorrect
+  - var cards = [{ attributes: [0,0,2,2] }, { attributes: [1,2,2,1] }, { attributes: [2,1,2,1] }]
+  - each card in cards
+    include ../card

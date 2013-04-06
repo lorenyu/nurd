@@ -1,0 +1,116 @@
+.instructions-overlay-container {
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    &.collapsed {
+        display: none;
+    }
+    .balloon {
+        float: left;
+    }
+    .balloon-going-up, .balloon-going-down {
+        display: inline-block;
+        vertical-align: top;
+    }
+    .right-arrow {
+        display: inline-block;
+        font-size: 60px;
+        margin: 0 30px 0 20px;
+        padding-top: 40px;
+        vertical-align: top;
+    }
+    .up-arrow, .down-arrow {
+        font-size: 60px;
+        text-align: center;
+    }
+    .instructions {
+        background: #E3F6FC;
+        border: solid 12px white;
+        border-radius: 12px;
+        box-shadow: 0px 0px 26px #4F93B0;
+        margin: 100px auto 0;
+        max-width: 400px;
+        padding: 24px 12px;
+        position: relative;
+        .example-cards {
+            margin: 20px 0 36px;
+        }
+        .example-card {
+            display: inline-block;
+            margin-left: 5px;
+        }
+        .trio {
+            display: inline-block;
+            margin: 16px;
+            width: 64px;
+            .card {
+                .card(64px);
+                margin-bottom: 4px;
+            }
+            &.false { }
+        }
+        .correct { background: url(/images/check-green.png) no-repeat center center; background-size: 16px; height: 16px; margin-bottom: 12px; }
+        .incorrect { background: url(/images/red-x.png) no-repeat center center; background-size: 16px; height: 16px; margin-bottom: 12px; }
+    }
+    .instructions-page {
+        display: none;
+        min-height: 200px;
+        text-align: center;
+        &.active {
+            display: block;
+        }
+        @pagination-button-width: 50px;
+        @pagination-button-padding: 12px;
+        @pagination-button-border-width: 5px;
+        .instructions-prev-page-button, .instructions-next-page-button {
+            &.disabled {
+                display: none;
+            }
+            background: rgb(191,234,244);
+            border-radius: 5px;
+            border: solid @pagination-button-border-width white;
+            color: @nav-link-color;
+            cursor: pointer;
+            font-size: 12px;
+            padding: @pagination-button-padding;
+            position: absolute;
+            text-align: center;
+            top: 100px;
+            width: @pagination-button-width - 2 * @pagination-button-padding - 2 * @pagination-button-border-width;
+        }
+        .instructions-prev-page-button {
+            left: 6px - @pagination-button-width;
+        }
+        .instructions-next-page-button {
+            right: 6px - @pagination-button-width;
+        }
+    }
+    .corner-close-overlay-button {
+        color: @nav-link-color;
+        cursor: pointer;
+        font-size: 12px;
+        padding: 12px;
+        position: absolute;
+        right: 0px;
+        top: 0px;
+    }
+    .start-playing-button {
+        border-radius: 5px;
+        color: @nav-link-color;
+        cursor: pointer;
+        padding: 12px;
+        text-align: center;
+        .card-gradient();
+    }
+    .instruction-sub-heading {
+        font-size: 24px;
+        margin-bottom: 12px;
+        text-align: center;
+    }
+    .instruction-rule-text {
+        margin: 12px 0;
+        text-align: center;
+    }
+}

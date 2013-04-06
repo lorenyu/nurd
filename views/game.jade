@@ -47,29 +47,13 @@ block content
     include game-end-overlay
   .name-form-overlay-container
     include name-form-overlay
-  .instructions-overlay-container(title="How to Play")
+  .instructions-overlay-container.collapsed(title="How to Play")
+    include instructions
   script
     $(document).ready(function() {
-      var jade = require('jade');
       
-      $('.instructions-overlay-container').html(jade.compile($('#instructions-view').text()).call());
-      $('.instructions').tabs();
-      $("#instructions-rules").accordion({ animated: false, header: "h3" });
-      $("#instructions-game-controls").accordion({ animated: false, autoHeight: false, header: "h3" });
-      $('.instructions-overlay-container').dialog({
-          autoOpen: false,
-          draggable: false,
-          resizable: false,
-          position: ['center', 'top'],
-          width: '100%',
-          buttons: {
-              'Close': function() {
-                  $(this).dialog('close');
-              }
-          }
-      });
       $('.how-to-play-btn').click(function() {
-          $('.instructions-overlay-container').dialog('open');
+          $('.instructions-overlay-container').removeClass('collapsed').addClass('expanded');
       });
 
       var gameId = #{game.id};

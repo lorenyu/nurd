@@ -1,0 +1,8 @@
+- var shape = card.attributes[0];
+- var color = card.attributes[1];
+- var shading = card.attributes[2];
+- var number = card.attributes[3];
+- var cls = ['shape'+shape, 'color'+color, 'shading'+shading].join(' ')
+  .card.shape(class=cls, json=JSON.stringify(card))
+    - each i in _.range(number+1)
+      span.card-object(class=cls)

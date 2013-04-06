@@ -1,0 +1,38 @@
+@media screen and (min-width: 481px) {
+    .balloons { height: 400px; position: absolute; right: 12px; top: 12px; width: 220px;
+        .balloon {
+            bottom: 0;
+            position: absolute;
+            -moz-transition: bottom 1s ease-in-out;
+            -webkit-transition: bottom 1s ease-in-out;
+        }
+    }
+    .balloon {
+        .background { background: url(/images/balloons.png); height: 59px; margin: 0 auto; width: 53px; }
+        .name {
+            background: rgba(232, 247, 255, 0.8);
+            border: solid 2px #73858C;
+            font-family: Arial;
+            font-size: 14px;
+            padding: 2px 4px;
+            position: relative;
+            text-align: center;
+            top: -2px;
+        }
+        &[color="0"] { left: 0; .background { background-position: -1px 0; } }
+        &[color="1"] { left: 55px; .background { background-position: -55px 0; } }
+        &[color="2"] { left: 110px; .background { background-position: -109px 0; } }
+        &[color="3"] { left: 11px; .background { background-position: -163px 0; } }
+        &[color="4"] { left: 66px; .background { background-position: -217px 0; } }
+        &[color="5"] { left: 121px; .background { background-position: -1px -61px; } }
+        &[color="6"] { left: 22px;.background { background-position: -55px -61px; } }
+        &[color="7"] { left: 77px;.background { background-position: -109px -61px; } }
+        &[color="8"] { left: 132px;.background { background-position: -163px -61px; } }
+        &[color="9"] { left: 33px;.background { background-position: -217px -61px; } }
+        &[color="10"] { left: 88px;.background { background-position: -1px -122px; } }
+        &[color="11"] { left: 143px;.background { background-position: -55px -122px; } }
+        &[color="12"] { left: 44px;.background { background-position: -109px -122px; } }
+        &[color="13"] { left: 99px;.background { background-position: -163px -122px; } }
+        &[color="14"] { left: 154px;.background { background-position: -217px -122px; } }
+    }
+}

@@ -1,0 +1,21 @@
+.instruction-rule-text All three cards must have the same number of symbols
+.trio
+  .correct
+  - var cards = [{ attributes: [0,0,2,2] }, { attributes: [1,0,2,2] }, { attributes: [2,0,2,2] }]
+  - each card in cards
+    include ../card
+.trio
+  .correct
+  - var cards = [{ attributes: [2,1,0,1] }, { attributes: [2,1,1,1] }, { attributes: [2,1,2,1] }]
+  - each card in cards
+    include ../card
+.trio
+  .correct
+  - var cards = [{ attributes: [2,1,0,0] }, { attributes: [0,2,1,0] }, { attributes: [1,0,2,0] }]
+  - each card in cards
+    include ../card
+.trio
+  .correct
+  - var cards = [{ attributes: [0,0,2,0] }, { attributes: [0,1,1,0] }, { attributes: [0,2,0,0] }]
+  - each card in cards
+    include ../card

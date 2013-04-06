@@ -1,0 +1,9 @@
+- var prevButtonDisabled = prevButtonDisabled || false
+- var nextButtonDisabled = nextButtonDisabled || false
+.instructions-page
+  if !prevButtonDisabled
+    .instructions-prev-page-button ◀
+  if !nextButtonDisabled
+    .instructions-next-page-button ▶
+  .clear
+  yield

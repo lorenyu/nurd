@@ -52,6 +52,10 @@ app.get('/game/:gameId', routes.game);
 app.get('/jsutil.js', routes.js.jsutil);
 app.get('/EventEngine.js', routes.js.EventEngine);
 
+app.locals({
+  _: _
+});
+
 eventServer.listen(app);
 
 server.listen(app.get('port'), function() {

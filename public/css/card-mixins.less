@@ -1,0 +1,65 @@
+.card-object-size(@card-width) {
+    width: 30*(@card-width/128);
+    height: 30*(@card-width/128);
+    background-image: url(/images/shapes.png);
+    background-size: (572/2*(@card-width/128)) (188/2*(@card-width/128));
+    background-repeat: no-repeat;
+}
+
+.card-object-mask-position-y(@shading, @card-width) {
+    -webkit-mask-position-y: 32 * -@shading;
+}
+.card-object-mask-position-x(@shape, @card-width) {
+    -webkit-mask-position-x: 32 * -@shape;
+}
+
+.card-object-background-position-y(@shading, @card-width) {
+    background-position-y: 32 * -@shading * (@card-width/128);
+}
+.card-object-background-position-x(@color, @shape, @card-width) {
+    background-position-x: 32 * (-3*@color - @shape) * (@card-width/128);
+}
+.card-object-background-position(@color, @shape, @shading, @card-width) {
+    background-position: (32 * (-3*@color - @shape) * (@card-width/128)) (32 * -@shading * (@card-width/128));
+}
+
+.card(@card-width) {
+    border-radius: @card-width * 0.08;
+    box-shadow: 6px 8px 26px #4F93B0;
+    display: inline-block;
+    height:@card-width * (64.0/128 - 16.0/128);
+    padding-top: @card-width * (16.0/128);
+    text-align: center;
+    width: @card-width;
+    .card-gradient();
+    .card-object { display: inline-block; margin:1px; .card-object-size(@card-width); }
+    .card-object {
+        &.color0.shape0.shading0 { .card-object-background-position(0, 0, 0, @card-width); }
+        &.color0.shape0.shading1 { .card-object-background-position(0, 0, 1, @card-width); }
+        &.color0.shape0.shading2 { .card-object-background-position(0, 0, 2, @card-width); }
+        &.color0.shape1.shading0 { .card-object-background-position(0, 1, 0, @card-width); }
+        &.color0.shape1.shading1 { .card-object-background-position(0, 1, 1, @card-width); }
+        &.color0.shape1.shading2 { .card-object-background-position(0, 1, 2, @card-width); }
+        &.color0.shape2.shading0 { .card-object-background-position(0, 2, 0, @card-width); }
+        &.color0.shape2.shading1 { .card-object-background-position(0, 2, 1, @card-width); }
+        &.color0.shape2.shading2 { .card-object-background-position(0, 2, 2, @card-width); }
+        &.color1.shape0.shading0 { .card-object-background-position(1, 0, 0, @card-width); }
+        &.color1.shape0.shading1 { .card-object-background-position(1, 0, 1, @card-width); }
+        &.color1.shape0.shading2 { .card-object-background-position(1, 0, 2, @card-width); }
+        &.color1.shape1.shading0 { .card-object-background-position(1, 1, 0, @card-width); }
+        &.color1.shape1.shading1 { .card-object-background-position(1, 1, 1, @card-width); }
+        &.color1.shape1.shading2 { .card-object-background-position(1, 1, 2, @card-width); }
+        &.color1.shape2.shading0 { .card-object-background-position(1, 2, 0, @card-width); }
+        &.color1.shape2.shading1 { .card-object-background-position(1, 2, 1, @card-width); }
+        &.color1.shape2.shading2 { .card-object-background-position(1, 2, 2, @card-width); }
+        &.color2.shape0.shading0 { .card-object-background-position(2, 0, 0, @card-width); }
+        &.color2.shape0.shading1 { .card-object-background-position(2, 0, 1, @card-width); }
+        &.color2.shape0.shading2 { .card-object-background-position(2, 0, 2, @card-width); }
+        &.color2.shape1.shading0 { .card-object-background-position(2, 1, 0, @card-width); }
+        &.color2.shape1.shading1 { .card-object-background-position(2, 1, 1, @card-width); }
+        &.color2.shape1.shading2 { .card-object-background-position(2, 1, 2, @card-width); }
+        &.color2.shape2.shading0 { .card-object-background-position(2, 2, 0, @card-width); }
+        &.color2.shape2.shading1 { .card-object-background-position(2, 2, 1, @card-width); }
+        &.color2.shape2.shading2 { .card-object-background-position(2, 2, 2, @card-width); }
+    }
+}
