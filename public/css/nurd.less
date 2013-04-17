@@ -17,10 +17,20 @@ body { background: rgb(191,234,244); font-family: arial;}
 }
 
 header { background: #2987E6; padding: 12px 0;  }
-nav { background: #2987E6;
-    div { .nav-gradient(); margin: 0 auto; text-align: center; }
-    .how-to-play-btn { color: @nav-link-color; cursor: pointer; font-size: 1.2em; padding: 4px 8px;
-        &:hover { color: #222; }
+nav {
+    background: #E3F6FC;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    button {
+        color: @nav-link-color;
+        cursor: pointer;
+        font-size: 1.2em;
+        padding: 4px 8px;
+        &:hover {
+            color: #222;
+        }
     }
     #restart-game-btn { color: @nav-link-color; cursor: pointer; font-size: 1.2em; padding: 4px 8px; position: relative;
         .waiting { color: #BFEAF4; display: none; font-size: 0.8em; left: -60px; padding: 3px 10px; position: absolute; top: 32px; width: 200%; }
@@ -39,8 +49,14 @@ nav { background: #2987E6;
 }
 
 article { position: relative; }
-footer { border-top: solid 1px #666; color: #666; font-weight: bold; padding: 12px; text-align: center;
-    a { color: #2987E6; }
+footer {
+    border-top: solid 1px #666;
+    color: #666;
+    font-weight: bold;
+    text-align: center;
+    a {
+        color: #2987E6;
+    }
 }
 
 article {
