@@ -16,6 +16,7 @@ var Game = this.Game = function(eventEngine, id) {
     this.cardsInPlay = [];
     this.players = [];
     this.eventEngine = eventEngine;
+    this.startTime = new Date();
 
     //var playerTimeout = 15*60*1000; // 15 minutes
     var playerTimeout = 20*1000, // shorter timeout (useful for testing/debugging)
@@ -390,3 +391,22 @@ Game.get = function(id) {
 Game.list = function() {
     return _.values(games);
 };
+Game.delete = function(id) {
+    var game = Game.get(id);
+    delete games[id];
+    game.eventEngine.fire('server:game:delete', {game: game.gameState()});
+};
+
+function cleanupGames() {
+    var emptyGames = _.filter(games, function(game) {
+        return game.players.length <= 0;
+    });
+    var now = new Date();
+    _.each(emptyGames, function(game) {
+        if (game.id !== 1 && now - game.startTime > 30000) {
+            Game.delete(game.id);
+        }
+    });
+}
+
+setInterval(cleanupGames, 1000);

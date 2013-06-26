@@ -17,6 +17,9 @@ block content
           eventEngine.observe('server:game:new', function(event) {
             $('.games').append(jadeTemplates.render('game-link', { game: event.data.game }));
           });
+          eventEngine.observe('server:game:delete', function(event) {
+            $('a[data-game-id=' + event.data.game.id + ']').remove();
+          });
         }
       });
     });
