@@ -17,6 +17,7 @@ var Game = this.Game = function(eventEngine, id) {
     this.players = [];
     this.eventEngine = eventEngine;
     this.startTime = new Date();
+    this._cleanupPlayersIntervalId = null;
 
     //var playerTimeout = 15*60*1000; // 15 minutes
     var playerTimeout = 20*1000, // shorter timeout (useful for testing/debugging)
@@ -38,7 +39,7 @@ var Game = this.Game = function(eventEngine, id) {
         this.eventEngine.observe('client:game:' + this.id + ':changeName', _.bind(this.onChangeName, this));
 
         this.startGame();
-        setInterval(proxy(this._cleanupPlayers, this), Math.floor(playerTimeout / 2)); // TODO: cleanup players
+        this._cleanupPlayersIntervalId = setInterval(proxy(this._cleanupPlayers, this), Math.floor(playerTimeout / 2)); // TODO: cleanup players
     }
 
     this.getPlayer = function(playerId) {
@@ -292,6 +293,10 @@ var Game = this.Game = function(eventEngine, id) {
         this.eventEngine.fire('server:game:' + this.id + ':gameUpdated', this.gameState());
     };
 
+    this.destroy = function() {
+        clearInterval(this._cleanupPlayersIntervalId);
+    }
+
     init.apply(this, arguments);
 };
 
@@ -392,9 +397,12 @@ Game.list = function() {
     return _.values(games);
 };
 Game.delete = function(id) {
-    var game = Game.get(id);
+    var game = Game.get(id),
+        gameState = game.gameState(),
+        eventEngine = game.eventEngine;
+    game.destroy();
     delete games[id];
-    game.eventEngine.fire('server:game:delete', {game: game.gameState()});
+    eventEngine.fire('server:game:delete', {game: gameState});
 };
 
 function cleanupGames() {
