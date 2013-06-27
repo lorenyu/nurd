@@ -26,7 +26,7 @@ var Game = this.Game = function(eventEngine, id) {
         
 
     this.restartGameRequestThreshold = 2/3; // minimum percentage of restart game requests required to restart game
-    this.goalScore = 2;
+    this.goalScore = 10;
 
     function init() {
 
