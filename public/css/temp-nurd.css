@@ -84,19 +84,6 @@ button { background: #e2e2e2; border: none; border-radius: 5px; cursor: pointer;
 .players .player .num-sets,
 .players .player .num-false-sets { background:#e8e8e8; display:inline-block; font-family:Arial; font-size:1em; height:17px; margin:0 5px; padding:5px; text-align:right; width:30px; }
 
-.game-end-overlay-container { height: 0; left: 0; position: fixed; top: 0; text-align: center; width: 100%; }
-.game-end-overlay { background: #fcfff4; font-family: Verdana; margin: 48px auto 0; padding: 22px 38px; width: 500px;
-    background: -webkit-linear-gradient(top, #fcfff4 0%,#dfe5d7 40%,#b3bead 100%); }
-.game-end-overlay .name { }
-.game-end-overlay .score { }
-.game-end-overlay .winners {  }
-.game-end-overlay .winners .winner { margin-top: 6px; }
-.game-end-overlay .champion { font-size: 1.6em; margin: 0 auto; }
-.game-end-overlay .runner-up { font-size: 1.2em; }
-.game-end-overlay .runner-up.first { }
-.game-end-overlay .runner-up.second { }
-.game-end-overlay .close { margin-top: 22px; }
-
 #name-change-form { float: left; margin-left: 22px; }
 #name-field { padding: 4px; width: 178px; }
 

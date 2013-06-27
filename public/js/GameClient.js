@@ -146,26 +146,21 @@ this.Game = function(eventEngine, id) {
         eventEngine.observe('server:game:' + this.id + ':gameUpdated', this.onGameUpdated);
         
         eventEngine.observe('server:game:' + this.id + ':gameEnded', function(event) {
-            var overlay = $('.game-end-overlay'),
-                players = event.data.players,
+            var players = event.data.players,
                 numPlayers = players.length;
-            overlay.find('.winner .name').text(players[0].name);
-            overlay.find('.winner .score').text(players[0].score);
-            if (numPlayers > 1) {
-                overlay.find('.runner-up.first .name').text(players[1].name);
-                overlay.find('.runner-up.first .score').text(players[1].score);
-                overlay.find('.runner-up.first').show();
-            } else {
-                overlay.find('.runner-up.first').hide();
+            
+            if (players.length > 2) {
+                $('#chat').chat('addMessage', players[2].name + ' is second runner up with ' + players[2].score + ' points!');
             }
-            if (numPlayers > 2) {
-                overlay.find('.runner-up.second .name').text(players[2].name);
-                overlay.find('.runner-up.second .score').text(players[1].score);
-                overlay.find('.runner-up.second').show();
-            } else {
-                overlay.find('.runner-up.second').hide();
+
+            if (players.length > 1) {
+                $('#chat').chat('addMessage', players[1].name + ' is runner up with ' + players[1].score + ' points!');
             }
-            overlay.show();
+
+            if (players.length > 0) {
+                $('#chat').chat('addMessage', players[0].name + ' wins with ' + players[0].score + ' points!');
+            }
+            
         });
         
         eventEngine.observe('server:game:' + this.id + ':playerScored', function(event) {
@@ -182,10 +177,6 @@ this.Game = function(eventEngine, id) {
                 
             balloon.css('bottom', (player.score * 34) + 'px'); // 34px = (400px - 60px) / 10 = (height of balloons area - height of balloon) / (number of points)
             $('#chat').chat( 'addMessage', player.name, jadeTemplates.render('cards', { 'className' : 'false-set', cards : event.data.cards }), { sanitize: false } );
-        });
-        
-        $('.game-end-overlay .close').click(function(event) {
-            $(this).parents('.game-end-overlay').hide();
         });
         
         eventEngine.observe('client:game:' + this.id + ':changeName', function(event) {

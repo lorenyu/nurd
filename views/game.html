@@ -96,25 +96,6 @@
             input.sender(type="hidden")
             input.msg(type="text", placeholder="Chat Away...")
         ul.chat-msgs
-    .game-end-overlay-container
-    .game-end-overlay(style="display:none;")
-        ol.winners
-            li.winner.champion
-                span.name
-                |  wins with 
-                span.score
-                |  points!
-            li.winner.runner-up.first
-                span.name
-                |  is runner up with
-                span.score
-                |  points!
-            li.winner.runner-up.second
-                span.name
-                |  is second runner up with 
-                span.score
-                |  points!
-        button.close Close
     #tmp
 </script>
 
@@ -472,16 +453,6 @@ ul.players
         <footer>
             Made by <a href="http://www.lorenyu.com" target="_blank">Loren Yu</a>
         </footer>
-    </div>
-    <div class="game-end-overlay-container">
-        <div class="game-end-overlay" style="display:none;" >
-            <ol class="winners">
-                <li class="winner champion"><span class="name"></span> wins with <span class="score"></span> points!</li>
-                <li class="winner runner-up first"><span class="name"></span> is runner up with <span class="score"></span> points!</li>
-                <li class="winner runner-up second"><span class="name"></span> is second runner up with <span class="score"></span> points!</li>
-            </ol>
-            <button class="close">Close</button>
-        </div>
     </div>
     <div class="name-form-overlay-container">
         <div class="name-form-overlay">
