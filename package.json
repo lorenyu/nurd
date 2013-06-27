@@ -23,7 +23,8 @@
 		"less": "1.x.x",
 		"socket.io": "0.6.x",
 		"underscore": "1.4.x",
-		"jade-browser": "0.0.x"
+		"jade-browser": "0.0.x",
+		"express": "3.1.0"
 	},
 	"devDependencies": {
 		"mocha": "1.8.x",
