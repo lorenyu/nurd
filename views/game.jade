@@ -41,10 +41,11 @@ block content
   footer
     nav
       button(class="how-to-play-btn") How to Play
-      button(class='games-list-btn') Private Game
-      ul.games
-        - each game in games
-          include game-link
+      //
+        button(class='games-list-btn') Private Game
+        ul.games
+          - each game in games
+            include game-link
       script
         $(document).ready(function() {
           var eventEngine = new EventEngine();
