@@ -51,6 +51,7 @@ app.get('/game', routes.masterGame);
 app.get('/game/:gameId', routes.game);
 app.get('/jsutil.js', routes.js.jsutil);
 app.get('/EventEngine.js', routes.js.EventEngine);
+app.get('/debug/game/:gameId', routes.admin.game);
 
 app.locals({
   _: _

@@ -2,6 +2,7 @@ var Game = require('../GameServer').Game;
 
 var routes = module.exports = {
   js: require('./js'),
+  admin: require('./admin'),
   index: function(req, res) {
     res.redirect(302, '/game/1');
     // res.render('index', {
