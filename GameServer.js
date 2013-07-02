@@ -298,6 +298,10 @@ var Game = this.Game = function(eventEngine, id) {
         clearInterval(this._cleanupPlayersIntervalId);
     }
 
+    this.getDeck = function() {
+        return deck;
+    }
+
     init.apply(this, arguments);
 };
 
