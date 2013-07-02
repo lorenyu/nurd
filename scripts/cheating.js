@@ -3,7 +3,7 @@ function setAlarm(callback, date) {
     return setTimeout(callback, date - now);
 }
 
-function clickOnSet() {
+function clickOnSet(setIndex) {
     var $cardEls = $('.cards-in-play .card');
     var cards = $cardEls.map(function () {
         return JSON.parse($(this).attr('json'));
@@ -23,11 +23,29 @@ function clickOnSet() {
         }
     }
 
-    if (sets.length <= 0) {
+    setIndex = setIndex || 0;
+
+    if (sets.length <= setIndex) {
         console.log('No sets');
+        return;
     }
 
-    for (var i = 0; i < sets[0].length; i++) {
-        $($cardEls[sets[0][i]]).trigger('mousedown');
+    for (var i = 0; i < sets[setIndex].length; i++) {
+        $($cardEls[sets[setIndex][i]]).trigger('mousedown');
     }
+}
+
+var stop = false;
+
+function clickOnSetEvery(ms, setIndex) {
+    stop = false;
+    var now = new Date();
+    var timeToWait = ms - (now.getTime() % ms);
+    setTimeout(function() {
+        if (stop) {
+            return;
+        }
+        clickOnSet();
+        clickOnSetEvery(ms, setIndex);
+    }, timeToWait);
 }
