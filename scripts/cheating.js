@@ -27,7 +27,7 @@ function clickOnSet() {
         console.log('No sets');
     }
 
-    for (var i = 0; i < sets.length; i++) {
+    for (var i = 0; i < sets[0].length; i++) {
         $($cardEls[sets[0][i]]).trigger('mousedown');
     }
 }
