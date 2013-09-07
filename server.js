@@ -5,6 +5,7 @@ var express = require('express')
   , routes = require('./routes')
   , http = require('http')
   , path = require('path')
+  , mobileDetector = require('./middleware/mobileDetector')
   , EventEngineHttpServer = require('./EventEngineHttpServer').EventEngineHttpServer
   , Game = require('./GameServer.js').Game
   , ChatServer = require('./ChatServer.js').ChatServer
@@ -33,6 +34,7 @@ app.configure(function(){
   // app.use(express.cookieParser());
   app.use(express.bodyParser());
   app.use(express.methodOverride());
+  app.use(mobileDetector);
   app.use(app.router);
   app.use(require('less-middleware')({ src: __dirname + '/public' }));
   app.use(jade_browser('/js/jade-templates', '**', {
