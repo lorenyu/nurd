@@ -54,6 +54,10 @@ this.Player = function() {
                 return false;
             }
 
+            if (!_game.areCardsInPlay(cards)) {
+                return false;
+            }
+
             if (_game.processSet(cards)) {
                 this.score += 1;
                 this.numSets += 1;

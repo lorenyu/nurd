@@ -80,8 +80,7 @@ var Game = this.Game = function(eventEngine, id) {
     };
     
     this._isValidSet = function(cards) {
-        var isInPlay = _.bind(this._isCardInPlay, this);
-        return SetCalculator.isValidSet(cards) && _.every(cards, isInPlay);
+        return this.areCardsInPlay(cards) && SetCalculator.isValidSet(cards);
     };
 
     this._isCardInPlay = function(card) {
@@ -159,6 +158,11 @@ var Game = this.Game = function(eventEngine, id) {
             }
         }
         return false;
+    };
+
+    this.areCardsInPlay = function(cards) {
+        var isInPlay = _.bind(this._isCardInPlay, this);
+        return _.every(cards, isInPlay);
     };
 
     this.processSet = function(cards) {
