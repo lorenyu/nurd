@@ -3,3 +3,5 @@ node_modules/*
 public/css/nurd.css
 config
 logs
+
+scripts/node-server.pid
