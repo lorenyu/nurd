@@ -32,8 +32,7 @@
 		"mocha": "1.8.x",
 		"chai": "1.5.x"
 	},
-	"bundleDependencies": [
-	],
+	"bundleDependencies": [],
 	"engine": {
 		"node": "0.6.x"
 	}
