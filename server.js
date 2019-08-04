@@ -1,4 +1,5 @@
 var express = require('express')
+  , log = require('./jsutil').log
   , util = require('util')
   , _ = require('underscore')
   , jade_browser = require('jade-browser')
@@ -10,8 +11,6 @@ var express = require('express')
   , Game = require('./GameServer.js').Game
   , ChatServer = require('./ChatServer.js').ChatServer
   , EventEngine = require('./EventEngine.js').EventEngine;
-
-var log = util.puts;
 
 var app = express()
   , eventEngine = new EventEngine()

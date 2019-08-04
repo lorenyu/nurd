@@ -1,13 +1,12 @@
 var util = require('util');
 var proxy = require('./jsutil.js').proxy;
+var log = require('./jsutil').log
 
 var Player = require('./Player.js').Player,
     Card = require('./Card.js').Card,
     Deck = require('./Deck.js').Deck,
     SetCalculator = require('./SetCalculator.js'),
     _ = require('underscore');
-
-var log = util.puts;
 
 var Game = this.Game = function(eventEngine, id) {
 
