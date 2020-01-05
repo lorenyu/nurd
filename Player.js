@@ -1,7 +1,7 @@
 var proxy = require('./jsutil.js').proxy;
 var Crypto = require('./jsutil.js').Crypto;
 
-var log = require('util').puts;
+var log = console.log;
 
 this.Player = function() {
     // Private class properties and functions
