@@ -10,7 +10,7 @@
 		}
 	],
 	"scripts": {
-		"deploy": "eb deploy Tttrio-env",
+		"deploy": "git push heroku master",
 		"start": "node server.js",
 		"stop": "./scripts/stop-server.sh",
 		"restart": "./scripts/restart-server.sh",
