@@ -11,7 +11,7 @@
 	],
 	"scripts": {
 		"deploy": "eb deploy Tttrio-env",
-		"start": "./scripts/start-server.sh",
+		"start": "node server.js",
 		"stop": "./scripts/stop-server.sh",
 		"restart": "./scripts/restart-server.sh",
 		"test": "mocha"
