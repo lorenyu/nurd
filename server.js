@@ -1,4 +1,5 @@
 var express = require('express')
+  , log = require('./jsutil').log
   , util = require('util')
   , _ = require('underscore')
   , jade_browser = require('jade-browser')
@@ -10,8 +11,6 @@ var express = require('express')
   , Game = require('./GameServer.js').Game
   , ChatServer = require('./ChatServer.js').ChatServer
   , EventEngine = require('./EventEngine.js').EventEngine;
-
-var log = util.puts;
 
 var app = express()
   , eventEngine = new EventEngine()
@@ -41,6 +40,9 @@ app.configure(function(){
     root: __dirname + '/views',
     namespace: 'jadeTemplates'
   }));
+  // During development, server serves static files 
+  // On AWS, static files are served from Nginx proxy
+  // (See https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/create_deploy_nodejs.container.html)
   app.use(express.static(path.join(__dirname, 'public')));
 });
 
