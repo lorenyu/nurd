@@ -1,14 +1,13 @@
 
 # Prerequisites
 1. [Node.js](https://nodejs.org/en/)
-2. [Elastic Beanstalk CLI](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3-install.html)
+2. [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
 
 # Setup
 ```
-npm install
-cp scripts/server.template.sh scripts/server.sh
+npm install  # Install dependencies
+git remote add heroku https://git.heroku.com/tttrio.git  # Deploy endpoint
 ```
-Optionally update the paths in scripts/server.sh
 
 # Run Unit Tests
 ```
