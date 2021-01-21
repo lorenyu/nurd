@@ -19,7 +19,7 @@
 		"url": "git@github.com:lorenyu/nurd.git"
 	},
 	"dependencies": {
-		"socket.io": "0.6.x",
+		"socket.io": "2.4.x",
 		"underscore": "1.4.x",
 		"jade": "0.28.2",
 		"jade-browser": "0.0.x",
